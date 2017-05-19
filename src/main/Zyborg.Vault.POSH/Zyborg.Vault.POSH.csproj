@@ -67,6 +67,7 @@
     <Compile Include="GetSecretProviders.cs" />
     <Compile Include="EnableAuditProvider.cs" />
     <Compile Include="Model\GenericAuditBackend.cs" />
+    <Compile Include="NewAuth.cs" />
     <Compile Include="RemoveData.cs" />
     <Compile Include="ReadData.cs" />
     <Compile Include="GetPathHelp.cs" />
