@@ -72,6 +72,8 @@
     <Compile Include="GetPathHelp.cs" />
     <Compile Include="GetDataList.cs" />
     <Compile Include="LockServer.cs" />
+    <Compile Include="GetProfile.cs" />
+    <Compile Include="SetProfile.cs" />
     <Compile Include="UnlockServer.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="VaultBaseCmdlet.cs" />

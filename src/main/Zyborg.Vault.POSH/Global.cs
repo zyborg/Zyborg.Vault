@@ -8,5 +8,6 @@
 
 		public const string VaultServerCacheFile = @"$HOME\.vault-server";
 		public const string VaultProfilesDir = @"$HOME\.vault-profiles";
+		public const string VaultProfileFileFormat = "{0}.profile";
 	}
 }
