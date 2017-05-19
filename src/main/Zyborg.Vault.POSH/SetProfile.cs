@@ -44,18 +44,25 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			var profileDir = base.InvokeCommand.ExpandString(Global.VaultProfilesDir);
-			WriteVerbose($"Resolved user profiles root directory [{profileDir}]");
+			SetVaultProfile(this, VaultProfile, Remove.IsPresent,
+					Force.IsPresent, VaultAddress, VaultToken);
+		}
+
+		public static void SetVaultProfile(PSCmdlet ctx, string name, bool Remove = false,
+				bool force = false, string vaultAddress = null, string vaultToken = null)
+		{
+			var profileDir = ctx.InvokeCommand.ExpandString(Global.VaultProfilesDir);
+			ctx.WriteVerbose($"Resolved user profiles root directory [{profileDir}]");
 
 			var profileFile = Path.Combine(profileDir,
-					string.Format(Global.VaultProfileFileFormat, VaultProfile));
-			WriteVerbose($"Resolved user profile file [{profileFile}]");
+					string.Format(Global.VaultProfileFileFormat, name));
+			ctx.WriteVerbose($"Resolved user profile file [{profileFile}]");
 
-			if (Remove.IsPresent)
+			if (Remove)
 			{
 				if (File.Exists(profileFile))
 				{
-					WriteVerbose("Removing profile file");
+					ctx.WriteVerbose("Removing profile file");
 					File.Delete(profileFile);
 				}
 			}
@@ -66,20 +73,20 @@ namespace Zyborg.Vault.POSH
 					// TODO: need to provide a default Directory ACL to
 					// protect the profiles directory
 
-					WriteVerbose("Creating user profiles root directory");
+					ctx.WriteVerbose("Creating user profiles root directory");
 					Directory.CreateDirectory(profileDir);
 				}
 
-				if (File.Exists(profileFile) && !Force.IsPresent)
+				if (File.Exists(profileFile) && !force)
 					throw new Exception("Existing profile found, use -Force to overwrite");
 
 				var vp = new VaultProfile
 				{
-					VaultAddress = VaultAddress,
-					VaultToken = VaultToken,
+					VaultAddress = vaultAddress,
+					VaultToken = vaultToken,
 				};
 
-				WriteVerbose("Saving VaultProfile to file");
+				ctx.WriteVerbose("Saving VaultProfile to file");
 				File.WriteAllText(profileFile, JsonConvert.SerializeObject(vp));
 			}
 		}
