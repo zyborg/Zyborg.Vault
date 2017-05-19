@@ -1,0 +1,22 @@
+﻿using System.Management.Automation;
+
+namespace Zyborg.Vault.POSH
+{
+	[Cmdlet(VerbsLifecycle.Disable, "AuthProvider")]
+	public class DisableAuthProvider : VaultBaseCmdlet
+	{
+		[Parameter(Mandatory = true, Position = 0)]
+		public string Path
+		{ get; set; }
+
+		protected override void BeginProcessing()
+		{
+			ResolveVaultClient();
+		}
+
+		protected override void EndProcessing()
+		{
+			_client.DisableAuthenticationBackendAsync(Path).Wait();
+		}
+	}
+}
