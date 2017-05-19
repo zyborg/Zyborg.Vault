@@ -25,9 +25,12 @@ namespace Zyborg.Vault.POSH
 		private readonly IAuthenticationInfo _authnInfo;
 		private readonly HttpDataAccessManager _dataAccessManager;
 
-		public VaultSession(string server, string token)
+		public VaultSession(string address, string token)
 		{
-			_vaultAddr = new Uri(server);
+			VaultAddress = address;
+			VaultToken = token;
+
+			_vaultAddr = new Uri(address);
 			_vaultBase = new Uri(_vaultAddr, "v1/");
 
 
@@ -38,8 +41,14 @@ namespace Zyborg.Vault.POSH
 			}
 
 			_dataAccessManager = new HttpDataAccessManager(_vaultBase);
-			VaultClient = VaultClientFactory.CreateVaultClient(new Uri(server), _authnInfo);
+			VaultClient = VaultClientFactory.CreateVaultClient(new Uri(address), _authnInfo);
 		}
+
+		public string VaultAddress
+		{ get; private set; }
+
+		public string VaultToken
+		{ get; private set; }
 
 		public IVaultClient VaultClient
 		{ get; private set; }

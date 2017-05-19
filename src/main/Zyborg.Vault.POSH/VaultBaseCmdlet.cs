@@ -69,11 +69,11 @@ namespace Zyborg.Vault.POSH
 					profile = JsonConvert.DeserializeObject<VaultProfile>(File.ReadAllText(profileFile));
 				}
 
-				var server = ResolveServer(profile);
+				var address = ResolveAddress(profile);
 				var token = ResolveToken(profile);
 
-				WriteVerbose($"Creating Vault Session with server address [{server}]");
-				_session = new VaultSession(server, token);
+				WriteVerbose($"Creating Vault Session with address [{address}]");
+				_session = new VaultSession(address, token);
 			}
 
 			_client = _session.VaultClient;
@@ -81,46 +81,46 @@ namespace Zyborg.Vault.POSH
 			// Make sure TLS1.2 is enabled as that's often a requirement with Vault Server
 			if (!ServicePointManager.SecurityProtocol.HasFlag(SecurityProtocolType.Tls12))
 			{
-				WriteVerbose("Enabling TLS 1.2 support, typically required for Vault Server");
+				WriteVerbose("Enabling TLS 1.2 support, typically required for Vault");
 				System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 			}
 
 			return _client;
 		}
 
-		protected string ResolveServer(VaultProfile profile = null)
+		protected string ResolveAddress(VaultProfile profile = null)
 		{
-			// Resolve Vault Server
-			var server = VaultAddress ?? profile?.VaultAddress;
+			// Resolve Vault Address
+			var address = VaultAddress ?? profile?.VaultAddress;
 
-			if (string.IsNullOrWhiteSpace(server))
+			if (string.IsNullOrWhiteSpace(address))
 			{
-				WriteVerbose("Trying to resolve Vault Server address from env");
-				server = Environment.GetEnvironmentVariable(Global.CliVaultServerAddressEnvName);
+				WriteVerbose("Trying to resolve Vault address from env");
+				address = Environment.GetEnvironmentVariable(Global.CliVaultAddressEnvName);
 			}
-			var serverCacheFile = base.InvokeCommand.ExpandString(Global.VaultServerCacheFile);
-			if (string.IsNullOrWhiteSpace(server))
+			var addressCacheFile = base.InvokeCommand.ExpandString(Global.VaultAddressCacheFile);
+			if (string.IsNullOrWhiteSpace(address))
 			{
-				if (File.Exists(serverCacheFile))
+				if (File.Exists(addressCacheFile))
 				{
-					WriteVerbose($"Trying to load Vault Server address from user server cache file [{serverCacheFile}]");
-					server = File.ReadAllText(serverCacheFile)?.Trim();
+					WriteVerbose($"Trying to load Vault address from user address cache file [{addressCacheFile}]");
+					address = File.ReadAllText(addressCacheFile)?.Trim();
 				}
 			}
 			else
 			{
-				WriteVerbose($"Saving resolved Vault Server address to user server cache file [{serverCacheFile}]");
-				File.WriteAllText(serverCacheFile, server);
+				WriteVerbose($"Saving resolved Vault address to user cache file [{addressCacheFile}]");
+				File.WriteAllText(addressCacheFile, address);
 			}
 
-			// Absolute last resort -- assume the default address for a local DEV server
-			if (string.IsNullOrWhiteSpace(server))
+			// Absolute last resort -- assume the default address for a local DEV address
+			if (string.IsNullOrWhiteSpace(address))
 			{
-				WriteVerbose("Defaulting to local dev Vault Server address");
-				server = "http://127.0.0.1:8200";
+				WriteVerbose("Defaulting to local dev Vault address");
+				address = "http://127.0.0.1:8200";
 			}
 
-			return server;
+			return address;
 		}
 
 		protected string ResolveToken(VaultProfile profile = null)
