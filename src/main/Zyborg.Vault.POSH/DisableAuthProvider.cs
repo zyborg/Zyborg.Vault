@@ -6,7 +6,7 @@ namespace Zyborg.Vault.POSH
 	public class DisableAuthProvider : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = true, Position = 0)]
-		public string Path
+		public string MountName
 		{ get; set; }
 
 		protected override void BeginProcessing()
@@ -16,7 +16,7 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			_client.DisableAuthenticationBackendAsync(Path).Wait();
+			_client.DisableAuthenticationBackendAsync(MountName).Wait();
 		}
 	}
 }

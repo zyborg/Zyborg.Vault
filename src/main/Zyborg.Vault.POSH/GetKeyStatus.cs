@@ -9,10 +9,6 @@ namespace Zyborg.Vault.POSH
 	[OutputType(typeof(EncryptionKeyStatus))]
 	public class GetKeyStatus : VaultBaseCmdlet
 	{
-		[Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
-		public string[] Path
-		{ get; set; }
-
 		protected override void BeginProcessing()
 		{
 			ResolveVaultClient();

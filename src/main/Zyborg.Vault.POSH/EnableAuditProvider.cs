@@ -12,7 +12,7 @@ namespace Zyborg.Vault.POSH
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 1)]
-		public string Path
+		public string MountName
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 2)]
@@ -36,7 +36,7 @@ namespace Zyborg.Vault.POSH
 		{
 			var ab = new GenericAuditBackend(Type)
 			{
-				MountPoint = Path,
+				MountPoint = MountName,
 				Options = Config,
 				Description = Description,
 			};

@@ -13,7 +13,7 @@ namespace Zyborg.Vault.POSH
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 1)]
-		public string Path
+		public string MountName
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 2)]
@@ -45,13 +45,13 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			if (string.IsNullOrEmpty(Path))
-				Path = Type;
+			if (string.IsNullOrEmpty(MountName))
+				MountName = Type;
 
 			var ab = new AuthenticationBackend()
 			{
 				BackendType = new AuthenticationBackendType(Type),
-				AuthenticationPath = Path,
+				AuthenticationPath = MountName,
 				Description = Description,
 			};
 
@@ -61,7 +61,7 @@ namespace Zyborg.Vault.POSH
 			{
 				var values = Config.Keys.Cast<string>().ToDictionary(
 						x => x, x => Config[x]);
-				_client.WriteRawSecretAsync($"auth/{Path}/config", values).Wait();
+				_client.WriteRawSecretAsync($"auth/{MountName}/config", values).Wait();
 			}
 		}
 	}
