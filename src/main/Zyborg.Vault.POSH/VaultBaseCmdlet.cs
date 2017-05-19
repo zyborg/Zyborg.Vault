@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Management.Automation;
 using System.Net;
@@ -31,7 +32,7 @@ namespace Zyborg.Vault.POSH
 		{ get; set; }
 
 		[Parameter()]
-		public string VaultServer
+		public string VaultAddress
 		{ get; set; }
 
 		[Parameter()]
@@ -48,16 +49,28 @@ namespace Zyborg.Vault.POSH
 		/// <returns></returns>
 		protected IVaultClient ResolveVaultClient()
 		{
+			VaultProfile profile = null;
+
 			_session = VaultSession as VaultSession;
 			if (_session == null)
 			{
-				//if (!string.IsNullOrEmpty(VaultProfile))
-				//{
-				//	var 
-				//}
+				if (!string.IsNullOrEmpty(VaultProfile))
+				{
+					var profileDir = base.InvokeCommand.ExpandString(Global.VaultProfilesDir);
+					WriteVerbose($"Resolving named profile under user profiles directory [{profileDir}]");
+					if (!Directory.Exists(profileDir))
+						throw new DirectoryNotFoundException($"missing user profiles directory [{profileDir}]");
+					var profileFile = Path.Combine(profileDir,
+							string.Format(Global.VaultProfileFileFormat, VaultProfile));
+					WriteVerbose($"Resolving named profile using profile file [{profileFile}]");
+					if (!File.Exists(profileFile))
+						throw new FileNotFoundException($"missing user profile file [{profileFile}]");
 
-				var server = ResolveServer();
-				var token = ResolveToken();
+					profile = JsonConvert.DeserializeObject<VaultProfile>(File.ReadAllText(profileFile));
+				}
+
+				var server = ResolveServer(profile);
+				var token = ResolveToken(profile);
 
 				WriteVerbose($"Creating Vault Session with server address [{server}]");
 				_session = new VaultSession(server, token);
@@ -75,10 +88,10 @@ namespace Zyborg.Vault.POSH
 			return _client;
 		}
 
-		protected string ResolveServer()
+		protected string ResolveServer(VaultProfile profile = null)
 		{
 			// Resolve Vault Server
-			var server = VaultServer;
+			var server = VaultAddress ?? profile?.VaultAddress;
 
 			if (string.IsNullOrWhiteSpace(server))
 			{
@@ -110,12 +123,13 @@ namespace Zyborg.Vault.POSH
 			return server;
 		}
 
-		protected string ResolveToken()
+		protected string ResolveToken(VaultProfile profile = null)
 		{
 			// Resolve Vault Token
-			var token = VaultToken;
+			var token = VaultToken ?? profile?.VaultToken;
 
-			if (!base.MyInvocation.BoundParameters.ContainsKey(nameof(VaultToken)))
+			if (string.IsNullOrEmpty(token) &&
+					!base.MyInvocation.BoundParameters.ContainsKey(nameof(VaultToken)))
 			{
 				WriteVerbose("Trying to resolve Vault Token from env");
 				token = Environment.GetEnvironmentVariable(Global.CliVaultTokenEnvName);
