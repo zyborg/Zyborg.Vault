@@ -71,7 +71,7 @@ namespace Zyborg.Vault.POSH
 				if (string.IsNullOrEmpty(token))
 					throw new Exception("empty token");
 
-				SetProfile.SetVaultProfile(this, SaveAsProfile, force: Force,
+				Global.SetVaultProfile(this, SaveAsProfile, force: Force,
 						vaultAddress: _session.VaultAddress, vaultToken: token);
 			}
 			else

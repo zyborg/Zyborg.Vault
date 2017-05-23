@@ -18,7 +18,7 @@ namespace Zyborg.Vault.POSH
 		public const string RemoveParamSet = "Remove";
 
 		[Parameter(Mandatory = true, Position = 0)]
-		public string VaultProfile
+		public string SaveAs
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 1,
@@ -29,6 +29,11 @@ namespace Zyborg.Vault.POSH
 		[Parameter(Mandatory = false, Position = 2,
 				ParameterSetName = DefaultParamSet)]
 		public string VaultToken
+		{ get; set; }
+
+		[Parameter(Mandatory = false,
+				ParameterSetName = DefaultParamSet)]
+		public string VaultProfile
 		{ get; set; }
 
 		[Parameter(Mandatory = false,
@@ -44,51 +49,16 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			SetVaultProfile(this, VaultProfile, Remove.IsPresent,
-					Force.IsPresent, VaultAddress, VaultToken);
-		}
-
-		public static void SetVaultProfile(PSCmdlet ctx, string name, bool Remove = false,
-				bool force = false, string vaultAddress = null, string vaultToken = null)
-		{
-			var profileDir = ctx.InvokeCommand.ExpandString(Global.VaultProfilesDir);
-			ctx.WriteVerbose($"Resolved user profiles root directory [{profileDir}]");
-
-			var profileFile = Path.Combine(profileDir,
-					string.Format(Global.VaultProfileFileFormat, name));
-			ctx.WriteVerbose($"Resolved user profile file [{profileFile}]");
-
-			if (Remove)
+			VaultProfile vp = null;
+			if (!string.IsNullOrEmpty(VaultProfile))
 			{
-				if (File.Exists(profileFile))
-				{
-					ctx.WriteVerbose("Removing profile file");
-					File.Delete(profileFile);
-				}
+				vp = Global.GetVaultProfile(this, VaultProfile);
 			}
-			else
-			{
-				if (!Directory.Exists(profileDir))
-				{
-					// TODO: need to provide a default Directory ACL to
-					// protect the profiles directory
 
-					ctx.WriteVerbose("Creating user profiles root directory");
-					Directory.CreateDirectory(profileDir);
-				}
+			var addr = VaultAddress ?? vp?.VaultAddress;
+			var token = VaultToken ?? vp?.VaultToken;
 
-				if (File.Exists(profileFile) && !force)
-					throw new Exception("Existing profile found, use -Force to overwrite");
-
-				var vp = new VaultProfile
-				{
-					VaultAddress = vaultAddress,
-					VaultToken = vaultToken,
-				};
-
-				ctx.WriteVerbose("Saving VaultProfile to file");
-				File.WriteAllText(profileFile, JsonConvert.SerializeObject(vp));
-			}
+			Global.SetVaultProfile(this, SaveAs, Remove.IsPresent, Force.IsPresent, addr, token);
 		}
 	}
 }
