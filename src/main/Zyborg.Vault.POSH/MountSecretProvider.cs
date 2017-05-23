@@ -9,38 +9,48 @@ using VaultSharp.Backends.System.Models;
 
 namespace Zyborg.Vault.POSH
 {
-	[Cmdlet(VerbsData.Mount, "SecretProvider")]
+	[Cmdlet(VerbsData.Mount, "SecretProvider", DefaultParameterSetName = DefaultParamSet)]
 	public class MountSecretProvider : VaultBaseCmdlet
 	{
-		[Parameter(Mandatory = true, Position = 0)]
+		public const string RemountParamSet = "Remount";
+
+		[Parameter(Mandatory = true, Position = 0, ParameterSetName = DefaultParamSet)]
 		public string Type
 		{ get; set; }
 
-		[Parameter(Mandatory = false, Position = 1)]
+		[Parameter(Mandatory = false, Position = 1, ParameterSetName = DefaultParamSet)]
 		public string MountName
 		{ get; set; }
 
-		[Parameter(Mandatory = false, Position = 2)]
+		[Parameter(Mandatory = false, Position = 2, ParameterSetName = DefaultParamSet)]
 		public string Description
 		{ get; set; }
 
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = false, ParameterSetName = DefaultParamSet)]
 		public string DefaultLeaseTtl
 		{ get; set; }
 
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = false, ParameterSetName = DefaultParamSet)]
 		public string MaxLeaseTtl
 		{ get; set; }
 
 		// TODO: no way to pass this option with VaultSharp Client
-		//[Parameter(Mandatory = false)]
+		//[Parameter(Mandatory = false, ParameterSetName = DefaultParamSet)]
 		//public SwitchParameter Local
 		//{ get; set; }
 
 		// TODO: no way to pass this option with VaultSharp Client
-		//[Parameter(Mandatory = false)]
+		//[Parameter(Mandatory = false, ParameterSetName = DefaultParamSet)]
 		//public SwitchParameter NoCache
 		//{ get; set; }
+
+		[Parameter(Mandatory = true, ParameterSetName = RemountParamSet)]
+		public string OldMountName
+		{ get; set; }
+
+		[Parameter(Mandatory = true, ParameterSetName = RemountParamSet)]
+		public string NewMountName
+		{ get; set; }
 
 
 		protected override void BeginProcessing()
@@ -50,28 +60,35 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			if (string.IsNullOrEmpty(MountName))
-				MountName = Type;
-
-			MountConfiguration mc = null;
-			if (!string.IsNullOrEmpty(DefaultLeaseTtl) || !string.IsNullOrEmpty(MaxLeaseTtl))
+			if (ParameterSetName == RemountParamSet)
 			{
-				mc = new MountConfiguration
-				{
-					DefaultLeaseTtl = DefaultLeaseTtl,
-					MaximumLeaseTtl = MaxLeaseTtl,
-				};
+				AsyncWait(_client.RemountSecretBackendAsync(OldMountName, NewMountName));
 			}
-
-			var sb = new SecretBackend
+			else
 			{
-				BackendType = new SecretBackendType(Type),
-				MountPoint = MountName,
-				Description = Description,
-				MountConfiguration = mc,
-			};
+				if (string.IsNullOrEmpty(MountName))
+					MountName = Type;
 
-			AsyncWait(_client.MountSecretBackendAsync(sb));
+				MountConfiguration mc = null;
+				if (!string.IsNullOrEmpty(DefaultLeaseTtl) || !string.IsNullOrEmpty(MaxLeaseTtl))
+				{
+					mc = new MountConfiguration
+					{
+						DefaultLeaseTtl = DefaultLeaseTtl,
+						MaximumLeaseTtl = MaxLeaseTtl,
+					};
+				}
+
+				var sb = new SecretBackend
+				{
+					BackendType = new SecretBackendType(Type),
+					MountPoint = MountName,
+					Description = Description,
+					MountConfiguration = mc,
+				};
+
+				AsyncWait(_client.MountSecretBackendAsync(sb));
+			}
 		}
 	}
 }
