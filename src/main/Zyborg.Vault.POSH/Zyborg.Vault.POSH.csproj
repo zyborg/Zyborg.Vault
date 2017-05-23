@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DismountSecretProvider.cs" />
     <Compile Include="DisableAuthProvider.cs" />
     <Compile Include="DisableAuditProvider.cs" />
     <Compile Include="EnableAuthProvider.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="EnableAuditProvider.cs" />
     <Compile Include="InitializeInstance.cs" />
     <Compile Include="Model\GenericAuditBackend.cs" />
+    <Compile Include="SetSecretMountOptions.cs" />
+    <Compile Include="MountSecretProvider.cs" />
     <Compile Include="NewAuth.cs" />
     <Compile Include="RemoveData.cs" />
     <Compile Include="ReadData.cs" />
