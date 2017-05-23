@@ -6,7 +6,7 @@ using VaultSharp.Backends.Authentication.Models;
 namespace Zyborg.Vault.POSH
 {
 	[Cmdlet(VerbsLifecycle.Enable, "AuthProvider")]
-	public class EnableAuthProvider : VaultBaseCmdlet
+	public class MountAuthProvider : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = true, Position = 0)]
 		public string Type

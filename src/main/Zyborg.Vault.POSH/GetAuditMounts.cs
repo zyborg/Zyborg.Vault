@@ -3,9 +3,9 @@ using VaultSharp.Backends.Audit.Models;
 
 namespace Zyborg.Vault.POSH
 {
-	[Cmdlet(VerbsCommon.Get, "AuditProviders")]
+	[Cmdlet(VerbsCommon.Get, "AuditMounts")]
 	[OutputType(typeof(AuditBackend))]
-	public class GetAuditProviders : VaultBaseCmdlet
+	public class GetAuditMounts : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = false)]
 		public SwitchParameter KeepSecretWrapper

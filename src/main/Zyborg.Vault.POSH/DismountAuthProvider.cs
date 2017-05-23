@@ -3,7 +3,7 @@
 namespace Zyborg.Vault.POSH
 {
 	[Cmdlet(VerbsLifecycle.Disable, "AuthProvider")]
-	public class DisableAuthProvider : VaultBaseCmdlet
+	public class DismountAuthProvider : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = true, Position = 0)]
 		public string MountName

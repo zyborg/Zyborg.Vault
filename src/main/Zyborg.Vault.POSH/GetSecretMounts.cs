@@ -1,11 +1,11 @@
 ﻿using System.Management.Automation;
-using VaultSharp.Backends.Authentication.Models;
+using VaultSharp.Backends.Secret.Models;
 
 namespace Zyborg.Vault.POSH
 {
-	[Cmdlet(VerbsCommon.Get, "AuthMethod")]
-	[OutputType(typeof(AuthenticationBackend))]
-	public class GetAuthMethod : VaultBaseCmdlet
+	[Cmdlet(VerbsCommon.Get, "SecretMounts")]
+	[OutputType(typeof(SecretBackend))]
+	public class GetSecretMounts : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = false)]
 		public SwitchParameter KeepSecretWrapper
@@ -13,12 +13,12 @@ namespace Zyborg.Vault.POSH
 
 		protected override void BeginProcessing()
 		{
-			ResolveVaultClient();
+			base.ResolveVaultClient();
 		}
 
 		protected override void ProcessRecord()
 		{
-			var r = AsyncWaitFor(_client.GetAllEnabledAuthenticationBackendsAsync());
+			var r = AsyncWaitFor(_client.GetAllMountedSecretBackendsAsync());
 			WriteWrappedEnumerableData(r, KeepSecretWrapper);
 		}
 	}

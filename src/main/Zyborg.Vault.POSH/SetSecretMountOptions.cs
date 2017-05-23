@@ -9,7 +9,7 @@ using VaultSharp.Backends.System.Models;
 
 namespace Zyborg.Vault.POSH
 {
-	[Cmdlet(VerbsCommon.Set, "SecretProviderOptions")]
+	[Cmdlet(VerbsCommon.Set, "SecretMountOptions")]
 	public class SetSecretMountOptions : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = false, Position = 0)]

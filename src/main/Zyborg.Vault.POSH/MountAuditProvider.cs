@@ -5,7 +5,7 @@ using Zyborg.Vault.POSH.Model;
 namespace Zyborg.Vault.POSH
 {
 	[Cmdlet(VerbsLifecycle.Enable, "AuditProvider")]
-	public class EnableAuditProvider : VaultBaseCmdlet
+	public class MountAuditProvider : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = true, Position = 0)]
 		public string Type
