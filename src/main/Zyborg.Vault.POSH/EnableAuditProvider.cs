@@ -23,9 +23,10 @@ namespace Zyborg.Vault.POSH
 		public string Description
 		{ get; set; }
 
-		[Parameter(Mandatory = false)]
-		public SwitchParameter Local
-		{ get; set; }
+		// TODO: no way to pass this option with VaultSharp Client
+		//[Parameter(Mandatory = false)]
+		//public SwitchParameter Local
+		//{ get; set; }
 
 		protected override void BeginProcessing()
 		{
