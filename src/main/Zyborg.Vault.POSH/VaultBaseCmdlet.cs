@@ -57,20 +57,16 @@ namespace Zyborg.Vault.POSH
 			_session = VaultSession as VaultSession;
 			if (_session == null)
 			{
+				// First see if user specified a named profile
 				if (!string.IsNullOrEmpty(VaultProfile))
 				{
-					var profileDir = base.InvokeCommand.ExpandString(Global.VaultProfilesDir);
-					WriteVerbose($"Resolving named profile under user profiles directory [{profileDir}]");
-					if (!Directory.Exists(profileDir))
-						throw new DirectoryNotFoundException($"missing user profiles directory [{profileDir}]");
-					var profileFile = Path.Combine(profileDir,
-							string.Format(Global.VaultProfileFileFormat, VaultProfile));
-					WriteVerbose($"Resolving named profile using profile file [{profileFile}]");
-					if (!File.Exists(profileFile))
-						throw new FileNotFoundException($"missing user profile file [{profileFile}]");
-
-					profile = JsonConvert.DeserializeObject<VaultProfile>(File.ReadAllText(profileFile));
+					profile = Global.GetVaultProfile(this, VaultProfile);
+					if (profile == null)
+						throw new FileNotFoundException($"missing user profile [{VaultProfile}]");
 				}
+
+				// Then default to possible default profile, may be null
+				profile = Global.GetVaultProfile(this, Global.DefaultVaultProfileName);
 
 				var address = ResolveAddress(profile);
 				var token = ResolveToken(profile);
@@ -101,6 +97,7 @@ namespace Zyborg.Vault.POSH
 				WriteVerbose("Trying to resolve Vault address from env");
 				address = Environment.GetEnvironmentVariable(Global.CliVaultAddressEnvName);
 			}
+
 			var addressCacheFile = base.InvokeCommand.ExpandString(Global.VaultAddressCacheFile);
 			if (string.IsNullOrWhiteSpace(address))
 			{
@@ -110,9 +107,9 @@ namespace Zyborg.Vault.POSH
 					address = File.ReadAllText(addressCacheFile)?.Trim();
 				}
 			}
-			else
+			else if (base.MyInvocation.BoundParameters.ContainsKey(nameof(VaultAddress)))
 			{
-				WriteVerbose($"Saving resolved Vault address to user cache file [{addressCacheFile}]");
+				WriteVerbose($"Saving manually-specified Vault address to user cache file [{addressCacheFile}]");
 				File.WriteAllText(addressCacheFile, address);
 			}
 
