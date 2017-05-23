@@ -19,7 +19,7 @@ namespace Zyborg.Vault.POSH
 		protected override void ProcessRecord()
 		{
 			foreach (var k in Key)
-				base.WriteObject(_client.UnsealAsync(k).Result);
+				WriteAsyncResult(_client.UnsealAsync(k));
 		}
 	}
 }

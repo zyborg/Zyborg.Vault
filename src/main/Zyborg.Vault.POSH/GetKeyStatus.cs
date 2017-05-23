@@ -16,8 +16,7 @@ namespace Zyborg.Vault.POSH
 
 		protected override void ProcessRecord()
 		{
-			var r = _client.GetEncryptionKeyStatusAsync().Result;
-			base.WriteObject(r);
+			WriteAsyncResult(_client.GetEncryptionKeyStatusAsync());
 		}
 	}
 }

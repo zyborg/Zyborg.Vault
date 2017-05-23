@@ -30,13 +30,13 @@ namespace Zyborg.Vault.POSH
 		{
 			if (!string.IsNullOrWhiteSpace(Accessor))
 				foreach (var p in Path)
-					base.WriteObject(_client.GetTokenAccessorCapabilitiesAsync(Accessor, p).Result);
+					WriteAsyncResult(_client.GetTokenAccessorCapabilitiesAsync(Accessor, p));
 			else if (!string.IsNullOrWhiteSpace(Token))
 				foreach (var p in Path)
-					base.WriteObject(_client.GetTokenCapabilitiesAsync(Token, p).Result);
+					WriteAsyncResult(_client.GetTokenCapabilitiesAsync(Token, p));
 			else
 				foreach (var p in Path)
-					base.WriteObject(_client.GetCallingTokenCapabilitiesAsync(p).Result);
+					WriteAsyncResult(_client.GetCallingTokenCapabilitiesAsync(p));
 		}
 	}
 }

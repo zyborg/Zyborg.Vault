@@ -18,7 +18,7 @@ namespace Zyborg.Vault.POSH
 		{
 			foreach (var p in Path)
 			{
-				_client.DeleteSecretAsync(p).Wait();
+				AsyncWait(_client.DeleteSecretAsync(p));
 			}
 		}
 	}

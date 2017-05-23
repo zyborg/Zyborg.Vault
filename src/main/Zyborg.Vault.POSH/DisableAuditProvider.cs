@@ -16,7 +16,7 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			_client.DisableAuditBackendAsync(MountName).Wait();
+			AsyncWait(_client.DisableAuditBackendAsync(MountName));
 		}
 	}
 }

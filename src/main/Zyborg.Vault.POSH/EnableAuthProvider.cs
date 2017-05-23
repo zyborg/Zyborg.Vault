@@ -55,13 +55,13 @@ namespace Zyborg.Vault.POSH
 				Description = Description,
 			};
 
-			_client.EnableAuthenticationBackendAsync(ab).Wait();
+			AsyncWait(_client.EnableAuthenticationBackendAsync(ab));
 
 			if (Config != null)
 			{
 				var values = Config.Keys.Cast<string>().ToDictionary(
 						x => x, x => Config[x]);
-				_client.WriteRawSecretAsync($"auth/{MountName}/config", values).Wait();
+				AsyncWait(_client.WriteRawSecretAsync($"auth/{MountName}/config", values));
 			}
 		}
 	}

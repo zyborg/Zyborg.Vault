@@ -62,8 +62,8 @@ namespace Zyborg.Vault.POSH
 			if (!string.IsNullOrEmpty(PathData))
 				resPath += $"/{PathData.TrimStart('/')}";
 
-			var r = _session.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(
-					resPath, HttpMethod.Post, AuthData).Result;
+			var r = AsyncWaitFor(_session.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(
+					resPath, HttpMethod.Post, AuthData));
 
 			if (!string.IsNullOrEmpty(SaveAsProfile))
 			{

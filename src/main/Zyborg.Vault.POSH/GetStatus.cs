@@ -14,7 +14,7 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			base.WriteObject(_client.GetSealStatusAsync().Result);
+			WriteAsyncResult(_client.GetSealStatusAsync());
 		}
 	}
 }

@@ -26,11 +26,11 @@ namespace Zyborg.Vault.POSH
 			if (Name?.Length > 0)
 			{
 				foreach (var n in Name)
-					base.WriteObject(_client.GetPolicyAsync(n).Result);
+					WriteAsyncResult(_client.GetPolicyAsync(n));
 			}
 			else
 			{
-				base.WriteObject(_client.GetAllPoliciesAsync().Result);
+				WriteAsyncResult(_client.GetAllPoliciesAsync());
 			}
 		}
 	}

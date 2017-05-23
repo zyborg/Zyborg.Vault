@@ -21,9 +21,8 @@ namespace Zyborg.Vault.POSH
 		{
 			foreach (var p in Path)
 			{
-				var r = _session.MakeVaultApiRequest<PathHelp>($"{p}?help=1",
-						HttpMethod.Get).Result;
-				base.WriteObject(r);
+				WriteAsyncResult(_session.MakeVaultApiRequest<PathHelp>($"{p}?help=1",
+						HttpMethod.Get));
 			}
 		}
 	}

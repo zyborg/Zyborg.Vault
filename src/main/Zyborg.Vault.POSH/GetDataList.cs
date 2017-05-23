@@ -42,11 +42,8 @@ namespace Zyborg.Vault.POSH
 			{
 				foreach (var t in UnwrapToken)
 				{
-					var r = _client.UnwrapWrappedResponseDataAsync<ListInfo>(t).Result;
-					if (KeepSecretWrapper)
-						base.WriteObject(r);
-					else
-						base.WriteObject(r.Data);
+					var r = AsyncWaitFor(_client.UnwrapWrappedResponseDataAsync<ListInfo>(t));
+					WriteWrappedData(r, KeepSecretWrapper);
 				}
 			}
 			else
@@ -56,25 +53,17 @@ namespace Zyborg.Vault.POSH
 					// Wrap
 					if (!string.IsNullOrEmpty(WrapTtl))
 					{
-						var r = _session.MakeVaultApiRequest<Secret<Dictionary<string, object>>>($"{p}?list=true",
-								HttpMethod.Get).Result;
-
-						var w = _client.WrapResponseDataAsync(r.Data, WrapTtl).Result;
-						if (KeepSecretWrapper)
-							base.WriteObject(w);
-						else
-							base.WriteObject(w.WrappedInformation);
+						var r = AsyncWaitFor(_session.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(
+								$"{p}?list=true", HttpMethod.Get));
+						var w = AsyncWaitFor(_client.WrapResponseDataAsync(r.Data, WrapTtl));
+						WriteWrapInfo(w, KeepSecretWrapper);
 					}
 					// Default
 					else
 					{
-						var r = _session.MakeVaultApiRequest<Secret<ListInfo>>($"{p}?list=true",
-								HttpMethod.Get).Result;
-
-						if (KeepSecretWrapper)
-							base.WriteObject(r);
-						else
-							base.WriteObject(r.Data);
+						var r = AsyncWaitFor(_session.MakeVaultApiRequest<Secret<ListInfo>>($"{p}?list=true",
+								HttpMethod.Get));
+						WriteWrappedData(r, KeepSecretWrapper);
 					}
 				}
 			}

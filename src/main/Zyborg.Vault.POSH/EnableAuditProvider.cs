@@ -41,7 +41,7 @@ namespace Zyborg.Vault.POSH
 				Description = Description,
 			};
 
-			_client.EnableAuditBackendAsync(ab).Wait();
+			AsyncWait(_client.EnableAuditBackendAsync(ab));
 		}
 	}
 }

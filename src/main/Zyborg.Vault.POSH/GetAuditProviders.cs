@@ -18,13 +18,8 @@ namespace Zyborg.Vault.POSH
 
 		protected override void ProcessRecord()
 		{
-			var r = _client.GetAllEnabledAuditBackendsAsync().Result;
-
-			if (KeepSecretWrapper.IsPresent)
-				base.WriteObject(r);
-			else
-				foreach (var ab in r.Data)
-					base.WriteObject(ab);
+			var r = AsyncWaitFor(_client.GetAllEnabledAuditBackendsAsync());
+			WriteWrappedEnumerableData(r, KeepSecretWrapper);
 		}
 	}
 }

@@ -41,35 +41,26 @@ namespace Zyborg.Vault.POSH
 			{
 				foreach (var t in UnwrapToken)
 				{
-					var r = _client.UnwrapWrappedResponseDataAsync(t).Result;
-					if (KeepSecretWrapper)
-						base.WriteObject(r);
-					else
-						base.WriteObject(r.Data);
+					var r = AsyncWaitFor(_client.UnwrapWrappedResponseDataAsync(t));
+					WriteWrappedData(r, KeepSecretWrapper);
 				}
 			}
 			else
 			{
 				foreach (var p in Path)
 				{
-					var r = _client.ReadSecretAsync(p).Result;
+					var r = AsyncWaitFor(_client.ReadSecretAsync(p));
 
 					// Wrap
 					if (!string.IsNullOrEmpty(WrapTtl))
 					{
-						var w = _client.WrapResponseDataAsync(r.Data, WrapTtl).Result;
-						if (KeepSecretWrapper)
-							base.WriteObject(w);
-						else
-							base.WriteObject(w.WrappedInformation);
+						var w = AsyncWaitFor(_client.WrapResponseDataAsync(r.Data, WrapTtl));
+						WriteWrappedData(w, KeepSecretWrapper);
 					}
 					// Default
 					else
 					{
-						if (KeepSecretWrapper)
-							base.WriteObject(r);
-						else
-							base.WriteObject(r.Data);
+						WriteWrappedData(r, KeepSecretWrapper);
 					}
 				}
 			}

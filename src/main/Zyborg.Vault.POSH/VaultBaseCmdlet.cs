@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.IO;
 using System.Management.Automation;
 using System.Net;
+using System.Threading.Tasks;
 using VaultSharp;
+using VaultSharp.Backends.System.Models;
 
 // When troubleshooting connections over SSL in Fiddler, this might help:
 //    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
@@ -148,6 +151,47 @@ namespace Zyborg.Vault.POSH
 				WriteVerbose("Using Vault Token");
 
 			return token;
+		}
+
+		protected void AsyncWait(Task t)
+		{
+			t.Wait();
+		}
+
+		protected T AsyncWaitFor<T>(Task<T> t)
+		{
+			return t.Result;
+		}
+
+		protected void WriteAsyncResult<T>(Task<T> t)
+		{
+			base.WriteObject(t.Result);
+		}
+
+		protected void WriteWrappedData<T>(Secret<T> wrapped, bool keepSecretWrapper)
+		{
+			if (keepSecretWrapper)
+				base.WriteObject(wrapped);
+			else if (wrapped != null)
+				base.WriteObject(wrapped.Data);
+		}
+
+		protected void WriteWrappedEnumerableData<T>(Secret<T> wrapped, bool keepSecretWrapper)
+			where T : IEnumerable
+		{
+			if (keepSecretWrapper)
+				base.WriteObject(wrapped);
+			else if (wrapped != null)
+				foreach (var x in wrapped.Data)
+					base.WriteObject(x);
+		}
+
+		protected void WriteWrapInfo<T>(Secret<T> wrapped, bool keepSecretWrapper)
+		{
+			if (keepSecretWrapper)
+				base.WriteObject(wrapped);
+			else if (wrapped != null)
+				base.WriteObject(wrapped.WrappedInformation);
 		}
 	}
 }

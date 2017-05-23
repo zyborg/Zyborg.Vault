@@ -89,11 +89,8 @@ namespace Zyborg.Vault.POSH
 				for (int i = 0; i < Key.Length; ++i)
 					values.Add(Key[i], Value[i]);
 
-				var r = _client.WriteSecretAsync(Path, values).Result;
-				if (KeepSecretWrapper)
-					base.WriteObject(r);
-				else
-					base.WriteObject(r.Data);
+				var r = AsyncWaitFor(_client.WriteSecretAsync(Path, values));
+				WriteWrappedData(r, KeepSecretWrapper);
 				return;
 			}
 
@@ -111,12 +108,8 @@ namespace Zyborg.Vault.POSH
 
 			foreach (var p in Paths)
 			{
-				var r = _client.WriteSecretAsync(p, values).Result;
-				if (KeepSecretWrapper)
-					base.WriteObject(r);
-				else
-					// TODO:  WHY IS r NULL????
-					base.WriteObject(r?.Data);
+				var r = AsyncWaitFor(_client.WriteSecretAsync(p, values));
+				WriteWrappedData(r, KeepSecretWrapper);
 			}
 		}
 	}

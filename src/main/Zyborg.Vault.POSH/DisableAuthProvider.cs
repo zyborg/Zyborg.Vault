@@ -16,7 +16,7 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			_client.DisableAuthenticationBackendAsync(MountName).Wait();
+			AsyncWait(_client.DisableAuthenticationBackendAsync(MountName));
 		}
 	}
 }
