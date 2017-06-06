@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using VaultSharp.Backends.System.Models;
+using Zyborg.Vault.POSH.Internal;
 
 namespace Zyborg.Vault.POSH
 {
 	[Cmdlet(VerbsData.Initialize, "Instance")]
 	public class InitializeInstance : VaultBaseCmdlet
 	{
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = false, Position = 0)]
 		public int KeyShares
 		{ get; set; } = 5;
 
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = false, Position = 1)]
 		public int KeyThreshold
 		{ get; set; } = 3;
 
@@ -33,15 +35,53 @@ namespace Zyborg.Vault.POSH
 			};
 
 			var r = AsyncWaitFor(_client.InitializeAsync(opts));
+			WriteObject(new InitializeResult(r.Base64MasterKeys, r.RootToken));
 
-			int keyNum = 1;
-			foreach (var k in r.Base64MasterKeys)
+			base.WriteVerbose("************************************************************************");
+			base.WriteVerbose($"Vault initialized with {KeyShares} unseal keys");
+			base.WriteVerbose($"and a key threshold of {KeyThreshold}.");
+			base.WriteVerbose("************************************************************************");
+			base.WriteVerbose($"Please securely distribute the unseal keys.");
+			base.WriteVerbose($"When the Vault is re-sealed, restarted, or stopped, you must provide");
+			base.WriteVerbose($"at least {KeyThreshold} of these keys to unseal it again.");
+			base.WriteVerbose("************************************************************************");
+			base.WriteVerbose("");
+
+			base.WriteWarning("************************************************************************");
+			base.WriteWarning($"VAULT DOES NOT STORE THE *MASTER* KEY.");
+			base.WriteWarning($"Without at least {KeyThreshold} unseal keys,");
+			base.WriteWarning($"your Vault will remain PERMANENTLY SEALED.");
+			base.WriteWarning("************************************************************************");
+		}
+
+		public class InitializeResult : PSObject
+		{
+			private IEnumerable<string> _unsealKeys;
+			public string _rootToken;
+
+			public InitializeResult(string[] unsealKeys, string rootToken)
 			{
-				base.WriteObject(new KeyValuePair<string, string>($"UnsealKey_{keyNum++}", k));
+				_unsealKeys = unsealKeys;
+				_rootToken = rootToken;
+
+				int i = 0;
+
+				foreach (var uk in unsealKeys)
+					base.Properties.Add(new PSLambdaProperty<string>($"UnsealKey_{i++}", () => uk));
+
+				base.Methods.Add(new PSLambdaMethod<IEnumerable<string>>(nameof(GetUnsealKeys), null,
+								x => GetUnsealKeys(this)));
+
+				base.Properties.Add(new PSLambdaProperty<string>("RootToken", () => rootToken));
 			}
 
-			base.WriteObject(new KeyValuePair<string, string>("InitialRootToken", r.RootToken));
+			public static IEnumerable<string> GetUnsealKeys(PSObject arg)
+			{
+				return ((InitializeResult)arg)._unsealKeys;
+			}
 		}
+
+
 	}
 
 	// This is a sample output from the CLI init command:
