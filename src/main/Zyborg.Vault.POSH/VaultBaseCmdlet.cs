@@ -27,18 +27,22 @@ namespace Zyborg.Vault.POSH
 		protected IVaultClient _client;
 
 		[Parameter()]
+		[Alias("vs")]
 		public object VaultSession
 		{ get; set; }
 
 		[Parameter()]
+		[Alias("vp")]
 		public string VaultProfile
 		{ get; set; }
 
 		[Parameter()]
+		[Alias("va")]
 		public string VaultAddress
 		{ get; set; }
 
 		[Parameter()]
+		[Alias("vt")]
 		public string VaultToken
 		{ get; set; }
 
