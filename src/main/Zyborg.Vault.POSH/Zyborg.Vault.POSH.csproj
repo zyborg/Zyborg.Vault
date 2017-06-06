@@ -71,6 +71,10 @@
     <Compile Include="Model\GenericAuditBackend.cs" />
     <Compile Include="NewAuthToken.cs" />
     <Compile Include="RemovePolicy.cs" />
+    <Compile Include="RevokeSecret.cs" />
+    <Compile Include="UpdateSecretLease.cs" />
+    <Compile Include="UpdateAuthToken.cs" />
+    <Compile Include="RevokeAuthToken.cs" />
     <Compile Include="SetSecretMountOptions.cs" />
     <Compile Include="MountSecretProvider.cs" />
     <Compile Include="NewAuth.cs" />
