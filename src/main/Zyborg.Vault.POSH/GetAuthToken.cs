@@ -14,14 +14,19 @@ namespace Zyborg.Vault.POSH
 	{
 		public const string TokenParamSet = "Token";
 		public const string AccessorParamSet = "Accessor";
+		public const string SelfParamSet = "Self";
 		public const string ListParamSet = "List";
 
-		[Parameter(Mandatory = false, Position = 0, ParameterSetName = TokenParamSet)]
+		[Parameter(Mandatory = true, Position = 0, ParameterSetName = TokenParamSet)]
 		public string Token
 		{ get; set; }
 
 		[Parameter(Mandatory = true, ParameterSetName = AccessorParamSet)]
 		public string Accessor
+		{ get; set; }
+
+		[Parameter(Mandatory = true, ParameterSetName = SelfParamSet)]
+		public SwitchParameter Self
 		{ get; set; }
 
 		[Parameter(Mandatory = true, ParameterSetName = ListParamSet)]
@@ -60,7 +65,7 @@ namespace Zyborg.Vault.POSH
 				var r = AsyncWaitFor(_session.WriteSecret<TokenInfo>($"auth/token/lookup-accessor/{Accessor}"));
 				WriteWrappedData(r, KeepSecretWrapper);
 			}
-			else if (string.IsNullOrEmpty(Token))
+			else if (ParameterSetName == SelfParamSet)
 			{
 				//var a = AsyncWaitFor(_client.GetCallingTokenInfoAsync());
 				//base.WriteWrappedData(a, KeepSecretWrapper);
