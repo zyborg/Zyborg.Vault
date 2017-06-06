@@ -53,16 +53,14 @@ namespace Zyborg.Vault.POSH
 					// Wrap
 					if (!string.IsNullOrEmpty(WrapTtl))
 					{
-						var r = AsyncWaitFor(_session.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(
-								$"{p}?list=true", HttpMethod.Get));
+						var r = AsyncWaitFor(_session.ListData<Secret<Dictionary<string, object>>>(p));
 						var w = AsyncWaitFor(_client.WrapResponseDataAsync(r.Data, WrapTtl));
 						WriteWrapInfo(w, KeepSecretWrapper);
 					}
 					// Default
 					else
 					{
-						var r = AsyncWaitFor(_session.MakeVaultApiRequest<Secret<ListInfo>>($"{p}?list=true",
-								HttpMethod.Get));
+						var r = AsyncWaitFor(_session.ListData<Secret<ListInfo>>(p));
 						WriteWrappedData(r, KeepSecretWrapper);
 					}
 				}

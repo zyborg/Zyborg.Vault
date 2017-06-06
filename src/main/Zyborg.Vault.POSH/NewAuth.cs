@@ -76,10 +76,7 @@ namespace Zyborg.Vault.POSH
 			}
 			else
 			{
-				if (KeepSecretWrapper.IsPresent)
-					WriteObject(r);
-				else
-					WriteObject(r.AuthorizationInfo);
+				WriteWrappedAuth(r, KeepSecretWrapper);
 			}
 		}
 	}
