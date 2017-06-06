@@ -163,12 +163,23 @@ namespace Zyborg.Vault.POSH
 
 		protected T AsyncWaitFor<T>(Task<T> t)
 		{
-			return t.Result;
+			try
+			{
+				return t.Result;
+			}
+			catch (AggregateException ex)
+			{
+				ex = ex.Flatten();
+				if (ex.InnerExceptions.Count < 2)
+					throw ex.InnerException;
+				else
+					throw ex;
+			}
 		}
 
 		protected void WriteAsyncResult<T>(Task<T> t)
 		{
-			base.WriteObject(t.Result);
+			base.WriteObject(AsyncWaitFor(t));
 		}
 
 		protected void WriteWrappedData<T>(Secret<T> wrapped, bool keepSecretWrapper)
