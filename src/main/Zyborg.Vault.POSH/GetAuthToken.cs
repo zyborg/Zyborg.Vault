@@ -118,7 +118,7 @@ namespace Zyborg.Vault.POSH
 			{ get; set; }
 
 			[JsonProperty("issue_time")]
-			public DateTime IssueTime
+			public DateTime? IssueTime
 			{ get; set; }
 
 			[JsonProperty("meta")]
