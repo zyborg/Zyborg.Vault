@@ -179,6 +179,14 @@ namespace Zyborg.Vault.POSH
 				base.WriteObject(wrapped.Data);
 		}
 
+		protected void WriteWrappedAuth<T>(Secret<T> wrapped, bool keepSecretWrapper)
+		{
+			if (keepSecretWrapper)
+				base.WriteObject(wrapped);
+			else if (wrapped != null)
+				base.WriteObject(wrapped.AuthorizationInfo);
+		}
+
 		protected void WriteWrappedEnumerableData<T>(Secret<T> wrapped, bool keepSecretWrapper)
 			where T : IEnumerable
 		{

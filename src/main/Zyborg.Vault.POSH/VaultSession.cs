@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using VaultSharp;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
+using VaultSharp.Backends.System.Models;
 
 namespace Zyborg.Vault.POSH
 {
@@ -58,6 +59,24 @@ namespace Zyborg.Vault.POSH
 			_dataAccessManager.Dispose();
 
 			VaultClient = null;
+		}
+
+		public async Task<TResponse> ListData<TResponse>(string path)
+			where TResponse : class
+		{
+			return await MakeVaultApiRequest<TResponse>($"{path}?list=true", HttpMethod.Get);
+		}
+
+		public async Task<Secret<TResponseData>> ReadSecret<TResponseData>(string path)
+			where TResponseData : class
+		{
+			return await MakeVaultApiRequest<Secret<TResponseData>>(path, HttpMethod.Get);
+		}
+
+		public async Task<Secret<TResponseData>> WriteSecret<TResponseData>(string path, object values = null)
+			where TResponseData : class
+		{
+			return await MakeVaultApiRequest<Secret<TResponseData>>(path, HttpMethod.Post, values);
 		}
 
 		public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath,
