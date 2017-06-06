@@ -68,9 +68,11 @@ namespace Zyborg.Vault.POSH
 					if (profile == null)
 						throw new FileNotFoundException($"missing user profile [{VaultProfile}]");
 				}
-
-				// Then default to possible default profile, may be null
-				profile = Global.GetVaultProfile(this, Global.DefaultVaultProfileName);
+				else
+				{
+					// Then default to possible default profile, may be null
+					profile = Global.GetVaultProfile(this, Global.DefaultVaultProfileName);
+				}
 
 				var address = ResolveAddress(profile);
 				var token = ResolveToken(profile);
