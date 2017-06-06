@@ -58,6 +58,7 @@
     <Compile Include="DismountSecretProvider.cs" />
     <Compile Include="DismountAuthProvider.cs" />
     <Compile Include="DismountAuditProvider.cs" />
+    <Compile Include="GetAuthToken.cs" />
     <Compile Include="MountAuthProvider.cs" />
     <Compile Include="GetAuthMounts.cs" />
     <Compile Include="GetAuditMounts.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="MountAuditProvider.cs" />
     <Compile Include="InitializeInstance.cs" />
     <Compile Include="Model\GenericAuditBackend.cs" />
+    <Compile Include="NewAuthToken.cs" />
     <Compile Include="RemovePolicy.cs" />
     <Compile Include="SetSecretMountOptions.cs" />
     <Compile Include="MountSecretProvider.cs" />
