@@ -23,16 +23,28 @@ namespace Zyborg.Vault.POSH
 
 		[Parameter(Mandatory = false, Position = 1,
 				ParameterSetName = DefaultParamSet)]
+		[Alias("va")]
 		public string VaultAddress
 		{ get; set; }
 
 		[Parameter(Mandatory = false, Position = 2,
 				ParameterSetName = DefaultParamSet)]
+		[Alias("vt")]
 		public string VaultToken
+		{ get; set; }
+
+		/// <summary>
+		/// Provides an optional human-friendly descriptive name to the profile
+		/// for quick and easy recognition upon inspection.
+		/// </summary>
+		[Parameter(Mandatory = false, Position = 3,
+				ParameterSetName = DefaultParamSet)]
+		public string Label
 		{ get; set; }
 
 		[Parameter(Mandatory = false,
 				ParameterSetName = DefaultParamSet)]
+		[Alias("vp")]
 		public string VaultProfile
 		{ get; set; }
 
@@ -58,7 +70,8 @@ namespace Zyborg.Vault.POSH
 			var addr = VaultAddress ?? vp?.VaultAddress;
 			var token = VaultToken ?? vp?.VaultToken;
 
-			Global.SetVaultProfile(this, SaveAs, Remove.IsPresent, Force.IsPresent, addr, token);
+			Global.SetVaultProfile(this, SaveAs, Remove.IsPresent, Force.IsPresent,
+					addr, token, Label);
 		}
 	}
 }

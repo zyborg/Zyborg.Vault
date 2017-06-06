@@ -69,7 +69,8 @@ namespace Zyborg.Vault.POSH
 		}
 
 		public static void SetVaultProfile(PSCmdlet ctx, string name, bool Remove = false,
-				bool force = false, string vaultAddress = null, string vaultToken = null)
+				bool force = false, string vaultAddress = null, string vaultToken = null,
+				string label = null)
 		{
 			var profileDir = ctx.InvokeCommand.ExpandString(Global.VaultProfilesDir);
 			ctx.WriteVerbose($"Resolved user profiles root directory [{profileDir}]");
@@ -102,6 +103,7 @@ namespace Zyborg.Vault.POSH
 
 				var vp = new VaultProfile
 				{
+					Label = label,
 					VaultAddress = vaultAddress,
 					VaultToken = vaultToken,
 				};

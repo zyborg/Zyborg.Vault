@@ -15,13 +15,29 @@ namespace Zyborg.Vault.POSH
 		public string[] VaultProfile
 		{ get; set; }
 
+		[Parameter(ParameterSetName = DefaultParamSet)]
+		public SwitchParameter ShowLabels
+		{ get; set; }
+
 		protected override void ProcessRecord()
 		{
 			if (VaultProfile == null)
 			{
 				foreach (var name in Global.GetVaultProfileNames(this))
 				{
-					WriteObject(name);
+					if (ShowLabels)
+					{
+						var vp = Global.GetVaultProfile(this, name);
+						WriteObject(new
+						{
+							Name = name,
+							Label = vp.Label,
+						});
+					}
+					else
+					{
+						WriteObject(name);
+					}
 				}
 			}
 			else
@@ -33,6 +49,7 @@ namespace Zyborg.Vault.POSH
 					{
 						WriteObject(new GetProfileResult
 						{
+							Label = vp.Label,
 							VaultAddress = vp.VaultAddress,
 						}.SetVaultToken(vp.VaultToken));
 					}
@@ -47,6 +64,9 @@ namespace Zyborg.Vault.POSH
 		{ get; set; }
 
 		public SecureString VaultToken
+		{ get; set; }
+
+		public string Label
 		{ get; set; }
 
 		public GetProfileResult SetVaultToken(string t)
