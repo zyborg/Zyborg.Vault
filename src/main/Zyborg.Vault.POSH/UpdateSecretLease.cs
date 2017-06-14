@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Zyborg.Vault.POSH
 {
 	[Cmdlet(VerbsData.Update, "SecretLease")]
+	[OutputType(typeof(Dictionary<string, object>))]
 	public class UpdateSecretLease : VaultBaseCmdlet
 	{
 		[Parameter(Mandatory = true, Position = 0)]
@@ -25,7 +26,8 @@ namespace Zyborg.Vault.POSH
 
 		protected override void EndProcessing()
 		{
-			AsyncWait(_client.RenewSecretAsync(LeaseId, Increment));
+			var r = AsyncWaitFor(_client.RenewSecretAsync(LeaseId, Increment));
+			WriteWrappedData(r, KeepSecretWrapper);
 		}
 	}
 }
