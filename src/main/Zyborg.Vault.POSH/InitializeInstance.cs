@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VaultSharp.Backends.System.Models;
 using Zyborg.Vault.POSH.Internal;
+using Zyborg.Vault.POSH.Model;
 
 namespace Zyborg.Vault.POSH
 {
@@ -52,62 +53,6 @@ namespace Zyborg.Vault.POSH
 			base.WriteWarning($"Without at least {KeyThreshold} unseal keys,");
 			base.WriteWarning($"your Vault will remain PERMANENTLY SEALED.");
 			base.WriteWarning("************************************************************************");
-		}
-
-		/// <summary>
-		/// This class represents a container for the credentials returned from initializing
-		/// a Vault instance.
-		/// </summary>
-		/// <remarks>
-		/// This class is intentionally implemented in a non-straightforward way in order to
-		/// capture and present all the contained elements in the best possible manner to the
-		/// end user.
-		/// <para>
-		/// If a user simply invokes the Init cmdlet without saving the returned output, the
-		/// way this result object is defined will present to the user all of the elements
-		/// such that they can be retroactively captured in a typical PS console.  (I.e. they
-		/// will not accidentally lose the returned unseal keys and the root token.)
-		/// </para><para>
-		/// Otherwise if the result is captured to a variable, then all the individual elements
-		/// will be accessible as normal as dynamic properties.  Additionally the unseal keys
-		/// can be accessed as a collection using a dynamically defined method.
-		/// </para>
-		/// </remarks>
-		public class InitializeResult : PSObject
-		{
-			public const string UnsealKeyCountProperty = "UnsealKeyCount";
-			public const string UnsealKeyPropertyPrefix = "UnsealKey_";
-			public const string RootTokenProperty = "RootToken";
-			public const string GetUnsealKeysMethod = "GetUnsealKeys";
-
-			private string[] _unsealKeys;
-			public string _rootToken;
-
-			public InitializeResult(string[] unsealKeys, string rootToken)
-			{
-				_unsealKeys = unsealKeys.ToArray();
-				_rootToken = rootToken;
-
-				int i = 0;
-
-				// Dynamically add a property to get the total count of Unseal keys
-				base.Properties.Add(new PSLambdaProperty<int>(
-						UnsealKeyCountProperty, () => _unsealKeys.Length));
-
-				// Dynamically add each unseal key as a firt-order property which will
-				// render as a top-level element under the default PS output formatting
-				foreach (var uk in unsealKeys)
-					base.Properties.Add(new PSLambdaProperty<string>(
-							$"{UnsealKeyPropertyPrefix}{i++}", () => uk));
-
-				// Dynamically add a method to get all unseal keys as a collection
-				base.Methods.Add(new PSLambdaMethod<IEnumerable<string>>(
-						GetUnsealKeysMethod, null, x => _unsealKeys));
-
-				// Dynamically add a property to access the root token
-				base.Properties.Add(new PSLambdaProperty<string>(
-						RootTokenProperty, () => rootToken));
-			}
 		}
 	}
 
