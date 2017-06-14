@@ -5,8 +5,8 @@ namespace Zyborg.Vault.POSH
 	[Cmdlet(VerbsData.Dismount, "SecretProvider")]
 	public class DismountSecretProvider : VaultBaseCmdlet
 	{
-		[Parameter(Mandatory = true, Position = 0)]
-		public string MountName
+		[Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
+		public string[] MountName
 		{ get; set; }
 
 		protected override void BeginProcessing()
@@ -14,9 +14,12 @@ namespace Zyborg.Vault.POSH
 			ResolveVaultClient();
 		}
 
-		protected override void EndProcessing()
+		protected override void ProcessRecord()
 		{
-			AsyncWait(_client.UnmountSecretBackendAsync(MountName));
+			foreach (var mn in MountName)
+			{
+				AsyncWait(_client.UnmountSecretBackendAsync(mn));
+			}
 		}
 	}
 }
