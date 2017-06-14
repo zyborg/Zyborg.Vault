@@ -27,7 +27,10 @@
 	CompanyName = 'https://github.com/zyborg'
 	Copyright = '(c) Eugene Bekker. All rights reserved.'
 
-	Description = ''
+	Description = @'PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.
+'@
 
 	# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 	DefaultCommandPrefix = 'HCVault'
