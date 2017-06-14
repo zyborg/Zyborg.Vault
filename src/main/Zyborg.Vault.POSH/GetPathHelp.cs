@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Management.Automation;
 using System.Net.Http;
+using Zyborg.Vault.POSH.Model;
 
 namespace Zyborg.Vault.POSH
 {
@@ -25,16 +26,6 @@ namespace Zyborg.Vault.POSH
 						HttpMethod.Get));
 			}
 		}
-	}
 
-	public class PathHelp
-	{
-		[JsonProperty("help")]
-		public string Help
-		{ get; set; }
-
-		[JsonProperty("see_also")]
-		public string SeeAlso
-		{ get; set; }
 	}
 }

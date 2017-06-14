@@ -1,5 +1,6 @@
 ﻿using System.Management.Automation;
 using System.Security;
+using Zyborg.Vault.POSH.Model;
 
 namespace Zyborg.Vault.POSH
 {
@@ -56,32 +57,6 @@ namespace Zyborg.Vault.POSH
 				}
 			}
 		}
-	}
 
-	public class GetProfileResult
-	{
-		public string VaultAddress
-		{ get; set; }
-
-		public SecureString VaultToken
-		{ get; set; }
-
-		public string Label
-		{ get; set; }
-
-		public GetProfileResult SetVaultToken(string t)
-		{
-			if (string.IsNullOrEmpty(t))
-				VaultToken = null;
-			else
-			{
-				var ss = new SecureString();
-				foreach (var c in t)
-					ss.AppendChar(c);
-				VaultToken = ss;
-			}
-
-			return this;
-		}
 	}
 }
