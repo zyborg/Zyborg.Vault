@@ -55,3 +55,88 @@ You can use the following cmdlets to manage profiles:
 * `Get-HCVaultProfile`
 * `Set-HCVaultProfile`
 * `New-HCVaultAuth` (when specifying the `-SaveAs` parameter)
+
+## Examples
+
+Here we provide a few usage examples to get a feel for the cmdlets.
+
+### Example #1
+
+Define a connection profile and use it in inquire about the setup of the Vault server.
+
+```PowerShell
+PS C:\> Set-HCVaultProfile my-vault -VaultAddress https://my-vault.contoso.local:8200 -VaultToken xxxx-yyyy-zzzz
+
+PS C:\> Test-HCVaultInstance -VaultProfile my-vault  ## This is used to verify Vault server is initialized
+True
+PS C:\> Get-HCVaultStatus -VaultProfile my-vault
+
+
+Sealed          : False
+SecretThreshold : 3
+SecretShares    : 5
+Progress        : 0
+Version         : 0.7.2
+ClusterName     : ezs-vault-cluster-1
+ClusterId       : a7f91311-dc25-91fb-1ed8-6bb530299a08
+Nonce           :
+
+
+PS C:\> Get-HCVaultKeyStatus -VaultProfile my-vault
+
+SequentialKeyNumber InstallTime
+------------------- -----------
+                  1 5/3/2017 12:56:10 PM +00:00
+
+
+PS C:\> Get-HCVaultAuthMounts -VaultProfile my-vault
+
+AuthenticationPath BackendType Description
+------------------ ----------- -----------
+approle/           approle
+okta/              okta
+token/             token       token based credentials
+user1/             userpass
+
+
+PS C:\> Get-HCVaultSecretMounts -VaultProfile my-vault
+
+MountPoint BackendType Description                                             MountConfiguration
+---------- ----------- -----------                                             ------------------
+cubbyhole/ cubbyhole   per-token private secret storage                        VaultSharp.Backends.System.Models.Mou...
+secret/    generic     generic secret storage                                  VaultSharp.Backends.System.Models.Mou...
+secret2b/  generic                                                             VaultSharp.Backends.System.Models.Mou...
+sys/       system      system endpoints used for control, policy and debugging VaultSharp.Backends.System.Models.Mou...
+```
+
+### Example #2
+
+Here we show a few typical use cases for working with secrets.
+
+```PowerShell
+## This creates a new profile named 'default' that uses the same
+## attributes as the existing profile 'my-profile' -- if not
+## overridden, the 'default' profile will be used by default
+PS C:\> Set-HCVaultProfile default -VaultProfile my-profile
+
+PS C:\> Get-HCVaultDataList secret
+
+Keys
+----
+{foo1, foo2, s1, s2...}
+
+
+PS C:\> Get-HCVaultDataList secret | select -ExpandProperty keys | select -First 3
+foo1
+foo2
+s1
+
+
+PS C:\> Write-HCVaultData secret/foo3 -Data @{ k1="v1"; k2="v2" }
+PS C:\> Read-HCVaultData secret/foo3
+
+Key Value
+--- -----
+k1  v1
+k2  v2
+```
