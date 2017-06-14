@@ -1,16 +1,18 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VaultSharp.Backends.Audit.Models;
 
 namespace Zyborg.Vault.POSH.Model
 {
+	/// <summary>
+	/// <para type="description">
+	/// Captures details of a mounted audit provider.
+	/// </para>
+	/// </summary>
 	public class GenericAuditBackend : AuditBackend
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		public GenericAuditBackend(string type)
 		{
 			BackendType = new AuditBackendType(type);
@@ -26,5 +28,7 @@ namespace Zyborg.Vault.POSH.Model
 		[JsonProperty("local", NullValueHandling = NullValueHandling.Ignore)]
 		public bool Local
 		{ get; set; }
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

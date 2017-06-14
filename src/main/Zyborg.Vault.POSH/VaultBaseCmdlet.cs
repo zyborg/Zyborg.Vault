@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.IO;
 using System.Management.Automation;
@@ -13,39 +12,79 @@ using VaultSharp.Backends.System.Models;
 
 namespace Zyborg.Vault.POSH
 {
+	/// <summary>
+	/// Base class for most cmdlets that interact with the Vault server.
+	/// </summary>
+	/// <remarks>
+	/// This base class defines a common set of base parameters such as specifying
+	/// connection details and commonly used methods.
+	/// </remarks>
 	public class VaultBaseCmdlet : PSCmdlet
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		public const string DefaultParamSet = "Default";
 		public const string WrapParamSet = "Wrap";
 		public const string UnwrapParamSet = "Unwrap";
 
 		protected VaultSession _session;
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
 		/// <summary>
 		/// Caches the result of the most recent invocation to <see cref="ResolveVaultClient"/>.
 		/// </summary>
 		protected IVaultClient _client;
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies a Vault Session object that represents a connected-state
+		/// container to a Vault server.
+		/// </para>
+		/// </summary>
 		[Parameter()]
 		[Alias("vs")]
 		public object VaultSession
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies the name of a persisted Vault connection profile whose
+		/// attributes define default parameters for connecting to a Vault
+		/// server endpoint.
+		/// </para><para type="description">
+		/// Other connection parameters on this command may override whatever
+		/// attributes are defined in the profile.
+		/// </para>
+		/// </summary>
 		[Parameter()]
 		[Alias("vp")]
 		public string VaultProfile
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies the Vault server connection endpoint URL.
+		/// </para>
+		/// </summary>
 		[Parameter()]
 		[Alias("va")]
 		public string VaultAddress
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies the Vault server connection authentication token
+		/// to identify the caller to the server.
+		/// </para>
+		/// </summary>
 		[Parameter()]
 		[Alias("vt")]
 		public string VaultToken
 		{ get; set; }
 
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 		/// <summary>
 		/// Resolves a Vault Client instance based on the common parameters passed into
@@ -215,5 +254,7 @@ namespace Zyborg.Vault.POSH
 			else if (wrapped != null)
 				base.WriteObject(wrapped.WrappedInformation);
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

@@ -7,8 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace Zyborg.Vault.POSH
 {
+	/// <summary>
+	/// Defines common constants and utility routines.
+	/// </summary>
 	public static class Global
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		public const string CliVaultAddressEnvName = "VAULT_ADDR";
 		public const string CliVaultTokenEnvName = "VAULT_TOKEN";
 		public const string CliVaultTokenCacheFile = @"$HOME\.vault-token";
@@ -18,6 +23,9 @@ namespace Zyborg.Vault.POSH
 		public const string VaultProfileFileFormat = "{0}.profile";
 		public const string DefaultVaultProfileName = "default";
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 		public static IEnumerable<string> GetVaultProfileNames(PSCmdlet ctx)
 		{
@@ -112,5 +120,7 @@ namespace Zyborg.Vault.POSH
 				File.WriteAllText(profileFile, JsonConvert.SerializeObject(vp));
 			}
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

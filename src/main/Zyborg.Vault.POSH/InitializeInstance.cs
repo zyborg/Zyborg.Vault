@@ -1,26 +1,46 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Management.Automation;
 using VaultSharp.Backends.System.Models;
-using Zyborg.Vault.POSH.Internal;
 using Zyborg.Vault.POSH.Model;
 
 namespace Zyborg.Vault.POSH
 {
+	/// <summary>
+	/// <para type="synopsis">
+	/// Initialize a new Vault server.
+	/// </para><para type="synopsis">
+	/// Comparable to the vault CLI <c>init</c> command.
+	/// </para>
+	/// </summary>
+	/// <remarks>
+	/// <para type="description">
+	/// This command connects to a Vault server and initializes it for the first time.
+	/// This sets up the initial set of master keys and the backend data store structure.
+	/// </para><para type="description">
+	/// This command can't be called on an already-initialized Vault server.
+	/// </para>
+	/// </remarks>
 	[Cmdlet(VerbsData.Initialize, "Instance")]
 	public class InitializeInstance : VaultBaseCmdlet
 	{
+		/// <summary>
+		/// <para type="description">
+		/// The number of key shares to split the master key into.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = false, Position = 0)]
 		public int KeyShares
 		{ get; set; } = 5;
 
+		/// <summary>
+		/// <para type="description">
+		/// The number of key shares required to reconstruct the master key.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = false, Position = 1)]
 		public int KeyThreshold
 		{ get; set; } = 3;
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 		protected override void BeginProcessing()
 		{
@@ -54,6 +74,8 @@ namespace Zyborg.Vault.POSH
 			base.WriteWarning($"your Vault will remain PERMANENTLY SEALED.");
 			base.WriteWarning("************************************************************************");
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 
 	// This is a sample output from the CLI init command:

@@ -7,20 +7,23 @@ using VaultSharp.Backends.System.Models;
 namespace Zyborg.Vault.POSH
 {
 	/// <summary>
+	/// <para type="synopsis">
 	/// Write data (secrets or configuration) into Vault to a backend provider
 	/// logically mounted at a specified path.
+	/// </para>
 	/// </summary>
 	/// <remarks>
+	/// <para type="description">
 	/// There are 3 different Parameter Sets corresponding to 3 typical usages of
 	/// this cmdlet.
-	/// <para>
+	/// </para><para type="description">
 	/// In the first (default) usage, a single vault path is specified
 	/// and one or more key-value pairs are provided.  The Keys are all provided as
 	/// an array, and the values are all provided as an array, and the length of
 	/// these two arrays must be equal.  Additionally, the Keys and Values can be
 	/// provided from the pipeline using objects with the corresponding property
 	/// names.
-	/// </para><para>
+	/// </para><para type="description">
 	/// In the second and third usages, either a single map of key-values is provided
 	/// or no values are provided at all using the <c>-NoValues</c> switch (some
 	/// vault backends support writing no value to trigger an action or behavior).
@@ -32,26 +35,68 @@ namespace Zyborg.Vault.POSH
 	[OutputType(typeof(Secret<Dictionary<string, object>>))]
 	public class WriteData : VaultBaseCmdlet
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		public const string DataMapParamSet = "DataMap";
 		public const string NoValuesParamSet = "NoValues";
 
-		// Single-Path, Multiple Key/Value sets
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
+		/// <summary>
+		/// <para type="description">
+		/// The path to which to write one or more key-value pairs of secrets.
+		/// This parameter set allows you to write multiple key-values to a single path.
+		/// </para><para type="description">
+		/// The behavior of the write is determined by the secret provider mounted
+		/// at the given path. For example, writing to "aws/policy/ops" will create
+		/// an "ops" IAM policy for the AWS secret provider (configuration), but
+		/// writing to "consul/foo" will write ta value directly into Consul at that
+		/// key.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 0, ParameterSetName = DefaultParamSet)]
 		public string Path
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies one or more keys to set a value for.
+		/// </para><para type="description">
+		/// The count of corresponding values specified with the <c>Value</c> 
+		/// parameter must match the count of keys.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 1, ParameterSetName = DefaultParamSet,
 				ValueFromPipelineByPropertyName = true)]
 		[Alias("Name")]
 		public string[] Key
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Specifies one or more secret values to set for the corresponding keys.
+		/// </para><para type="description">
+		/// The count of corresponding keys specified with the <c>Key</c> parameter
+		/// must match the count of values.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 2, ParameterSetName = DefaultParamSet,
 				ValueFromPipelineByPropertyName = true)]
 		public object[] Value
 		{ get; set; }
 
-		// Multiple Paths, Single or No Key/Value Map
+		/// <summary>
+		/// <para type="description">
+		/// The paths to which to write one ore more key-value pairs.
+		/// This parameter set allows you to write to multiple paths simultaneously.
+		/// </para><para type="description">
+		/// The behavior of the write is determined by the secret provider mounted
+		/// at the given path. For example, writing to "aws/policy/ops" will create
+		/// an "ops" IAM policy for the AWS secret provider (configuration), but
+		/// writing to "consul/foo" will write ta value directly into Consul at that
+		/// key.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 0, ParameterSetName = DataMapParamSet,
 				ValueFromPipeline = true)]
 		[Parameter(Mandatory = true, Position = 0, ParameterSetName = NoValuesParamSet,
@@ -59,17 +104,36 @@ namespace Zyborg.Vault.POSH
 		public string[] Paths
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// A map of key-value pairs to write to the target path or paths.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 1, ParameterSetName = DataMapParamSet)]
 		public Hashtable Data
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// Forces the write to without any data values specified.  This allows writing
+		/// to keys that do not need or expect any fields to be specified.
+		/// </para>
+		/// </summary>
 		[Parameter(Mandatory = true, Position = 1, ParameterSetName = NoValuesParamSet)]
 		public SwitchParameter NoValues
 		{ get; set; }
 
+		/// <summary>
+		/// <para type="description">
+		/// When specified, the returned result maintains the meta data wrapper
+		/// for the secret result.
+		/// </para>
+		/// </summary>
 		[Parameter()]
 		public SwitchParameter KeepSecretWrapper
 		{ get; set; }
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 		protected override void BeginProcessing()
 		{
@@ -112,5 +176,7 @@ namespace Zyborg.Vault.POSH
 				WriteWrappedData(r, KeepSecretWrapper);
 			}
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

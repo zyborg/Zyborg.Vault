@@ -1,0 +1,71 @@
+﻿
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
+	/// <para type="link">Get-HCVaultProfile</para>
+	/// <para type="link">New-HCVaultAuth</para>
+
+	/// <para type="link" uri="https://www.vaultproject.io/api/index.html">Vault API</para>
+
+
+Generict Cmdlet Class:
+
+	/// <summary>
+	/// <para type="synopsis">
+	/// </para><para type="synopsis">
+	/// Comparable to the vault CLI <c>'auth'</c> command.
+	/// </para>
+	/// </summary>
+	/// <remarks>
+	/// <para type="description">
+	/// </para><para type="description">
+	/// </para>
+	/// </remarks>
+
+Generic Parameter Property:
+
+		/// <summary>
+		/// <para type="description">
+		/// </para><para type="description">
+		/// </para>
+		/// </summary>
+
+
+KeepSecretWrapper Parameter Property:
+
+		/// <summary>
+		/// <para type="description">
+		/// When specified, the returned result maintains the meta data wrapper
+		/// for the secret result.
+		/// </para>
+		/// </summary>
+
+
+WrapTtl Parameter Property:
+
+		/// <summary>
+		/// <para type="description">
+		/// Indicates that the response should be wrapped in a
+		/// cubbyhole token with the requested TTL.
+		/// </para><para type="description">
+		/// This is a numeric string with an optional suffix "s", "m", or "h";
+		/// if no suffix is specified it will be parsed as seconds.
+		/// </para><para type="description">
+		/// The unwrapped response can be fetched by calling the command
+		/// again but providing the wrapped token ID to the <c>UnwrapToken</c>
+		/// parameter.
+		/// </para>
+		/// </summary>
+
+UnwrapToke Paramter Property:
+
+		/// <summary>
+		/// <para type="description">
+		/// One ore more token ID representing wrapped data returned by a
+		/// prior call of this command with the <c>WrappTtl</c> parameter
+		/// set.
+		/// </para>
+		/// </summary>
+

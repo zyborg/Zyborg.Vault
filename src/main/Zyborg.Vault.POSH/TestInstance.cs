@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
-using VaultSharp.Backends.System.Models;
+﻿using System.Management.Automation;
 
 namespace Zyborg.Vault.POSH
 {
+	/// <summary>
+	/// <para type="synopsis">
+	/// Gets the initialization status of Vault.
+	/// </para>
+	/// </summary>
+	/// <remarks>
+	/// <para type="description">
+	/// This is an unauthenticated call and does not use a vault auth token.
+	/// </para>
+	/// </remarks>
 	[Cmdlet(VerbsDiagnostic.Test, "Instance")]
 	public class TestInstance : VaultBaseCmdlet
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		protected override void BeginProcessing()
 		{
 			ResolveVaultClient();
@@ -20,5 +26,7 @@ namespace Zyborg.Vault.POSH
 		{
 			base.WriteAsyncResult(_client.GetInitializationStatusAsync());
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }

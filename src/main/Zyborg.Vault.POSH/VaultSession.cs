@@ -14,8 +14,15 @@ using VaultSharp.Backends.System.Models;
 
 namespace Zyborg.Vault.POSH
 {
+	/// <summary>
+	/// <para type="description">
+	/// Local state for interacting with a Vault server endpoint.
+	/// </para>
+	/// </summary>
 	public class VaultSession : IDisposable
 	{
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 		public const string VaultTokenHeaderKey = "X-Vault-Token";
 
 		public const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
@@ -26,6 +33,10 @@ namespace Zyborg.Vault.POSH
 		private readonly IAuthenticationInfo _authnInfo;
 		private readonly HttpDataAccessManager _dataAccessManager;
 
+		/// <summary>
+		/// Creates a session with the two minimum, necessary components
+		/// provided as parameters.
+		/// </summary>
 		public VaultSession(string address, string token)
 		{
 			VaultAddress = address;
@@ -45,9 +56,15 @@ namespace Zyborg.Vault.POSH
 			VaultClient = VaultClientFactory.CreateVaultClient(new Uri(address), _authnInfo);
 		}
 
+		/// <summary>
+		/// URL specifying the Vault server endpoint.
+		/// </summary>
 		public string VaultAddress
 		{ get; private set; }
 
+		/// <summary>
+		/// The authentication Token to self-identify with to the Vault server.
+		/// </summary>
 		public string VaultToken
 		{ get; private set; }
 
@@ -255,5 +272,7 @@ namespace Zyborg.Vault.POSH
 				}
 			}
 		}
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 	}
 }
