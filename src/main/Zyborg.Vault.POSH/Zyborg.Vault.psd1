@@ -6,31 +6,76 @@
 # Generated on: 5/10/2017
 #
 
+## For a reference of this file's elements, see:
+##    https://technet.microsoft.com/library/hh849709.aspx
+##    https://technet.microsoft.com/en-us/library/dd878297(v=vs.85).aspx
+
+## 64-bit:
+##    %SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe
+## 32-bit:
+##    %SystemRoot%\syswow64\WindowsPowerShell\v1.0\powershell.exe
+
 @{
+	RootModule = 'Zyborg.Vault.POSH.dll'
+	ModuleVersion = '0.5.0'
+	GUID = '40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5'
 
-# Script module or binary module file associated with this manifest.
-RootModule = 'Zyborg.Vault.POSH.dll'
+	# Supported PSEditions
+	# CompatiblePSEditions = @()
 
-# Version number of this module.
-ModuleVersion = '0.5.0'
+	Author = 'https://github.com/ebekker'
+	CompanyName = 'https://github.com/zyborg'
+	Copyright = '(c) Eugene Bekker. All rights reserved.'
 
-# Supported PSEditions
-# CompatiblePSEditions = @()
+	Description = ''
 
-# ID used to uniquely identify this module
-GUID = '40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5'
+	# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+	DefaultCommandPrefix = 'HCVault'
 
-# Author of this module
-Author = 'ebekker'
+	# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
+	FunctionsToExport = '*'
 
-# Company or vendor of this module
-CompanyName = 'Unknown'
+	# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+	CmdletsToExport = '*'
 
-# Copyright statement for this module
-Copyright = '(c) 2017 ebekker. All rights reserved.'
+	# Variables to export from this module
+	VariablesToExport = '*'
 
-# Description of the functionality provided by this module
-# Description = ''
+	# Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
+	AliasesToExport = '*'
+
+	# DSC resources to export from this module
+	# DscResourcesToExport = @()
+
+	# Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+	PrivateData = @{
+
+		PSData = @{
+
+			# Tags applied to this module. These help with module discovery in online galleries.
+			Tags = @('security', 'secrets', 'encryption', 'hashicorp', 'vault')
+
+			# A URL to the license for this module.
+			LicenseUri = 'https://github.com/zyborg/Zyborg.Vault/blob/master/LICENSE.md'
+
+			# A URL to the main website for this project.
+			ProjectUri = 'https://github.com/zyborg/Zyborg.Vault'
+
+			# A URL to an icon representing this module.
+			# IconUri = 'https://cdn.rawgit.com/docker-library/docs/fab4b16599d1424cee888d47af850e0ba07e6a37/vault/logo.svg'
+			IconUri = 'https://chocolatey.org/content/packageimages/vault.0.7.3.png'
+
+			# ReleaseNotes of this module
+			ReleaseNotes = 'https://github.com/zyborg/Zyborg.Vault/releases'
+
+		} # End of PSData hashtable
+
+	} # End of PrivateData hashtable
+
+
+############################################################
+## Unused manifest elements reserved for possible future use
+############################################################
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -68,56 +113,14 @@ Copyright = '(c) 2017 ebekker. All rights reserved.'
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
 
-# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
-
-# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
-
-# Variables to export from this module
-VariablesToExport = '*'
-
-# Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
-
-# DSC resources to export from this module
-# DscResourcesToExport = @()
-
 # List of all modules packaged with this module
 # ModuleList = @()
 
 # List of all files packaged with this module
 # FileList = @()
 
-# Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-PrivateData = @{
-
-    PSData = @{
-
-        # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
-
-        # A URL to the license for this module.
-        # LicenseUri = ''
-
-        # A URL to the main website for this project.
-        # ProjectUri = ''
-
-        # A URL to an icon representing this module.
-        # IconUri = ''
-
-        # ReleaseNotes of this module
-        # ReleaseNotes = ''
-
-    } # End of PSData hashtable
-
-} # End of PrivateData hashtable
-
 # HelpInfo URI of this module
 # HelpInfoURI = ''
-
-# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-DefaultCommandPrefix = 'HCVault'
 
 }
 
