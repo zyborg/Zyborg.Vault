@@ -27,7 +27,8 @@
 	CompanyName = 'https://github.com/zyborg'
 	Copyright = '(c) Eugene Bekker. All rights reserved.'
 
-	Description = @'PowerShell bindings for HashiCorp Vault.
+	Description = @'
+PowerShell bindings for HashiCorp Vault.
 
 Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.
 '@
