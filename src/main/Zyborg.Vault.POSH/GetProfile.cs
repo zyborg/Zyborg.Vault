@@ -10,8 +10,8 @@ namespace Zyborg.Vault.POSH
 		public const string DefaultParamSet = VaultBaseCmdlet.DefaultParamSet;
 		public const string GetDetailsParamSet = "GetDetails";
 
-		[Parameter(Mandatory = true, Position = 0,
-				ParameterSetName = GetDetailsParamSet)]
+		[Parameter(Mandatory = true, Position = 0, ParameterSetName = GetDetailsParamSet,
+				ValueFromPipeline = true)]
 		public string[] VaultProfile
 		{ get; set; }
 
