@@ -63,6 +63,10 @@
     <Compile Include="DismountAuditProvider.cs" />
     <Compile Include="GetAuthToken.cs" />
     <Compile Include="Internal\PSLambdaProperty.cs" />
+    <Compile Include="Model\GetProfileResult.cs" />
+    <Compile Include="Model\PathHelp.cs" />
+    <Compile Include="Model\TokenAccessorList.cs" />
+    <Compile Include="Model\TokenInfo.cs" />
     <Compile Include="TestInstance.cs" />
     <Compile Include="MountAuthProvider.cs" />
     <Compile Include="GetAuthMounts.cs" />
