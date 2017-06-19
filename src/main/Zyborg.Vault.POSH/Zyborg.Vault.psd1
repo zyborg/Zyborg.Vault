@@ -34,7 +34,7 @@ Provides cmdlets that talk directly to the Vault REST API and are comparable to 
 '@
 
 	# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-	DefaultCommandPrefix = 'HCVault'
+	DefaultCommandPrefix = 'Vlt'
 
 	# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = '*'
