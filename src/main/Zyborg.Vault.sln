@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault.POSH", "Zyborg.Vault.POSH\Zyborg.Vault.POSH.csproj", "{EC4AD1BC-D0AC-4435-A592-CE8F5DC735F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{8C3BCE57-F84B-4430-9F74-5AC0590C7866}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{30AB10B7-063F-4B71-9BC4-0C723EF271EC}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\tools\ci\on_succsess-DocTreeGen.ps1 = ..\..\tools\ci\on_succsess-DocTreeGen.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +25,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30AB10B7-063F-4B71-9BC4-0C723EF271EC} = {8C3BCE57-F84B-4430-9F74-5AC0590C7866}
 	EndGlobalSection
 EndGlobal
