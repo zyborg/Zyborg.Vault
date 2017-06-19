@@ -55,9 +55,9 @@ You can then reference the profiles instead of having to specify these settings 
 Even when using a connection profile, you can override individual connection settings as parameters on each invocation.
 
 You can use the following cmdlets to manage profiles:
-* `Get-HCVaultProfile`
-* `Set-HCVaultProfile`
-* `New-HCVaultAuth` (when specifying the `-SaveAs` parameter)
+* `Get-VltProfile`
+* `Set-VltProfile`
+* `New-VltAuth` (when specifying the `-SaveAs` parameter)
 
 ## Examples
 
@@ -68,11 +68,11 @@ Here we provide a few usage examples to get a feel for the cmdlets.
 Define a connection profile and use it in inquire about the setup of the Vault server.
 
 ```PowerShell
-PS C:\> Set-HCVaultProfile my-vault -VaultAddress https://my-vault.contoso.local:8200 -VaultToken xxxx-yyyy-zzzz
+PS C:\> Set-VltProfile my-vault -VaultAddress https://my-vault.contoso.local:8200 -VaultToken xxxx-yyyy-zzzz
 
-PS C:\> Test-HCVaultInstance -VaultProfile my-vault  ## This is used to verify Vault server is initialized
+PS C:\> Test-VltInstance -VaultProfile my-vault  ## This is used to verify Vault server is initialized
 True
-PS C:\> Get-HCVaultStatus -VaultProfile my-vault
+PS C:\> Get-VltStatus -VaultProfile my-vault
 
 
 Sealed          : False
@@ -85,14 +85,14 @@ ClusterId       : a7f91311-dc25-91fb-1ed8-6bb530299a08
 Nonce           :
 
 
-PS C:\> Get-HCVaultKeyStatus -VaultProfile my-vault
+PS C:\> Get-VltKeyStatus -VaultProfile my-vault
 
 SequentialKeyNumber InstallTime
 ------------------- -----------
                   1 5/3/2017 12:56:10 PM +00:00
 
 
-PS C:\> Get-HCVaultAuthMounts -VaultProfile my-vault
+PS C:\> Get-VltAuthMounts -VaultProfile my-vault
 
 AuthenticationPath BackendType Description
 ------------------ ----------- -----------
@@ -102,7 +102,7 @@ token/             token       token based credentials
 user1/             userpass
 
 
-PS C:\> Get-HCVaultSecretMounts -VaultProfile my-vault
+PS C:\> Get-VltSecretMounts -VaultProfile my-vault
 
 MountPoint BackendType Description                                             MountConfiguration
 ---------- ----------- -----------                                             ------------------
@@ -120,23 +120,23 @@ Here we show a few typical use cases for working with secrets.
 ## This creates a new profile named 'default' that uses the same
 ## attributes as the existing profile 'my-profile' -- if not
 ## overridden, the 'default' profile will be used by default
-PS C:\> Set-HCVaultProfile default -VaultProfile my-profile
+PS C:\> Set-VltProfile default -VaultProfile my-profile
 
-PS C:\> Get-HCVaultDataList secret
+PS C:\> Get-VltDataList secret
 
 Keys
 ----
 {foo1, foo2, s1, s2...}
 
 
-PS C:\> Get-HCVaultDataList secret | select -ExpandProperty keys | select -First 3
+PS C:\> Get-VltDataList secret | select -ExpandProperty keys | select -First 3
 foo1
 foo2
 s1
 
 
-PS C:\> Write-HCVaultData secret/foo3 -Data @{ k1="v1"; k2="v2" }
-PS C:\> Read-HCVaultData secret/foo3
+PS C:\> Write-VltData secret/foo3 -Data @{ k1="v1"; k2="v2" }
+PS C:\> Read-VltData secret/foo3
 
 Key Value
 --- -----
