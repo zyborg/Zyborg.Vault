@@ -20,7 +20,7 @@ Import-Module DocTreeGenerator -Force
 
 
 ## Resolve input parameters and paths
-$projectRoot = "." ## Root of Zyborg.Vault
+$projectRoot = "$(Resolve-Path .)" ## Root of Zyborg.Vault
 $ciDir = "$projectRoot\tools\ci"
 
 $templatePath = "$ciDir\DTG\bootstrap4_template.html"
