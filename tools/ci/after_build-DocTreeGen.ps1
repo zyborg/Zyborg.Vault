@@ -2,7 +2,7 @@
 ## This script generates HTML API Documentation for Zyborg.Vault module
 
 ## Install and load the DTG module
-Install-Module DocTreeGenerator -Scope CurrentUser -Force -ErrorAction Stop
+Install-Module DocTreeGenerator -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
 Import-Module DocTreeGenerator -Force
 
 ## We need to "FIX" the DTG module to handle modules with a DefaultCommandPrefix
