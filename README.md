@@ -3,7 +3,7 @@ PowerShell client bindings for HashiCorp Vault
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ldby4js60k32mqtl?svg=true)](https://ci.appveyor.com/project/ebekker/zyborg-vault)
 [![Powershellgallery Badge][psgallery-badge]][psgallery-status]
-[![MyGet](https://img.shields.io/myget/zyborg-stage/v/Zyborg.Vault.svg)]()
+[![MyGet](https://img.shields.io/myget/zyborg-stage/v/Zyborg.Vault.svg)](https://www.myget.org/feed/zyborg-stage/package/nuget/Zyborg.Vault)
 
 
 ## About
