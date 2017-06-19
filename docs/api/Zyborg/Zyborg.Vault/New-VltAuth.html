@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags for Bootstrap4 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>New-VltAuth</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+            integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+            crossorigin="anonymous">
+
+    <style>
+        body {
+            padding-top: 5rem;
+        }
+        h2 {
+            font-size-adjust: -5px;
+        }
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<!--
+  The four types of pages used in conditional properties are:
+    home     = the single master home page
+               rendered as "$TargetDir/index.html"
+    contents = the single master index/contents page
+               rendered as "$TargetDir/contents.html"
+    module   = the module index pages, one per module
+               rendered as "$TargetDir/$nsName/$modName/index.html"
+    function = the function pages, one per exported function
+               rendered as "$TargetDir/$nsName/$modName/$funName.html"
+  -->
+
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                
+                
+                
+                
+                
+                
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../..">Site Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html">API Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../contents.html">API Index</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Module</a>
+                </li>
+                
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button">
+                    Zyborg Vault API:
+                    
+                    
+                </button>
+                <!--<input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="var-breadcrumbs"><a href='../../index.html'>Zyborg</a> &raquo; <a href='index.html'>Zyborg.Vault</a> &raquo; New-VltAuth</div>
+
+        <!--<h2>Zyborg Vault API:</h2>-->
+        <h1 class="display-3">New-VltAuth</h1>
+
+        <!--  = manifest.Description property + module_overview.html <body> contents -->
+
+        
+
+        <div class="var-body"><div class='PowerShellDoc'>
+<h2>NAME</h2>
+<div>
+    New-VltAuth
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>SYNOPSIS</h2>
+<div>
+    Authenticate with Vault against an auth provider using argument auth data.
+<br/>
+<br/>
+    Comparable to the vault CLI auth command.
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>SYNTAX</h2>
+<div>
+<b>New-Auth</b> [-AuthData <i>&lt;Hashtable&gt;</i>] [-AuthMethod <i>&lt;string&gt;</i>] [-KeepSecretWrapper <i>&lt;SwitchParameter&gt;</i>] [-MountName <i>&lt;string&gt;</i>] [-NoVerify <i>&lt;SwitchParameter&gt;</i>] [-PathData <i>&lt;string&gt;</i>] [-VaultAddress <i>&lt;string&gt;</i>] [-VaultProfile <i>&lt;string&gt;</i>] [-VaultSession <i>&lt;object&gt;</i>] [-VaultToken <i>&lt;string&gt;</i>] [<i>&lt;CommonParameters&gt;</i>]
+<br/>
+<br/>
+<b>New-Auth</b> [-AuthData <i>&lt;Hashtable&gt;</i>] [-AuthMethod <i>&lt;string&gt;</i>] [-Force <i>&lt;SwitchParameter&gt;</i>] [-MountName <i>&lt;string&gt;</i>] [-NoVerify <i>&lt;SwitchParameter&gt;</i>] [-PathData <i>&lt;string&gt;</i>] [-SaveAsProfile <i>&lt;string&gt;</i>] [-VaultAddress <i>&lt;string&gt;</i>] [-VaultProfile <i>&lt;string&gt;</i>] [-VaultSession <i>&lt;object&gt;</i>] [-VaultToken <i>&lt;string&gt;</i>] [<i>&lt;CommonParameters&gt;</i>]
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>DESCRIPTION</h2>
+<div>
+    By default, the AuthMethod is assumed to be token. If not supplied via the AuthData parameter, a prompt will be issued to collect the token ID used to authenticate against the token auth provider.
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>PARAMETERS</h2>
+<div>
+<br/>
+    -<strong>AuthMethod &lt;string&gt;</strong>
+<br/>
+      Selects the authentication method to be used, such as userpass, GitHub, or TLS certificates.
+<br/>
+<br/>
+Each method corresponds to an associated auth provider which defines its own set of authentication parameters which are provided via the AuthData parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                token</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>MountName &lt;string&gt;</strong>
+<br/>
+      The path at which the auth provider is mounted. If an auth provider is mounted at multiple paths, this option can be used to authenticate against a specific path associated with a specific provider instance (i.e. with a distinct configuration).
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>PathData &lt;string&gt;</strong>
+<br/>
+      Defines the sub-path under the mount to authenticate against.
+<br/>
+<br/>
+By default authentication is targeted against the login sub-path under the mount point of an auth provider instance. This parameter allows you to define an additional sub-path to the default.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>AuthData &lt;Hashtable&gt;</strong>
+<br/>
+      Specifies arbitrary authentication parameters as key-value pairs.
+<br/>
+<br/>
+Authentication parameters are specific to each authentication method, aka auth provider, which define various required or optional parameter key names. Refer to the documentation of specific auth providers for more details about specific auth data key names.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>NoVerify &lt;SwitchParameter&gt;</strong>
+<br/>
+      Do not verify the token after creation; avoids a use count decrement.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>KeepSecretWrapper &lt;SwitchParameter&gt;</strong>
+<br/>
+      When specified, the returned result maintains the meta data wrapper for the secret result.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>SaveAsProfile &lt;string&gt;</strong>
+<br/>
+      Saves the result of the new auth token request to a Vault connection profile with the argument name.
+<br/>
+<br/>
+If the profile name already exists, use the Force switch parameter to overwrite it, otherwise an error will be raised
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>Force &lt;SwitchParameter&gt;</strong>
+<br/>
+      When saving the auth token to a profile with the SaveAsProfile parameter, use this flag to overwrite an existing profile with the same name, otherwise an error will be raised.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultSession &lt;object&gt;</strong>
+<br/>
+      Specifies a Vault Session object that represents a connected-state container to a Vault server.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vs &lt;object&gt;</strong>
+<br/>
+      Specifies a Vault Session object that represents a connected-state container to a Vault server.
+<br/>
+<br/>
+This is an alias of the VaultSession parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultProfile &lt;string&gt;</strong>
+<br/>
+      Specifies the name of a persisted Vault connection profile whose attributes define default parameters for connecting to a Vault server endpoint.
+<br/>
+<br/>
+Other connection parameters on this command may override whatever attributes are defined in the profile.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vp &lt;string&gt;</strong>
+<br/>
+      Specifies the name of a persisted Vault connection profile whose attributes define default parameters for connecting to a Vault server endpoint.
+<br/>
+<br/>
+Other connection parameters on this command may override whatever attributes are defined in the profile.
+<br/>
+<br/>
+This is an alias of the VaultProfile parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultAddress &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection endpoint URL.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>va &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection endpoint URL.
+<br/>
+<br/>
+This is an alias of the VaultAddress parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultToken &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection authentication token to identify the caller to the server.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vt &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection authentication token to identify the caller to the server.
+<br/>
+<br/>
+This is an alias of the VaultToken parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    &lt;CommonParameters&gt;
+<pre>        This cmdlet supports the common parameters: Verbose, Debug,</pre>
+<pre>        ErrorAction, ErrorVariable, WarningAction, WarningVariable,</pre>
+<pre>        OutBuffer, PipelineVariable, and OutVariable. For more information, see </pre>
+<pre>        about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). </pre>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>INPUTS</h2>
+<div>
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>OUTPUTS</h2>
+<div>
+    VaultSharp.Backends.System.Models.AuthorizationInfo
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>EXAMPLES</h2>
+<div>
+<br/>
+<strong>    ----------  EXAMPLE 1  ----------</strong>
+<br/>
+<br/>
+    <span class='pscmd'>An example of authenticating to the 'userpass' auth provider at the default mount point.##</span>
+<br/>
+<br/>
+      $creds = Get-Credential ## Interactively and securely prompt for auth creds
+<br/>
+      New-VltAuth -AuthMethod userpass -PathData $creds.Username `
+<pre>          -AuthData @{ password = $creds.GetNetworkCredential().Password }</pre>
+<br/>
+<strong>    ----------  EXAMPLE 2  ----------</strong>
+<br/>
+<br/>
+    <span class='pscmd'>An example of authenticating to the okta auth provider at the non-default mount point 'okta1'.##</span>
+<br/>
+<br/>
+      $creds = Get-Credential ## Interactively and securely prompt for auth creds
+<br/>
+      New-VltAuth -AuthMethod okta -MountName okta1 -PathData $creds.Username `
+<pre>          -AuthData @{ password = $creds.GetNetworkCredential().Password }</pre>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>RELATED LINKS</h2>
+<ul>
+<li><a href='Set-VltProfile.html'>Set-VltProfile</a></li>
+<li><a href='Get-VltProfile.html'>Get-VltProfile</a></li>
+</ul></div>
+</div>
+
+        <hr>
+
+        
+
+        <div class="var-copyright">Copyright (C) Eugene Bekker.  All rights reserved.</div>
+        <div class="var-revdate">2017-06-19 12:39:53</div>
+
+    </div>
+    <!-- /.container -->
+
+    <!--<hr />
+
+    <code>Global Properties:</code>
+
+    <h1><code>&#x7b;title}=</code>        New-VltAuth</h1>
+    <h2><code>&#x7b;subtitle}=</code>     Zyborg Vault API:</h2>
+
+    <div><code>&#x7b;breadcrumbs}=</code> <a href='../../index.html'>Zyborg</a> &raquo; <a href='index.html'>Zyborg.Vault</a> &raquo; New-VltAuth</div>
+    <div><code>&#x7b;preamble}=</code>     <i>(computed as <code>module.Description</code> + <code>module_overview.html</code> &lt;body&gt; contents)</i></div>
+    <div><code>&#x7b;body}=</code>        <div class='PowerShellDoc'>
+<h2>NAME</h2>
+<div>
+    New-VltAuth
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>SYNOPSIS</h2>
+<div>
+    Authenticate with Vault against an auth provider using argument auth data.
+<br/>
+<br/>
+    Comparable to the vault CLI auth command.
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>SYNTAX</h2>
+<div>
+<b>New-Auth</b> [-AuthData <i>&lt;Hashtable&gt;</i>] [-AuthMethod <i>&lt;string&gt;</i>] [-KeepSecretWrapper <i>&lt;SwitchParameter&gt;</i>] [-MountName <i>&lt;string&gt;</i>] [-NoVerify <i>&lt;SwitchParameter&gt;</i>] [-PathData <i>&lt;string&gt;</i>] [-VaultAddress <i>&lt;string&gt;</i>] [-VaultProfile <i>&lt;string&gt;</i>] [-VaultSession <i>&lt;object&gt;</i>] [-VaultToken <i>&lt;string&gt;</i>] [<i>&lt;CommonParameters&gt;</i>]
+<br/>
+<br/>
+<b>New-Auth</b> [-AuthData <i>&lt;Hashtable&gt;</i>] [-AuthMethod <i>&lt;string&gt;</i>] [-Force <i>&lt;SwitchParameter&gt;</i>] [-MountName <i>&lt;string&gt;</i>] [-NoVerify <i>&lt;SwitchParameter&gt;</i>] [-PathData <i>&lt;string&gt;</i>] [-SaveAsProfile <i>&lt;string&gt;</i>] [-VaultAddress <i>&lt;string&gt;</i>] [-VaultProfile <i>&lt;string&gt;</i>] [-VaultSession <i>&lt;object&gt;</i>] [-VaultToken <i>&lt;string&gt;</i>] [<i>&lt;CommonParameters&gt;</i>]
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>DESCRIPTION</h2>
+<div>
+    By default, the AuthMethod is assumed to be token. If not supplied via the AuthData parameter, a prompt will be issued to collect the token ID used to authenticate against the token auth provider.
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>PARAMETERS</h2>
+<div>
+<br/>
+    -<strong>AuthMethod &lt;string&gt;</strong>
+<br/>
+      Selects the authentication method to be used, such as userpass, GitHub, or TLS certificates.
+<br/>
+<br/>
+Each method corresponds to an associated auth provider which defines its own set of authentication parameters which are provided via the AuthData parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                token</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>MountName &lt;string&gt;</strong>
+<br/>
+      The path at which the auth provider is mounted. If an auth provider is mounted at multiple paths, this option can be used to authenticate against a specific path associated with a specific provider instance (i.e. with a distinct configuration).
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>PathData &lt;string&gt;</strong>
+<br/>
+      Defines the sub-path under the mount to authenticate against.
+<br/>
+<br/>
+By default authentication is targeted against the login sub-path under the mount point of an auth provider instance. This parameter allows you to define an additional sub-path to the default.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>AuthData &lt;Hashtable&gt;</strong>
+<br/>
+      Specifies arbitrary authentication parameters as key-value pairs.
+<br/>
+<br/>
+Authentication parameters are specific to each authentication method, aka auth provider, which define various required or optional parameter key names. Refer to the documentation of specific auth providers for more details about specific auth data key names.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>NoVerify &lt;SwitchParameter&gt;</strong>
+<br/>
+      Do not verify the token after creation; avoids a use count decrement.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>KeepSecretWrapper &lt;SwitchParameter&gt;</strong>
+<br/>
+      When specified, the returned result maintains the meta data wrapper for the secret result.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>SaveAsProfile &lt;string&gt;</strong>
+<br/>
+      Saves the result of the new auth token request to a Vault connection profile with the argument name.
+<br/>
+<br/>
+If the profile name already exists, use the Force switch parameter to overwrite it, otherwise an error will be raised
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>Force &lt;SwitchParameter&gt;</strong>
+<br/>
+      When saving the auth token to a profile with the SaveAsProfile parameter, use this flag to overwrite an existing profile with the same name, otherwise an error will be raised.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                False</pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultSession &lt;object&gt;</strong>
+<br/>
+      Specifies a Vault Session object that represents a connected-state container to a Vault server.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vs &lt;object&gt;</strong>
+<br/>
+      Specifies a Vault Session object that represents a connected-state container to a Vault server.
+<br/>
+<br/>
+This is an alias of the VaultSession parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultProfile &lt;string&gt;</strong>
+<br/>
+      Specifies the name of a persisted Vault connection profile whose attributes define default parameters for connecting to a Vault server endpoint.
+<br/>
+<br/>
+Other connection parameters on this command may override whatever attributes are defined in the profile.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vp &lt;string&gt;</strong>
+<br/>
+      Specifies the name of a persisted Vault connection profile whose attributes define default parameters for connecting to a Vault server endpoint.
+<br/>
+<br/>
+Other connection parameters on this command may override whatever attributes are defined in the profile.
+<br/>
+<br/>
+This is an alias of the VaultProfile parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultAddress &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection endpoint URL.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>va &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection endpoint URL.
+<br/>
+<br/>
+This is an alias of the VaultAddress parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>VaultToken &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection authentication token to identify the caller to the server.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    -<strong>vt &lt;string&gt;</strong>
+<br/>
+      Specifies the Vault server connection authentication token to identify the caller to the server.
+<br/>
+<br/>
+This is an alias of the VaultToken parameter.
+<br/>
+<br/>
+<pre>        Required?                    false</pre>
+<pre>        Position?                    named</pre>
+<pre>        Default value                </pre>
+<pre>        Accept pipeline input?       false</pre>
+<pre>        Accept wildcard characters?  false</pre>
+<br/>
+    &lt;CommonParameters&gt;
+<pre>        This cmdlet supports the common parameters: Verbose, Debug,</pre>
+<pre>        ErrorAction, ErrorVariable, WarningAction, WarningVariable,</pre>
+<pre>        OutBuffer, PipelineVariable, and OutVariable. For more information, see </pre>
+<pre>        about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). </pre>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>INPUTS</h2>
+<div>
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>OUTPUTS</h2>
+<div>
+    VaultSharp.Backends.System.Models.AuthorizationInfo
+<br/>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>EXAMPLES</h2>
+<div>
+<br/>
+<strong>    ----------  EXAMPLE 1  ----------</strong>
+<br/>
+<br/>
+    <span class='pscmd'>An example of authenticating to the 'userpass' auth provider at the default mount point.##</span>
+<br/>
+<br/>
+      $creds = Get-Credential ## Interactively and securely prompt for auth creds
+<br/>
+      New-VltAuth -AuthMethod userpass -PathData $creds.Username `
+<pre>          -AuthData @{ password = $creds.GetNetworkCredential().Password }</pre>
+<br/>
+<strong>    ----------  EXAMPLE 2  ----------</strong>
+<br/>
+<br/>
+    <span class='pscmd'>An example of authenticating to the okta auth provider at the non-default mount point 'okta1'.##</span>
+<br/>
+<br/>
+      $creds = Get-Credential ## Interactively and securely prompt for auth creds
+<br/>
+      New-VltAuth -AuthMethod okta -MountName okta1 -PathData $creds.Username `
+<pre>          -AuthData @{ password = $creds.GetNetworkCredential().Password }</pre>
+<br/></div>
+</div>
+ <div class='PowerShellDoc'>
+<h2>RELATED LINKS</h2>
+<ul>
+<li><a href='Set-VltProfile.html'>Set-VltProfile</a></li>
+<li><a href='Get-VltProfile.html'>Get-VltProfile</a></li>
+</ul></div>
+</div>
+    <div><code>&#x7b;postscript}=</code>   <i>(not currently used)</i></div>
+    <div><code>&#x7b;copyright}=</code>   Copyright (C) Eugene Bekker.  All rights reserved.</div>
+    <div><code>&#x7b;revdate}=</code>     2017-06-19 12:39:53</div>
+
+    <code>Module Properties (samples):</code>
+
+    <pre>
+        &#x7b;module.Name}        : Zyborg.Vault
+        &#x7b;module.Guid}        : 40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5
+        &#x7b;module.Version}     : 0.6.0
+        &#x7b;module.Author}      : https://github.com/ebekker
+        &#x7b;module.Prefix}      : Vlt
+        &#x7b;module.ModuleType}  : Binary
+        &#x7b;module.Path}        : C:\projects\zyborg-vault\work\ZyborgSource\Zyborg\Zyborg.Vault\Zyborg.Vault.POSH.dll
+        &#x7b;module.ModuleBase}  : C:\projects\zyborg-vault\work\ZyborgSource\Zyborg\Zyborg.Vault
+        &#x7b;module.Copyright}   : (c) Eugene Bekker. All rights reserved.
+        &#x7b;module.Description} : PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.            
+    </pre>-->
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <script>
+        var t = $(".var-body table")
+        if (t) {
+            t.removeAttr("border")
+            t.addClass("table-sm")
+            t.addClass("table-bordered")
+            t.addClass("table-striped")
+            t.addClass("table-hover")
+        }
+    </script>
+</body>
+
+</html>
+

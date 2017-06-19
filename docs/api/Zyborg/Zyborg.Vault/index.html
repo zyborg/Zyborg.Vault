@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags for Bootstrap4 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Zyborg.Vault</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+            integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+            crossorigin="anonymous">
+
+    <style>
+        body {
+            padding-top: 5rem;
+        }
+        h2 {
+            font-size-adjust: -5px;
+        }
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<!--
+  The four types of pages used in conditional properties are:
+    home     = the single master home page
+               rendered as "$TargetDir/index.html"
+    contents = the single master index/contents page
+               rendered as "$TargetDir/contents.html"
+    module   = the module index pages, one per module
+               rendered as "$TargetDir/$nsName/$modName/index.html"
+    function = the function pages, one per exported function
+               rendered as "$TargetDir/$nsName/$modName/$funName.html"
+  -->
+
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                
+                
+                
+                
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../..">Site Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html">API Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../contents.html">API Index</a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Module <span class="sr-only">(current)</span></a>
+                </li>
+                
+                
+                
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button">
+                    Zyborg Vault API:
+                    
+                    
+                </button>
+                <!--<input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="var-breadcrumbs"><a href='../../index.html'>Zyborg</a> &raquo; Zyborg.Vault</div>
+
+        <!--<h2>Zyborg Vault API:</h2>-->
+        <h1 class="display-3">Zyborg.Vault</h1>
+
+        <!-- 
+<p>PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.</p>
+
+
+<p>
+            The PowerShell module <code>Zyborg.Vault</code> defines
+            client-side bindings to the HashiCorp Vault server.
+        </p><p>
+            The module is implemented strictly using REST API calls
+            and therefore does not have any client-side dependencies
+            on the official Vault CLI.
+        </p>
+ = manifest.Description property + module_overview.html <body> contents -->
+
+        
+        <p class="lead">PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.</p>
+        
+
+        <div class="var-body">
+<table border='1'>
+  <tr>
+    <td><a href='Dismount-VltAuditProvider.html'>Dismount-VltAuditProvider</a></td>
+    <td>Disable an audit provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Dismount-VltAuthProvider.html'>Dismount-VltAuthProvider</a></td>
+    <td>Disable an already-enabled auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Dismount-VltSecretProvider.html'>Dismount-VltSecretProvider</a></td>
+    <td>Disable an already-enabled auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Enable-VltAuditProvider.html'>Enable-VltAuditProvider</a></td>
+    <td>Enable an audit provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Enable-VltAuthProvider.html'>Enable-VltAuthProvider</a></td>
+    <td>Enable a new auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuditMounts.html'>Get-VltAuditMounts</a></td>
+    <td>List the enabled audit backends.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuthMounts.html'>Get-VltAuthMounts</a></td>
+    <td>List the available auth provider mounts and auth methods.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuthToken.html'>Get-VltAuthToken</a></td>
+    <td>Retrieves information about tokens.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltDataList.html'>Get-VltDataList</a></td>
+    <td>List data from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltKeyStatus.html'>Get-VltKeyStatus</a></td>
+    <td>Provides information about the active encryption key. Specifically, the current key term and the key installation time.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltPathHelp.html'>Get-VltPathHelp</a></td>
+    <td>Look up the help for a path.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltPolicy.html'>Get-VltPolicy</a></td>
+    <td>List the policies that are available or read a single policy.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltProfile.html'>Get-VltProfile</a></td>
+    <td>Retrieves the list of Vault connection profiles defined for the current user/ or the details of a specific Vault connection profile.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltSecretMounts.html'>Get-VltSecretMounts</a></td>
+    <td>Outputs information about the mounted secret providers.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltStatus.html'>Get-VltStatus</a></td>
+    <td>Outputs the state of the Vault, sealed or unsealed and if HA is enabled.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltTokenCapabilities.html'>Get-VltTokenCapabilities</a></td>
+    <td>Fetch the capabilities of a token on a given path.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Initialize-VltInstance.html'>Initialize-VltInstance</a></td>
+    <td>Initialize a new Vault server.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Lock-VltServer.html'>Lock-VltServer</a></td>
+    <td>Seal the vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Mount-VltSecretProvider.html'>Mount-VltSecretProvider</a></td>
+    <td>Mount a logical secrets provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='New-VltAuth.html'>New-VltAuth</a></td>
+    <td>Authenticate with Vault against an auth provider using argument auth data.</td>
+  </tr>
+
+  <tr>
+    <td><a href='New-VltAuthToken.html'>New-VltAuthToken</a></td>
+    <td>Create a new auth token.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Read-VltData.html'>Read-VltData</a></td>
+    <td>Read data from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Remove-VltData.html'>Remove-VltData</a></td>
+    <td>Delete data (secrets or configuration) from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Remove-VltPolicy.html'>Remove-VltPolicy</a></td>
+    <td>Delete a policy with the given name.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Revoke-VltAuthToken.html'>Revoke-VltAuthToken</a></td>
+    <td>Revoke one or more auth tokens.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Revoke-VltSecret.html'>Revoke-VltSecret</a></td>
+    <td>Revoke a secret by its lease ID.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltPolicy.html'>Set-VltPolicy</a></td>
+    <td>Create or update a policy with the given rules.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltProfile.html'>Set-VltProfile</a></td>
+    <td>Defines or updates a Vault connection profile.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltSecretMountOptions.html'>Set-VltSecretMountOptions</a></td>
+    <td>Tune configuration options for a mounted secret provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Test-VltInstance.html'>Test-VltInstance</a></td>
+    <td>Gets the initialization status of Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Unlock-VltServer.html'>Unlock-VltServer</a></td>
+    <td>Unseal the vault by entering a portion of the master key.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Update-VltAuthToken.html'>Update-VltAuthToken</a></td>
+    <td>Renew an auth token, extending the amount of time it can be used.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Update-VltSecretLease.html'>Update-VltSecretLease</a></td>
+    <td>Renew the lease on a secret, extending the time that it can be used before it is revoked by Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Write-VltData.html'>Write-VltData</a></td>
+    <td>Write data (secrets or configuration) into Vault to a backend provider logically mounted at a specified path.</td>
+  </tr>
+
+</table>
+</div>
+
+        <hr>
+
+        
+        <blockquote class="blockquote">
+            <dl class="row">
+                <dt class="col-sm-3">Manifest Name:</dt>
+                <dd class="col-sm-9">Zyborg.Vault</dd>
+
+                <dt class="col-sm-3">Module Type:</dt>
+                <dd class="col-sm-9">Binary</dd>
+                
+                <dt class="col-sm-3">GUID:</dt>
+                <dd class="col-sm-9">40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5</dd>
+                
+                <dt class="col-sm-3">Version:</dt>
+                <dd class="col-sm-9">0.6.0</dd>
+                
+                <dt class="col-sm-3">Author:</dt>
+                <dd class="col-sm-9">https://github.com/ebekker</dd>
+                
+                <dt class="col-sm-3">Company:</dt>
+                <dd class="col-sm-9">https://github.com/zyborg</dd>
+                
+                <dt class="col-sm-3">Manifest Copyright:</dt>
+                <dd class="col-sm-9">(c) Eugene Bekker. All rights reserved.</dd>
+                
+                <dt class="col-sm-3">Prefix:</dt>
+                <dd class="col-sm-9">Vlt</dd>
+                
+                <dt class="col-sm-3">Manifest Description:</dt>
+                <dd class="col-sm-9">PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.</dd>
+            </dl>
+        </blockquote>
+        
+
+        <div class="var-copyright">Copyright (C) Eugene Bekker.  All rights reserved.</div>
+        <div class="var-revdate">2017-06-19 12:39:53</div>
+
+    </div>
+    <!-- /.container -->
+
+    <!--<hr />
+
+    <code>Global Properties:</code>
+
+    <h1><code>&#x7b;title}=</code>        Zyborg.Vault</h1>
+    <h2><code>&#x7b;subtitle}=</code>     Zyborg Vault API:</h2>
+
+    <div><code>&#x7b;breadcrumbs}=</code> <a href='../../index.html'>Zyborg</a> &raquo; Zyborg.Vault</div>
+    <div><code>&#x7b;preamble}=</code>    
+<p>PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.</p>
+
+
+<p>
+            The PowerShell module <code>Zyborg.Vault</code> defines
+            client-side bindings to the HashiCorp Vault server.
+        </p><p>
+            The module is implemented strictly using REST API calls
+            and therefore does not have any client-side dependencies
+            on the official Vault CLI.
+        </p>
+ <i>(computed as <code>module.Description</code> + <code>module_overview.html</code> &lt;body&gt; contents)</i></div>
+    <div><code>&#x7b;body}=</code>        
+<table border='1'>
+  <tr>
+    <td><a href='Dismount-VltAuditProvider.html'>Dismount-VltAuditProvider</a></td>
+    <td>Disable an audit provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Dismount-VltAuthProvider.html'>Dismount-VltAuthProvider</a></td>
+    <td>Disable an already-enabled auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Dismount-VltSecretProvider.html'>Dismount-VltSecretProvider</a></td>
+    <td>Disable an already-enabled auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Enable-VltAuditProvider.html'>Enable-VltAuditProvider</a></td>
+    <td>Enable an audit provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Enable-VltAuthProvider.html'>Enable-VltAuthProvider</a></td>
+    <td>Enable a new auth provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuditMounts.html'>Get-VltAuditMounts</a></td>
+    <td>List the enabled audit backends.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuthMounts.html'>Get-VltAuthMounts</a></td>
+    <td>List the available auth provider mounts and auth methods.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltAuthToken.html'>Get-VltAuthToken</a></td>
+    <td>Retrieves information about tokens.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltDataList.html'>Get-VltDataList</a></td>
+    <td>List data from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltKeyStatus.html'>Get-VltKeyStatus</a></td>
+    <td>Provides information about the active encryption key. Specifically, the current key term and the key installation time.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltPathHelp.html'>Get-VltPathHelp</a></td>
+    <td>Look up the help for a path.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltPolicy.html'>Get-VltPolicy</a></td>
+    <td>List the policies that are available or read a single policy.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltProfile.html'>Get-VltProfile</a></td>
+    <td>Retrieves the list of Vault connection profiles defined for the current user/ or the details of a specific Vault connection profile.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltSecretMounts.html'>Get-VltSecretMounts</a></td>
+    <td>Outputs information about the mounted secret providers.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltStatus.html'>Get-VltStatus</a></td>
+    <td>Outputs the state of the Vault, sealed or unsealed and if HA is enabled.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Get-VltTokenCapabilities.html'>Get-VltTokenCapabilities</a></td>
+    <td>Fetch the capabilities of a token on a given path.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Initialize-VltInstance.html'>Initialize-VltInstance</a></td>
+    <td>Initialize a new Vault server.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Lock-VltServer.html'>Lock-VltServer</a></td>
+    <td>Seal the vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Mount-VltSecretProvider.html'>Mount-VltSecretProvider</a></td>
+    <td>Mount a logical secrets provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='New-VltAuth.html'>New-VltAuth</a></td>
+    <td>Authenticate with Vault against an auth provider using argument auth data.</td>
+  </tr>
+
+  <tr>
+    <td><a href='New-VltAuthToken.html'>New-VltAuthToken</a></td>
+    <td>Create a new auth token.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Read-VltData.html'>Read-VltData</a></td>
+    <td>Read data from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Remove-VltData.html'>Remove-VltData</a></td>
+    <td>Delete data (secrets or configuration) from Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Remove-VltPolicy.html'>Remove-VltPolicy</a></td>
+    <td>Delete a policy with the given name.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Revoke-VltAuthToken.html'>Revoke-VltAuthToken</a></td>
+    <td>Revoke one or more auth tokens.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Revoke-VltSecret.html'>Revoke-VltSecret</a></td>
+    <td>Revoke a secret by its lease ID.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltPolicy.html'>Set-VltPolicy</a></td>
+    <td>Create or update a policy with the given rules.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltProfile.html'>Set-VltProfile</a></td>
+    <td>Defines or updates a Vault connection profile.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Set-VltSecretMountOptions.html'>Set-VltSecretMountOptions</a></td>
+    <td>Tune configuration options for a mounted secret provider.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Test-VltInstance.html'>Test-VltInstance</a></td>
+    <td>Gets the initialization status of Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Unlock-VltServer.html'>Unlock-VltServer</a></td>
+    <td>Unseal the vault by entering a portion of the master key.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Update-VltAuthToken.html'>Update-VltAuthToken</a></td>
+    <td>Renew an auth token, extending the amount of time it can be used.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Update-VltSecretLease.html'>Update-VltSecretLease</a></td>
+    <td>Renew the lease on a secret, extending the time that it can be used before it is revoked by Vault.</td>
+  </tr>
+
+  <tr>
+    <td><a href='Write-VltData.html'>Write-VltData</a></td>
+    <td>Write data (secrets or configuration) into Vault to a backend provider logically mounted at a specified path.</td>
+  </tr>
+
+</table>
+</div>
+    <div><code>&#x7b;postscript}=</code>   <i>(not currently used)</i></div>
+    <div><code>&#x7b;copyright}=</code>   Copyright (C) Eugene Bekker.  All rights reserved.</div>
+    <div><code>&#x7b;revdate}=</code>     2017-06-19 12:39:53</div>
+
+    <code>Module Properties (samples):</code>
+
+    <pre>
+        &#x7b;module.Name}        : Zyborg.Vault
+        &#x7b;module.Guid}        : 40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5
+        &#x7b;module.Version}     : 0.6.0
+        &#x7b;module.Author}      : https://github.com/ebekker
+        &#x7b;module.Prefix}      : Vlt
+        &#x7b;module.ModuleType}  : Binary
+        &#x7b;module.Path}        : C:\projects\zyborg-vault\work\ZyborgSource\Zyborg\Zyborg.Vault\Zyborg.Vault.POSH.dll
+        &#x7b;module.ModuleBase}  : C:\projects\zyborg-vault\work\ZyborgSource\Zyborg\Zyborg.Vault
+        &#x7b;module.Copyright}   : (c) Eugene Bekker. All rights reserved.
+        &#x7b;module.Description} : PowerShell bindings for HashiCorp Vault.
+
+Provides cmdlets that talk directly to the Vault REST API and are comparable to most commands available through the official Vault CLI without any dependency on the CLI.            
+    </pre>-->
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <script>
+        var t = $(".var-body table")
+        if (t) {
+            t.removeAttr("border")
+            t.addClass("table-sm")
+            t.addClass("table-bordered")
+            t.addClass("table-striped")
+            t.addClass("table-hover")
+        }
+    </script>
+</body>
+
+</html>
+
