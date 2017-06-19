@@ -95,11 +95,17 @@ if ([int]$((Resolve-DnsName pubapidocs.vault.zyborg-ci.bkkr.us -Type TXT).Text))
         git clone https://github.com/zyborg/Zyborg.Vault.git --branch gh-pages --single-branch .
 
         ## Delete then create and copy to make sure we get rid of anything obselete
-        Remove-Item $ghPagesApiDocsDir -Recurse
+        if (Test-Path $ghPagesApiDocsDir) {
+            Remove-Item $ghPagesApiDocsDir -Recurse
+        }
         mkdir $ghPagesApiDocsDir
-        Copy-Item -Path $targetDir -Destination $ghPagesApiDocsDir -Recurse -Force
+        Copy-Item -Path $targetDir\* -Destination $ghPagesApiDocsDir -Recurse -Force
 
-        git commit
+        git add .
+        git commit -m "Publishing API Docs from AppVeyor from build $($env:APPVEYOR_BUILD_NUMBER)"
         git push --dry-run
     }
 }
+
+## Make sure we return to the project root in case we had to change paths for Git
+Set-Location $projectRoot
