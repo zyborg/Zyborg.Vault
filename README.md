@@ -1,7 +1,7 @@
 # Zyborg.Vault
 PowerShell client bindings for HashiCorp Vault
 
-[![Browse API Docs][apidocs-badge]](docs/api)
+[![Browse API Docs][apidocs-badge]](https://zyborg.github.io/Zyborg.Vault/docs/api)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ldby4js60k32mqtl?svg=true)](https://ci.appveyor.com/project/ebekker/zyborg-vault)
 [![Powershellgallery Badge][psgallery-badge]][psgallery-status]
@@ -48,4 +48,4 @@ Install-Module -Name "Zyborg.Vault" -Repository "zyborg-stage"
 
 ## Home Page
 
-For more information, including examples and API Documentation, please visit the [home page]().
+For more information, including examples and API Documentation, please visit the [home page](https://zyborg.github.io/Zyborg.Vault/).
