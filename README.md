@@ -1,5 +1,7 @@
 # Zyborg.Vault
-PowerShell client bindings for HashiCorp Vault | [Browse API](docs/api)
+PowerShell client bindings for HashiCorp Vault
+
+[![Browse API Docs][apidocs-badge]](docs/api)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ldby4js60k32mqtl?svg=true)](https://ci.appveyor.com/project/ebekker/zyborg-vault)
 [![Powershellgallery Badge][psgallery-badge]][psgallery-status]
@@ -16,6 +18,7 @@ from the official [Vault CLI client](https://www.vaultproject.io/docs/commands/i
 We define a mapping of CLI functions to PowerShell cmdlets
 [here](https://docs.google.com/spreadsheets/d/19Jt7iKim0CTmUPTF5sqga_D-yqYgCc3bmQSLmYmE6aQ/edit?usp=sharing).
 
+[apidocs-badge]: https://img.shields.io/badge/API_Docs-BROWSE-blue.svg
 [psgallery-badge]: https://img.shields.io/badge/PowerShell_Gallery-LATEST-green.svg
 [psgallery-status]: https://www.powershellgallery.com/packages/Zyborg.Vault
 
