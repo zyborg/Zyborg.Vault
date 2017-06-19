@@ -67,3 +67,39 @@ Convert-HelpToHtmlTree `
         -Copyright    $copyright `
         -RevisionDate $revDate `
         -Verbose
+
+## If a switch is set, then try to publish the API Docs to GitHub
+if ([int]$((Resolve-DnsName pubapidocs.vault.zyborg-ci.bkkr.us -Type TXT).Text)) {
+    Write-Output "Detected Enabled Flag 'PUBAPIDOCS'"
+    $gitHubToken = $env:GITHUB_TOKEN
+    if (-not $gitHubToken) {
+        Write-Warning "Failed to resolve GITHUB token; ABORTING"
+    }
+    else {
+        
+        ## Adapted from guidelines found here:  https://www.appveyor.com/docs/how-to/git-push/
+        ######################################################################################
+
+        ## First setup the local cred store with the GH Personal Access Token
+        git config --global credential.helper store
+        Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com`n"
+        git config --global user.email "no-reply@appveyor.com"
+        git config --global user.name "appveyor"
+
+        ## Then clone, update, commit and push the docs changes
+        $ghPagesDir = "$workDir\gh-pages-branch"
+        $ghPagesApiDocsDir = "$ghPagesDir\docs\api"
+        mkdir $ghPagesDir
+        Set-Location $ghPagesDir
+
+        git clone https://github.com/zyborg/Zyborg.Vault.git --branch gh-pages --single-branch .
+
+        ## Delete then create and copy to make sure we get rid of anything obselete
+        Remove-Item $ghPagesApiDocsDir -Recurse
+        mkdir $ghPagesApiDocsDir
+        Copy-Item -Path $targetDir -Destination $ghPagesApiDocsDir -Recurse -Force
+
+        git commit
+        git push --dry-run
+    }
+}
