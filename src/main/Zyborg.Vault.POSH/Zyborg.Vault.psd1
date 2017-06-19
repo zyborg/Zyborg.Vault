@@ -17,7 +17,7 @@
 
 @{
 	RootModule = 'Zyborg.Vault.POSH.dll'
-	ModuleVersion = '0.5.0'
+	ModuleVersion = '0.6.0'
 	GUID = '40e86eed-4ae6-47fd-9e9d-7d21a54c0bc5'
 
 	# Supported PSEditions
