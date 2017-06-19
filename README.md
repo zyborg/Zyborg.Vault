@@ -1,5 +1,5 @@
 # Zyborg.Vault
-PowerShell client bindings for HashiCorp Vault
+PowerShell client bindings for HashiCorp Vault | [Browse API](docs/api)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ldby4js60k32mqtl?svg=true)](https://ci.appveyor.com/project/ebekker/zyborg-vault)
 [![Powershellgallery Badge][psgallery-badge]][psgallery-status]
