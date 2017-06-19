@@ -103,7 +103,7 @@ if ([int]$((Resolve-DnsName pubapidocs.vault.zyborg-ci.bkkr.us -Type TXT).Text))
 
         git add .
         git commit -m "Publishing API Docs from AppVeyor from build $($env:APPVEYOR_BUILD_NUMBER)"
-        git push --dry-run
+        git push
     }
 }
 
