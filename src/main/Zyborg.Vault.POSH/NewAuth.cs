@@ -22,8 +22,8 @@ namespace Zyborg.Vault.POSH
 	/// to collect the token ID used to authenticate against the token auth provider.
 	/// </para><para type="description">
 	/// </para>
-	/// <para type="link">Set-HCVaultProfile</para>
-	/// <para type="link">Get-HCVaultProfile</para>
+	/// <para type="link">Set-VltProfile</para>
+	/// <para type="link">Get-VltProfile</para>
 	/// </remarks>
 	/// <example>
 	/// <para>
@@ -33,7 +33,7 @@ namespace Zyborg.Vault.POSH
 	/// ##
 	///   
 	///   $creds = Get-Credential ## Interactively and securely prompt for auth creds
-	///   New-HCVaultAuth -AuthMethod userpass -PathData $creds.Username `
+	///   New-VltAuth -AuthMethod userpass -PathData $creds.Username `
 	///       -AuthData @{ password = $creds.GetNetworkCredential().Password }
 	/// </code>
 	/// </example>
@@ -45,7 +45,7 @@ namespace Zyborg.Vault.POSH
 	/// ##
 	/// 
 	///   $creds = Get-Credential ## Interactively and securely prompt for auth creds
-	///   New-HCVaultAuth -AuthMethod okta -MountName okta1 -PathData $creds.Username `
+	///   New-VltAuth -AuthMethod okta -MountName okta1 -PathData $creds.Username `
 	///       -AuthData @{ password = $creds.GetNetworkCredential().Password }
 	/// </code>
 	/// </example>

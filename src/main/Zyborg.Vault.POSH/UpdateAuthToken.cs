@@ -14,13 +14,13 @@ namespace Zyborg.Vault.POSH
 	/// You can either specify a specific token ID or indicate to target
 	/// auth token of the client caller.
 	/// </para><para type="description">
-	/// This command is similar to the command <c>'Update-HCVaultSecretLease'</c>
+	/// This command is similar to the command <c>'Update-VltSecretLease'</c>
 	/// which is used for renewing secret leases.
 	/// </para><para type="description">
 	/// An optional increment can be given to request a certain number of seconds to
 	/// increment the lease.  This request is advisory; Vault may not adhere to it at all.
 	/// </para>
-	/// <para type="link">Update-HCVaultSecretLease</para>
+	/// <para type="link">Update-VltSecretLease</para>
 	/// </remarks>
 	[Cmdlet(VerbsData.Update, "AuthToken", DefaultParameterSetName = TokenParamSet)]
 	public class UpdateAuthToken : VaultBaseCmdlet

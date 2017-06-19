@@ -24,7 +24,7 @@ namespace Zyborg.Vault.POSH
 	/// </para><code>
 	/// ##
 	/// 
-	///	  PS> Mount-HCVaultAuditProvider file -Config @{ file_path = "c:\temp\log\audit.log" }
+	///	  PS> Mount-VltAuditProvider file -Config @{ file_path = "c:\temp\log\audit.log" }
 	/// </code>
 	/// </example>
 	[Cmdlet(VerbsLifecycle.Enable, "AuditProvider")]

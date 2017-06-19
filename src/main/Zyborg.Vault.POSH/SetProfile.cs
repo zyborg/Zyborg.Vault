@@ -21,10 +21,10 @@ namespace Zyborg.Vault.POSH
 	/// </para><para type="description">
 	/// Beside explicitily defining a profile with this command, you can also
 	/// save a profile as the result of a new authentication via the
-	/// <c>'New-HCVaultAuth'</c> command.
+	/// <c>'New-VltAuth'</c> command.
 	/// </para>
-	/// <para type="link">Get-HCVaultProfile</para>
-	/// <para type="link">New-HCVaultAuth</para>
+	/// <para type="link">Get-VltProfile</para>
+	/// <para type="link">New-VltAuth</para>
 	/// </remarks>
 	[Cmdlet(VerbsCommon.Set, "Profile",
 			DefaultParameterSetName = DefaultParamSet)]

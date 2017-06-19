@@ -13,7 +13,7 @@ namespace Zyborg.Vault.POSH
 	/// <para type="description">
 	/// This command revokes auth tokens.
 	/// </para><para type="description">
-	/// The related command <c>'Revoke-HCVaultSecret'</c> is used to revoke secrets.
+	/// The related command <c>'Revoke-VltSecret'</c> is used to revoke secrets.
 	/// </para><para type="description">
 	/// By default a token is revoked along with all of its children.
 	/// </para><para type="description">
@@ -24,7 +24,7 @@ namespace Zyborg.Vault.POSH
 	/// prefix will be deleted, along with all their children.  The path cannot specify
 	/// token values or parts of token values.
 	/// </para>
-	/// <para type="link">Revoke-HCVaultSecret</para>
+	/// <para type="link">Revoke-VltSecret</para>
 	/// </remarks>
 	[Cmdlet(VerbsSecurity.Revoke, "AuthToken", DefaultParameterSetName = TokenParamSet)]
 	public class RevokeAuthToken : VaultBaseCmdlet

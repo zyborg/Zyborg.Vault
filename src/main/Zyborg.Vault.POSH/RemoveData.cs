@@ -17,7 +17,7 @@ namespace Zyborg.Vault.POSH
 	/// path.  For example, deleting "aws/policy/ops" will delete the "ops"
 	/// policy for the AWS backend.
 	/// </para><para type="description">
-	/// Use <c>'Get-HCVaultPathHelp'</c> for more details on whether delete is
+	/// Use <c>'Get-VltPathHelp'</c> for more details on whether delete is
 	/// supported for a path and what the behavior is.
 	/// </para>
 	/// </remarks>

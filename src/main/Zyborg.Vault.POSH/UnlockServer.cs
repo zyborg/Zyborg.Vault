@@ -21,9 +21,9 @@ namespace Zyborg.Vault.POSH
 	/// </para><para type="description">
 	/// In order to abort the unsealing process and discard any prior keys
 	/// that have already been entered in the process, use the
-	/// <c>'Lock-HCVaultServer'</c> command.
+	/// <c>'Lock-VltServer'</c> command.
     /// </para>
-	/// <para type="link">Lock-HCVaultServer</para>
+	/// <para type="link">Lock-VltServer</para>
 	/// </remarks>
 	[Cmdlet(VerbsCommon.Unlock, "Server")]
 	[OutputType(typeof(SealStatus))]

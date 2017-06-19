@@ -18,7 +18,7 @@ namespace Zyborg.Vault.POSH
 	/// <example>
 	/// <code>
 	/// ##
-	///   Set-HCVaultSecretMountOptions -DefaultLeaseTtl 24h secret
+	///   Set-VltSecretMountOptions -DefaultLeaseTtl 24h secret
 	/// </code>
 	/// </example>
 	[Cmdlet(VerbsCommon.Set, "SecretMountOptions")]

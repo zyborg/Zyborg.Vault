@@ -23,7 +23,7 @@ namespace Zyborg.Vault.POSH
 	/// If an unseal has started, sealing the vault will reset the unsealing
 	/// process. You'll have to re-enter every portion of the master key again.
 	/// </para>
-	/// <para type="link">Unlock-HCVaultServer</para>
+	/// <para type="link">Unlock-VltServer</para>
 	/// </remarks>
 	[Cmdlet(VerbsCommon.Lock, "Server")]
 	[OutputType(typeof(SealStatus))]

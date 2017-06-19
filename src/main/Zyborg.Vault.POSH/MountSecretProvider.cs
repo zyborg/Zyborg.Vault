@@ -26,7 +26,7 @@ namespace Zyborg.Vault.POSH
 	/// </para><code>
 	/// ##
 	/// 
-	///   Mount-HCVaultSecretProvider -OldMountName secret -NewMountName generic
+	///   Mount-VltSecretProvider -OldMountName secret -NewMountName generic
 	/// </code>
 	/// </example>
 	[Cmdlet(VerbsData.Mount, "SecretProvider", DefaultParameterSetName = DefaultParamSet)]

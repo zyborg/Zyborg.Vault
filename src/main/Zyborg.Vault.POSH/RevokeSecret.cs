@@ -14,9 +14,9 @@ namespace Zyborg.Vault.POSH
 	/// This command revokes a secret by its lease ID that was returned with it.
 	/// Once the key is revoked, it is no longer valid.
 	/// </para><para type="description">
-	/// The related command <c>'Revoke-HCVaultAuthToken'</c> is used to revoke auth tokens.
+	/// The related command <c>'Revoke-VltAuthToken'</c> is used to revoke auth tokens.
 	/// </para>
-	/// <para type="link">Revoke-HCVaultSecret</para>
+	/// <para type="link">Revoke-VltSecret</para>
 	/// </remarks>
 	[Cmdlet(VerbsSecurity.Revoke, "Secret", DefaultParameterSetName = LeaseIdParamSet)]
 	public class RevokeSecret : VaultBaseCmdlet

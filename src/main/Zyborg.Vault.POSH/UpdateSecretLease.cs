@@ -21,7 +21,7 @@ namespace Zyborg.Vault.POSH
 	/// was read.  Optionally, request a specific increment in seconds. Vault
 	/// is not required to honor this request.
 	/// </para>
-	/// <para type="link">Update-HCVaultAuthToken</para>
+	/// <para type="link">Update-VltAuthToken</para>
 	/// </remarks>
 	[Cmdlet(VerbsData.Update, "SecretLease")]
 	[OutputType(typeof(Dictionary<string, object>))]

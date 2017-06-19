@@ -4,8 +4,8 @@
 
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
-	/// <para type="link">Get-HCVaultProfile</para>
-	/// <para type="link">New-HCVaultAuth</para>
+	/// <para type="link">Get-VltProfile</para>
+	/// <para type="link">New-VltAuth</para>
 
 	/// <para type="link" uri="https://www.vaultproject.io/api/index.html">Vault API</para>
 
