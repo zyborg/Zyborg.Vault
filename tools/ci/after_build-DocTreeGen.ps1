@@ -3,7 +3,6 @@
 
 ## Install and load the DTG module
 Install-Module DocTreeGenerator -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
-Import-Module DocTreeGenerator -Force
 
 ## We need to "FIX" the DTG module to handle modules with a DefaultCommandPrefix
 ## defined, until [this](https://github.com/msorens/DocTreeGenerator/pull/8) is
@@ -15,6 +14,9 @@ $dtgLines = [System.IO.File]::ReadAllLines($dtgFile)
 Rename-Item  -Path $dtgFile -NewName "$($dtgFile).ORIG"
 $dtgLines[434] = $dtgLines[434].Replace('$_', '$function')
 [System.IO.File]::WriteAllLines($dtgFile, $dtgLines)
+
+## Now load the module after the fix
+Import-Module DocTreeGenerator -Force
 
 
 ## Resolve input parameters and paths
