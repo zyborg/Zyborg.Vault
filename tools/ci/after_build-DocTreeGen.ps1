@@ -7,7 +7,7 @@ Install-Module DocTreeGenerator -Scope CurrentUser -Force -AllowClobber -ErrorAc
 ## We need to "FIX" the DTG module to handle modules with a DefaultCommandPrefix
 ## defined, until [this](https://github.com/msorens/DocTreeGenerator/pull/8) is
 ## merged in and the tool is republished.
-$dtg = Get-Module DocTreeGenerator
+$dtg = Get-Module DocTreeGenerator -ListAvailable
 $dtgBase = $dtg.ModuleBase
 $dtgFile = "$dtgBase\Source\Convert-HelpToHtmlTree.ps1"
 $dtgLines = [System.IO.File]::ReadAllLines($dtgFile)
