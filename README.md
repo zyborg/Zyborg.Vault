@@ -35,8 +35,10 @@ Any feedback is welcome!
 The easiest way to get started is to install the latest published release from the [PowerShell Gallery](https://www.powershellgallery.com/packages/Zyborg.Vault).
 
 ```PowerShell
-Install-Module -Name Zyborg.Vault
+Install-Module -Name Zyborg.Vault -Repository PSGallery
 ```
+
+The `-Repository` parameter is only needed if you have multiple repos registered and you want to disambiguate where to try to install from.
 
 You can also get early access to pre-release builds.
 
