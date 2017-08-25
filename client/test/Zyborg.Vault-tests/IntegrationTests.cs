@@ -16,17 +16,8 @@ namespace Zyborg.Vault
 {
     public class IntegrationTests
     {
-        public const string VaultAddress = "http://localhost:8888";
-
-        [Fact]
-        public async void GetInitStatusBeforeInit()
-        {
-            using (var client = new VaultClient(VaultAddress))
-            {
-                var initStatus = await client.GetInitializationStatusAsync();
-                Assert.Equal(false, initStatus.Initialized);
-            }
-        }
+        //public const string VaultAddress = "http://local-fiddler-8200:8888";
+        public const string VaultAddress = "http://local-fiddler-5000:8888";
 
         [Fact]
         public async void GetHealthBeforeInit()
@@ -41,15 +32,12 @@ namespace Zyborg.Vault
         }
 
         [Fact]
-        public async void GetKeyStatusBeforeInit()
+        public async void GetInitStatusBeforeInit()
         {
             using (var client = new VaultClient(VaultAddress))
             {
-                var ex = await Assert.ThrowsAsync<VaultClientException>(
-                        async () => await client.GetKeyStatusAsync());
-                
-                Assert.Equal(HttpStatusCode.ServiceUnavailable, ex.StatusCode);
-                Assert.Equal("Vault is sealed", ex.Errors?.Errors?.FirstOrDefault());
+                var initStatus = await client.GetInitializationStatusAsync();
+                Assert.Equal(false, initStatus.Initialized);
             }
         }
 
@@ -66,7 +54,21 @@ namespace Zyborg.Vault
             }
         }
 
-        [Fact(Skip = "Not Repeatable")]
+        [Fact]
+        public async void GetKeyStatusBeforeInit()
+        {
+            using (var client = new VaultClient(VaultAddress))
+            {
+                var ex = await Assert.ThrowsAsync<VaultClientException>(
+                        async () => await client.GetKeyStatusAsync());
+                
+                Assert.Equal(HttpStatusCode.ServiceUnavailable, ex.StatusCode);
+                Assert.Equal("Vault is sealed", ex.Errors?.Errors?.FirstOrDefault());
+            }
+        }
+
+        //[Fact(Skip = "Not Repeatable")]
+        [Fact]
         public async void FirstInit()
         {
             using (var client = new VaultClient(VaultAddress))
@@ -161,7 +163,6 @@ namespace Zyborg.Vault
         [Fact]
         public async void UnsealAfterInit()
         {
-
             using (var client = new VaultClient(VaultAddress))
             {
                 var sealStatus = await client.GetSealStatusAsync();

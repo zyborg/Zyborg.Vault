@@ -1,5 +1,6 @@
 
 cluster_name = "vault-file"
+#cluster_name = "foo-bar"
 
 ##
 ## Doc Ref:
