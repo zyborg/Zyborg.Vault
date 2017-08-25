@@ -1,0 +1,13 @@
+
+@SETLOCAL
+@SET THIS_DIR=%~dp0
+
+@SET VAULT_CLI="%THIS_DIR%vault.cmd"
+@SET VAULT_CFG="%THIS_DIR%config-file.hcl"
+
+@SET VAULT_ARGS=server
+@SET VAULT_ARGS=%VAULT_ARGS% -config=%VAULT_CFG%
+
+%VAULT_CLI% %VAULT_ARGS%
+
+@ENDLOCAL
