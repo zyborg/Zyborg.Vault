@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault-tests", "test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Testing.XunitExt", "..\tools\src\Zyborg.Testing.XunitExt\Zyborg.Testing.XunitExt.csproj", "{2B627A53-4DF9-4B7D-BA03-9D73F02E9FA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault.Server", "src\Zyborg.Vault.Server\Zyborg.Vault.Server.csproj", "{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,9 +64,22 @@ Global
 		{2B627A53-4DF9-4B7D-BA03-9D73F02E9FA9}.Release|x64.Build.0 = Release|x64
 		{2B627A53-4DF9-4B7D-BA03-9D73F02E9FA9}.Release|x86.ActiveCfg = Release|x86
 		{2B627A53-4DF9-4B7D-BA03-9D73F02E9FA9}.Release|x86.Build.0 = Release|x86
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|x64.ActiveCfg = Debug|x64
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|x64.Build.0 = Debug|x64
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|x86.ActiveCfg = Debug|x86
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Debug|x86.Build.0 = Debug|x86
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|x64.ActiveCfg = Release|x64
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|x64.Build.0 = Release|x64
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|x86.ActiveCfg = Release|x86
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A62F57E-5C81-45A2-90A4-A44EB915B358} = {D46C7E5E-A719-4C65-85F2-5DE9B3A01095}
 		{794649DF-0AB7-4959-9635-AB59A95411F7} = {B1CBC9FD-2A19-4473-89D2-B337559581C2}
+		{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047} = {D46C7E5E-A719-4C65-85F2-5DE9B3A01095}
 	EndGlobalSection
 EndGlobal
