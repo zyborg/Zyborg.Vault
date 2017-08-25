@@ -7,28 +7,29 @@ namespace Zyborg.Vault.Model
         public bool Sealed
         { get; set; }
 
-        [JsonProperty("n")]
-        public int SecretShares
-        { get; set; }
-
         [JsonProperty("t")]
         public int SecretThreshold
+        { get; set; }
+
+        [JsonProperty("n")]
+        public int SecretShares
         { get; set; }
 
         public int Progress
         { get; set; }
 
-        public string Version
-        { get; set; }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Nonce
         { get; set; }
+
+        public string Version
+        { get; set; }
         
-        [JsonProperty("cluster_name")]
+        [JsonProperty("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterName
         { get; set; }
 
-        [JsonProperty("cluster_id")]
+        [JsonProperty("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterId
         { get; set; }
     }

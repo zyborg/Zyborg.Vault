@@ -4,28 +4,28 @@ namespace Zyborg.Vault.Model
 {
     public class HealthStatus
     {
-        public bool Initialized
+        public virtual bool Initialized
         { get; set; }
 
-        public bool Sealed
+        public virtual bool Sealed
         { get; set; }
 
-        public bool Standby
+        public virtual bool Standby
         { get; set; }
 
         [JsonProperty("server_time_utc")]
-        public long ServerTimeUtc
+        public virtual long ServerTimeUtc
         { get; set; }
 
-        public string Version
+        public virtual string Version
         { get; set; }
 
-        [JsonProperty("cluster_name")]
-        public string ClusterName
+        [JsonProperty("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
+        public virtual string ClusterName
         { get; set; }
 
-        [JsonProperty("cluster_id")]
-        public string ClusterId
+        [JsonProperty("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
+        public virtual string ClusterId
         { get; set; }
     }
 }
