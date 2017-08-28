@@ -14,6 +14,7 @@ namespace Zyborg.Vault
     {
         public const string DefaultVaultAddress = "http://localhost:8200";
         public const string DefaultUserAgent = "zyborg-vault-client/1.0";
+        public static readonly HttpMethod ListHttpMethod = new HttpMethod("LIST");
 
         private Uri _vaultAddress;
         private TimeSpan? _timeout;
@@ -118,6 +119,37 @@ namespace Zyborg.Vault
             return await SendGetAsync<LeaderStatus>("sys/leader");
         }
 
+        public async Task<HelpResponse> GetHelpAsync(string path)
+        {
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+            if (path.Contains("?"))
+                path += "&help=1";
+            else
+                path += "?help=1";
+
+            return await SendGetAsync<HelpResponse>(path);
+        }
+
+        public async Task WriteAsync(string path, object data)
+        {
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+
+            await SendPutAsync<NoContentResponse>(path, data);
+        }
+
+        // public async Task ListAsync(string path)
+        // {
+
+        // }
+
+        // public async Task ReadAsync(string path)
+        // {
+
+        // }
+
+
         public async Task<T> SendGetAsync<T>(string uri)
         {
             using (var resp = await _httpClient.GetAsync(uri))
@@ -128,13 +160,39 @@ namespace Zyborg.Vault
 
         public async Task<T> SendPutAsync<T>(string uri, object payload = null)
         {
-            var payloadJson = JsonConvert.SerializeObject(payload);
-            var requContent = new StringContent(payloadJson, Encoding.UTF8, "application/json");
-
-            using (var resp = await _httpClient.PutAsync(uri, requContent))
+            using (var resp = await _httpClient.PutAsync(uri, GetContent(payload)))
             {
                 return await ProcessResponseAsync<T>(resp);
             }
+        }
+
+        public async Task<T> SendPostAsync<T>(string uri, object payload = null)
+        {
+            using (var resp = await _httpClient.PostAsync(uri, GetContent(payload)))
+            {
+                return await ProcessResponseAsync<T>(resp);
+            }
+        }
+
+        public async Task<T> SendListAsync<T>(string uri, object payload = null)
+        {
+            using (var requ = new HttpRequestMessage(ListHttpMethod, uri) {
+                Content = GetContent(payload),
+            })
+            using (var resp = await _httpClient.SendAsync(requ))
+            {
+                return await ProcessResponseAsync<T>(resp);
+            }
+        }
+
+        private HttpContent GetContent(object payload)
+        {
+            if (payload == null)
+                return null;
+
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var requContent = new StringContent(payloadJson, Encoding.UTF8, "application/json");
+            return requContent;
         }
 
         private async Task<T> ProcessResponseAsync<T>(HttpResponseMessage resp)
