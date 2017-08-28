@@ -83,6 +83,11 @@ namespace Zyborg.Vault
                 + "&uninitcode=200");
         }
 
+        public async Task<InitializationStatus> GetInitializationStatusAsync()
+        {
+            return await SendGetAsync<InitializationStatus>("sys/init");
+        }
+
         public async Task<SealStatus> GetSealStatusAsync()
         {
             return await SendGetAsync<SealStatus>("sys/seal-status");
@@ -91,11 +96,6 @@ namespace Zyborg.Vault
         public async Task<KeyStatus> GetKeyStatusAsync()
         {
             return await SendGetAsync<KeyStatus>("sys/key-status");
-        }
-
-        public async Task<InitializationStatus> GetInitializationStatusAsync()
-        {
-            return await SendGetAsync<InitializationStatus>("sys/init");
         }
 
         public async Task<InitializationResponse> DoInitializeAsync(InitializationRequest requ)
