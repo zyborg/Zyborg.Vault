@@ -49,6 +49,9 @@ namespace Zyborg.Vault.Server
         public byte[] RootKeyEncrypted
         { get; set; }
 
+        public byte[] RootKeyHash
+        { get; set; }
+
         public byte[] RootTokenHash
         { get; set; }
     }

@@ -101,6 +101,7 @@ namespace Zyborg.Vault.Server
                     State.Durable.RootKeyTerm = 1;
                     State.Durable.RootKeyInstallTime = DateTime.UtcNow;
                     State.Durable.RootKeyEncrypted = rootKeyCrypt;
+                    State.Durable.RootKeyHash = sha.ComputeHash(rootKeyClear);
                     State.Durable.RootTokenHash = sha.ComputeHash(rootToken.ToByteArray());
 
                     State.Durable.ClusterName = Settings.ClusterName;
@@ -115,6 +116,70 @@ namespace Zyborg.Vault.Server
                     State.Durable = null;
                     throw;
                 }
+            }
+        }
+
+        public SealStatus Unseal(string key, bool reset)
+        {
+            if (reset)
+            {
+                State.UnsealNonce = null;
+                State.UnsealKeys = null;
+            }
+            else
+            {
+                // TODO: try-catch this and confirm the error response
+                byte[] keyBytes = Util.HexUtil.HexToByteArray(key);
+                if (State.UnsealKeys == null)
+                {
+                    // TODO: research this
+                    State.UnsealNonce = Guid.NewGuid().ToString();
+                }
+
+                if (State.UnsealKeys == null)
+                {
+                    State.UnsealKeys = new[] { keyBytes };
+                }
+                else
+                {
+                    var keys = State.UnsealKeys.Append(keyBytes).ToArray();
+                    if (keys.Length < State.Durable.SecretThreshold)
+                    {
+                        State.UnsealKeys = keys;
+                    }
+                    else
+                    {
+                        // Either we succeed or we fail but
+                        // we reset the unseal state regardless
+                        State.UnsealNonce = null;
+                        State.UnsealKeys = null;
+
+                        // Combine the assembled keys
+                        // to derive the true root key
+                        Unseal(keys);
+
+                        Health.Sealed = false;
+                    }
+                }
+            }
+
+            return GetSealStatus();
+        }
+
+        private void Unseal(byte[][] keys)
+        {
+            using (var tss = ThresholdSecretSharingAlgorithm.Create())
+            using (var sha = SHA512.Create())
+            {
+                tss.Shares = keys;
+                var rootKeyClear = tss.Combine(State.Durable.RootKeyEncrypted);
+                var rootKeyHash = sha.ComputeHash(rootKeyClear);
+
+                if (BitConverter.ToString(rootKeyHash) != BitConverter.ToString(State.Durable.RootKeyHash))
+                    // TODO: verify the response in this case
+                    throw new InvalidDataException("Invalid keys!");
+
+                State.RootKey = rootKeyClear;
             }
         }
 
@@ -146,6 +211,34 @@ namespace Zyborg.Vault.Server
                 Term = State.Durable.RootKeyTerm.Value,
                 InstallTime = State.Durable.RootKeyInstallTime.Value,
             };
+        }
+
+        public LeaderStatus GetLeaderStatus()
+        {
+            if (!Health.Initialized || Health.Sealed)
+                return null;
+
+            return new LeaderStatus
+            {
+                HaEnabled = false,
+                IsSelf = true,
+                LeaderAddress = "???",
+            };
+        }
+
+        public void GetAuthProviders()
+        {
+
+        }
+
+        public void MountAuthProvider()
+        {
+
+        }
+
+        public void DismountAuthProvider()
+        {
+
         }
     }
 

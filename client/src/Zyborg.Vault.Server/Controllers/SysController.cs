@@ -39,6 +39,12 @@ namespace Zyborg.Vault.Server.Controllers
             };
         }
 
+        [HttpGet("init")]
+        public InitializationStatus GetInitStatus()
+        {
+            return _server.GetInitializationStatus();
+        }
+
         [HttpGet("seal-status")]
         public SealStatus GetSealStatus()
         {
@@ -55,10 +61,12 @@ namespace Zyborg.Vault.Server.Controllers
                     "Vault is sealed");
         }
 
-        [HttpGet("init")]
-        public InitializationStatus GetInitStatus()
+        [HttpGet("leader")]
+        public LeaderStatus GetLeaderStatus()
         {
-            return _server.GetInitializationStatus();
+            return _server.GetLeaderStatus() ?? throw new VaultServerException(
+                    HttpStatusCode.ServiceUnavailable,
+                    "Vault is sealed");
         }
 
         [HttpPut("init")]
@@ -68,6 +76,16 @@ namespace Zyborg.Vault.Server.Controllers
                     ?? throw new VaultServerException(
                             HttpStatusCode.BadRequest,
                             "Vault is already initialized");
+        }
+
+        [HttpPut("unseal")]
+        public SealStatus DoUnseal([FromBody]UnsealRequest requ)
+        {
+            return _server.Unseal(requ.Key, requ.Reset.GetValueOrDefault())
+                    // TODO:  confirm this is the correct response for this state
+                    ?? throw new VaultServerException(
+                            HttpStatusCode.BadRequest,
+                            "server is not yet initialized");
         }
     }
 }
