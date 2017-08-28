@@ -1,0 +1,51 @@
+{
+    "token/": {
+        "accessor": "auth_token_70da5636",
+        "config": {
+            "default_lease_ttl": 0,
+            "max_lease_ttl": 0
+        },
+        "description": "token based credentials",
+        "local": false,
+        "type": "token"
+    },
+    "userpass/": {
+        "accessor": "auth_userpass_92a99346",
+        "config": {
+            "default_lease_ttl": 0,
+            "max_lease_ttl": 0
+        },
+        "description": "",
+        "local": false,
+        "type": "userpass"
+    },
+    "request_id": "b2e60aa1-7d9a-3157-4145-f6ad2ff40b87",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": {
+        "token/": {
+            "accessor": "auth_token_70da5636",
+            "config": {
+                "default_lease_ttl": 0,
+                "max_lease_ttl": 0
+            },
+            "description": "token based credentials",
+            "local": false,
+            "type": "token"
+        },
+        "userpass/": {
+            "accessor": "auth_userpass_92a99346",
+            "config": {
+                "default_lease_ttl": 0,
+                "max_lease_ttl": 0
+            },
+            "description": "",
+            "local": false,
+            "type": "userpass"
+        }
+    },
+    "wrap_info": null,
+    "warnings": null,
+    "auth": null
+}

@@ -1,0 +1,77 @@
+{
+    "secret/": {
+        "accessor": "generic_8e017d22",
+        "config": {
+            "default_lease_ttl": 0,
+            "force_no_cache": false,
+            "max_lease_ttl": 0
+        },
+        "description": "generic secret storage",
+        "local": false,
+        "type": "generic"
+    },
+    "sys/": {
+        "accessor": "system_6f1a66c3",
+        "config": {
+            "default_lease_ttl": 0,
+            "force_no_cache": false,
+            "max_lease_ttl": 0
+        },
+        "description": "system endpoints used for control, policy and debugging",
+        "local": false,
+        "type": "system"
+    },
+    "cubbyhole/": {
+        "accessor": "cubbyhole_ab863abe",
+        "config": {
+            "default_lease_ttl": 0,
+            "force_no_cache": false,
+            "max_lease_ttl": 0
+        },
+        "description": "per-token private secret storage",
+        "local": true,
+        "type": "cubbyhole"
+    },
+    "request_id": "0aee5ea2-35af-290e-90e9-89a6a0439e33",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": {
+        "cubbyhole/": {
+            "accessor": "cubbyhole_ab863abe",
+            "config": {
+                "default_lease_ttl": 0,
+                "force_no_cache": false,
+                "max_lease_ttl": 0
+            },
+            "description": "per-token private secret storage",
+            "local": true,
+            "type": "cubbyhole"
+        },
+        "secret/": {
+            "accessor": "generic_8e017d22",
+            "config": {
+                "default_lease_ttl": 0,
+                "force_no_cache": false,
+                "max_lease_ttl": 0
+            },
+            "description": "generic secret storage",
+            "local": false,
+            "type": "generic"
+        },
+        "sys/": {
+            "accessor": "system_6f1a66c3",
+            "config": {
+                "default_lease_ttl": 0,
+                "force_no_cache": false,
+                "max_lease_ttl": 0
+            },
+            "description": "system endpoints used for control, policy and debugging",
+            "local": false,
+            "type": "system"
+        }
+    },
+    "wrap_info": null,
+    "warnings": null,
+    "auth": null
+}

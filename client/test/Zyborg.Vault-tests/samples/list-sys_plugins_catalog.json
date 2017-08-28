@@ -1,0 +1,33 @@
+{
+    "keys": [
+        "cassandra-database-plugin",
+        "hana-database-plugin",
+        "mongodb-database-plugin",
+        "mssql-database-plugin",
+        "mysql-aurora-database-plugin",
+        "mysql-database-plugin",
+        "mysql-legacy-database-plugin",
+        "mysql-rds-database-plugin",
+        "postgresql-database-plugin"
+    ],
+    "request_id": "c5a2a93d-9798-cc23-a44a-832a2771ac97",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": {
+        "keys": [
+            "cassandra-database-plugin",
+            "hana-database-plugin",
+            "mongodb-database-plugin",
+            "mssql-database-plugin",
+            "mysql-aurora-database-plugin",
+            "mysql-database-plugin",
+            "mysql-legacy-database-plugin",
+            "mysql-rds-database-plugin",
+            "postgresql-database-plugin"
+        ]
+    },
+    "wrap_info": null,
+    "warnings": null,
+    "auth": null
+}

@@ -1,0 +1,26 @@
+// CLI:  vault write auth/userpass/users/foo password=bar policies=admin,default
+// CLI:  vault auth -method=userpass username=foo
+//       (prompted for and inputted 'bar')
+
+{
+    "request_id": "ff4eaf45-9d03-3f09-154a-f527a642cd59",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": null,
+    "wrap_info": null,
+    "warnings": null,
+    "auth": {
+        "client_token": "e52af64a-beee-fa37-10b3-0135446a2737",
+        "accessor": "c1854bd6-4602-36b3-cc60-38f24895deca",
+        "policies": [
+            "admin",
+            "default"
+        ],
+        "metadata": {
+            "username": "foo"
+        },
+        "lease_duration": 2764800,
+        "renewable": true
+    }
+}
