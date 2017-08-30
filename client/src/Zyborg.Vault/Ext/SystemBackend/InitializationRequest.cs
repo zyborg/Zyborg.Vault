@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Zyborg.Vault.Model
+namespace Zyborg.Vault.Ext.SystemBackend
 {
     /// <summary>
     /// Defines the request parameters payload when initializing a new Vault.

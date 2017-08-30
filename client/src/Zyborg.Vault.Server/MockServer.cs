@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Zyborg.Security.Cryptography;
+using Zyborg.Vault.Ext.SystemBackend;
 using Zyborg.Vault.Model;
 
 namespace Zyborg.Vault.Server

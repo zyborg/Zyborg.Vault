@@ -4,13 +4,15 @@ using System.Net;
 using Xunit;
 using Zyborg.Testing.XunitExt;
 using Zyborg.Vault.Model;
+using Zyborg.Vault.Ext.SystemBackend;
 
 namespace Zyborg.Vault
 {
     public class InitAndSealIntegrationTests
     {
-        public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
+        //public const string VaultAddress = "http://local-fiddler-8299:8888"; // Vault NO-INIT Config
+        public const string VaultAddress = "http://local-fiddler-8200:8888"; // Vault File Config
+        //public const string VaultAddress = "http://local-fiddler-5000:8888"; // Mock Server
 
         [Fact]
         public async void GetHealthBeforeInit()

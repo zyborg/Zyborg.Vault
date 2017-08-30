@@ -28,53 +28,6 @@ namespace Zyborg.Vault
 
         ProtocolClient IProtocolSource.Protocol => _Protocol;
 
-        public async Task<HealthStatus> GetHealthAsync()
-        {
-            // We want to make sure that all the valid modes or states
-            // return a 200 response so we can capture it successfully
-            return await SendGetAsync<HealthStatus>("sys/health"
-                + "?standbyok=false"
-                + "&activecode=200"
-                + "&standbycode=200"
-                + "&sealedcode=200"
-                + "&uninitcode=200");
-        }
-
-        public async Task<InitializationStatus> GetInitializationStatusAsync()
-        {
-            return await SendGetAsync<InitializationStatus>("sys/init");
-        }
-
-        public async Task<SealStatus> GetSealStatusAsync()
-        {
-            return await SendGetAsync<SealStatus>("sys/seal-status");
-        }
-
-        public async Task<KeyStatus> GetKeyStatusAsync()
-        {
-            return await SendGetAsync<KeyStatus>("sys/key-status");
-        }
-
-        public async Task<InitializationResponse> DoInitializeAsync(InitializationRequest requ)
-        {
-            return await SendPutAsync<InitializationResponse>("sys/init", requ);
-        }
-
-        public async Task<SealStatus> DoUnsealAsync(UnsealRequest requ)
-        {
-            return await SendPutAsync<SealStatus>("sys/unseal", requ);
-        }
-
-        public async Task DoSealAsync()
-        {
-            await SendPutAsync<NoContentResponse>("sys/seal");
-        }
-
-        public async Task<LeaderStatus> GetLeaderAsync()
-        {
-            return await SendGetAsync<LeaderStatus>("sys/leader");
-        }
-
         public async Task<HelpResponse> GetHelpAsync(string path,
                 CallOptions options = null)
         {

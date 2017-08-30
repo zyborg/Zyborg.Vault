@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Zyborg.Vault.Model
+namespace Zyborg.Vault.Ext.SystemBackend
 {
     /// <summary>
     /// A JSON-encoded object including the (possibly encrypted, if pgp_keys was provided)

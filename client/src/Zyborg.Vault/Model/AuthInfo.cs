@@ -18,7 +18,7 @@ namespace Zyborg.Vault.Model
         { get; set; }
         
         [JsonProperty("metadata")]
-        public Dictionary<string, object> Metadata
+        public Dictionary<string, string> Metadata
         { get; set; }
         
         [JsonProperty("lease_duration")]

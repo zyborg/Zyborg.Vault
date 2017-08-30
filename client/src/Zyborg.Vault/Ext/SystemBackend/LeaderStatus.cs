@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Zyborg.Vault.Model
+namespace Zyborg.Vault.Ext.SystemBackend
 {
     /// <summary>
     /// Represents the high availability status and current leader instance of Vault.
