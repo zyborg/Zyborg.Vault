@@ -1,76 +1,32 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Zyborg.Vault.Internal;
 using Zyborg.Vault.Model;
+using Zyborg.Vault.Protocol;
 
 namespace Zyborg.Vault
 {
-    public class VaultClient : IDisposable
+    /// <summary>
+    /// Implements a higher-level client that provides the foundational,
+    /// logical operations of the Vault service.
+    /// </summary>
+    public class VaultClient : IProtocolSource, IDisposable
     {
-        public const string DefaultVaultAddress = "http://localhost:8200";
-        public const string DefaultUserAgent = "zyborg-vault-client/1.0";
-        public static readonly HttpMethod ListHttpMethod = new HttpMethod("LIST");
-
-        private Uri _vaultAddress;
-        private TimeSpan? _timeout;
-        private bool _keepAlive;
-        private string _userAgent = DefaultUserAgent;
-        private string _VaultToken;
-
-        HttpClient _httpClient;
+        private ProtocolClient _Protocol;
 
         public VaultClient(string vaultAddress = null, TimeSpan? timeout = null,
                 bool keepAlive = false, string userAgent = null)
         {
-            _vaultAddress = new Uri(vaultAddress ?? DefaultVaultAddress);
-            _timeout = timeout;
-            _keepAlive = keepAlive;
-            if (userAgent != null)
-                _userAgent = string.IsNullOrEmpty(userAgent) ? null : userAgent;
-
-            Configure();
+            _Protocol = new ProtocolClient(vaultAddress, timeout, keepAlive, userAgent);
         }
 
         public string VaultToken
         {
-            set
-            {
-                _VaultToken = value;
-                if (_httpClient != null)
-                {
-                    if (!string.IsNullOrEmpty(value))
-                        _httpClient.DefaultRequestHeaders.Add(Protocol.TokenHeader, value);
-                    else
-                        _httpClient.DefaultRequestHeaders.Remove(Protocol.TokenHeader);
-                }
-            }
+            set => _Protocol.VaultToken = value;
         }
 
-        private void Configure()
-        {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(_vaultAddress, "v1/");
-            _httpClient.DefaultRequestHeaders.ConnectionClose = !_keepAlive;
-
-            if (_userAgent != null)
-            {
-                _httpClient.DefaultRequestHeaders.UserAgent.Clear();
-                _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
-            }
-
-            if (!string.IsNullOrEmpty(_VaultToken))
-            {
-                _httpClient.DefaultRequestHeaders.Add(Protocol.TokenHeader, _VaultToken);
-            }
-
-            if (_timeout != null)
-                _httpClient.Timeout = _timeout.Value;
-        }
+        ProtocolClient IProtocolSource.Protocol => _Protocol;
 
         public async Task<HealthStatus> GetHealthAsync()
         {
@@ -119,7 +75,8 @@ namespace Zyborg.Vault
             return await SendGetAsync<LeaderStatus>("sys/leader");
         }
 
-        public async Task<HelpResponse> GetHelpAsync(string path)
+        public async Task<HelpResponse> GetHelpAsync(string path,
+                CallOptions options = null)
         {
             if (path.StartsWith("/"))
                 throw new ArgumentException("path must be relative", nameof(path));
@@ -128,136 +85,86 @@ namespace Zyborg.Vault
             else
                 path += "?help=1";
 
-            return await SendGetAsync<HelpResponse>(path);
+            return await _Protocol.SendGetAsync<HelpResponse>(path, options);
         }
 
-        public async Task WriteAsync(string path, object data)
+        public async Task<T> ListAsync<T>(string path,
+                Func<T> on404 = null,
+                CallOptions options = null)
         {
             if (path.StartsWith("/"))
                 throw new ArgumentException("path must be relative", nameof(path));
 
-            await SendPutAsync<NoContentResponse>(path, data);
+            return await _Protocol.SendListAsync<T>(path, on404: on404, options: options);
         }
 
-        // public async Task ListAsync(string path)
-        // {
-
-        // }
-
-        // public async Task ReadAsync(string path)
-        // {
-
-        // }
-
-
-        public async Task<T> SendGetAsync<T>(string uri)
+        public async Task<T> ReadAsync<T>(string path,
+                CallOptions options = null)
         {
-            using (var resp = await _httpClient.GetAsync(uri))
-            {
-                return await ProcessResponseAsync<T>(resp);
-            }
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+
+            return await _Protocol.SendGetAsync<T>(path, options);
         }
 
-        public async Task<T> SendPutAsync<T>(string uri, object payload = null)
+        public async Task WriteAsync(string path, object data,
+                CallOptions options = null)
         {
-            using (var resp = await _httpClient.PutAsync(uri, GetContent(payload)))
-            {
-                return await ProcessResponseAsync<T>(resp);
-            }
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+
+            await _Protocol.SendPutAsync<NoContentResponse>(path, data, options);
         }
 
-        public async Task<T> SendPostAsync<T>(string uri, object payload = null)
+        public async Task<T> WriteAsync<T>(string path, object data,
+                CallOptions options = null)
         {
-            using (var resp = await _httpClient.PostAsync(uri, GetContent(payload)))
-            {
-                return await ProcessResponseAsync<T>(resp);
-            }
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+
+            return await _Protocol.SendPutAsync<T>(path, data, options);
         }
 
-        public async Task<T> SendListAsync<T>(string uri, object payload = null)
+        public async Task DeleteAsync(string path,
+                CallOptions options = null)
         {
-            using (var requ = new HttpRequestMessage(ListHttpMethod, uri) {
-                Content = GetContent(payload),
-            })
-            using (var resp = await _httpClient.SendAsync(requ))
-            {
-                return await ProcessResponseAsync<T>(resp);
-            }
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
+
+            await _Protocol.SendDeleteAsync<NoContentResponse>(path, options);            
         }
 
-        private HttpContent GetContent(object payload)
+        public async Task DeleteAsync<T>(string path,
+                CallOptions options = null)
         {
-            if (payload == null)
-                return null;
+            if (path.StartsWith("/"))
+                throw new ArgumentException("path must be relative", nameof(path));
 
-            var payloadJson = JsonConvert.SerializeObject(payload);
-            var requContent = new StringContent(payloadJson, Encoding.UTF8, "application/json");
-            return requContent;
+            await _Protocol.SendDeleteAsync<T>(path, options);            
         }
 
-        private async Task<T> ProcessResponseAsync<T>(HttpResponseMessage resp)
-        {
-            var respBody = await resp.Content.ReadAsStringAsync();
-            var contentType = resp.Content?.Headers?.ContentType?.MediaType;
-            var isJson = string.Equals("application/json", contentType);
-            var isNoContent = typeof(T) == typeof(NoContentResponse);
-
-            if (resp.IsSuccessStatusCode)
-            {
-                if (isNoContent)
-                    return default(T);
-                else if (isJson)
-                    return JsonConvert.DeserializeObject<T>(respBody);
-                else
-                    throw new VaultClientException("unexpected content-type")
-                    {
-                        StatusCode = resp.StatusCode,
-                        ReasonPhrase = resp.ReasonPhrase,
-                        Data = {
-                            ["ContentType"] = contentType,
-                        }
-                    };
-            }
-            else
-            {
-                var exMessage = "Response status code does not indicate success:"
-                        + $" {(int)resp.StatusCode} ({resp.ReasonPhrase}).";
-                var ex = new VaultClientException(exMessage)
-                {
-                    StatusCode = resp.StatusCode,
-                    ReasonPhrase = resp.ReasonPhrase,
-                    Data = {
-                        ["ContentType"] = contentType,
-                    }
-                };
-                if (isJson)
-                    ex.Errors = JsonConvert.DeserializeObject<ErrorResponse>(respBody);
-                else
-                    ex.Data.Add("Content", respBody);
-
-                throw ex;
-            }
-        }
 
         #region -- IDisposable Support --
 
-        private bool disposedValue = false; // To detect redundant calls
+        /// To detect redundant calls
+        public bool IsDisposed
+        { get; private set; }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!IsDisposed)
             {
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    _httpClient.Dispose();
-                    _httpClient = null;
+                    _Protocol.Dispose();
+                    _Protocol = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                disposedValue = true;
+                IsDisposed = true;
             }
         }
 
@@ -277,25 +184,5 @@ namespace Zyborg.Vault
         }
 
         #endregion -- IDisposable Support --
-
-        //    private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod,
-        //         object requestData = null, bool rawResponse = false,
-        //         Func<int, string, TResponse> customProcessor = null,
-        //         string wrapTimeToLive = null) where TResponse : class
-        //     {
-        //         var headers = new Dictionary<string, string>();
-
-        //         if (_lazyVaultToken != null)
-        //         {
-        //             headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
-        //         }
-
-        //         if (wrapTimeToLive != null)
-        //         {
-        //             headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
-        //         }
-
-        //         return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
-        //     }        
     }
 }
