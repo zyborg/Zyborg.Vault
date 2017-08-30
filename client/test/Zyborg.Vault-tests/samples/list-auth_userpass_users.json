@@ -1,0 +1,14 @@
+{
+    "request_id": "6fefbecf-3fa7-4180-7c5c-31ac9beefabf",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": {
+        "keys": [
+            "foo"
+        ]
+    },
+    "wrap_info": null,
+    "warnings": null,
+    "auth": null
+}
