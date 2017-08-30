@@ -6,3 +6,6 @@
 
 ## Building Micro Services with ASP.NET Core but without MVC:
 * http://www.strathweb.com/2017/01/building-microservices-with-asp-net-core-without-mvc/
+
+## Web Developer Checklist:
+* http://webdevchecklist.com
