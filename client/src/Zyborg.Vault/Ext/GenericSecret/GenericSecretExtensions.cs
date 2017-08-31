@@ -28,7 +28,7 @@ namespace Zyborg.Vault.Ext.GenericSecret
             var mountName = options?.MountName ?? DefaultMountName;
             return await client.ListAsync<ReadResponse<KeysData>>(
                     $"{mountName}/{path}",
-                    on404: () => null,
+                    on404: resp => null,
                     //on404: () => new ReadResponse<KeysData> { Data = new KeysData { Keys = new string[0] } },
                     options: options);
         }

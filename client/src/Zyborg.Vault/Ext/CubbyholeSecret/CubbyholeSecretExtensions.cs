@@ -17,7 +17,7 @@ namespace Zyborg.Vault.Ext.CubbyholeSecret
         {
             return await client.ListAsync<ReadResponse<KeysData>>(
                     $"{MountName}/{path}",
-                    on404: () => null,
+                    on404: resp => null,
                     //on404: () => new ReadResponse<KeysData> { Data = new KeysData { Keys = new string[0] } },
                     options: options);
         }

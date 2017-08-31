@@ -42,7 +42,7 @@ namespace Zyborg.Vault
         }
 
         public async Task<T> ListAsync<T>(string path,
-                Func<T> on404 = null,
+                Func<IResponseContext, T> on404 = null,
                 CallOptions options = null)
         {
             if (path.StartsWith("/"))

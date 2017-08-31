@@ -162,7 +162,7 @@ namespace Zyborg.Vault.Protocol
         }
 
         public async Task<T> SendListAsync<T>(string uri, object payload = null,
-                Func<T> on404 = null,
+                Func<IResponseContext, T> on404 = null,
                 CallOptions options = null)
         {
             using (var resp = await ProcessRequestAsync(ListHttpMethod, uri, payload, options))
@@ -218,7 +218,7 @@ namespace Zyborg.Vault.Protocol
         }
 
         private async Task<T> ProcessResponseAsync<T>(HttpResponseMessage resp,
-                Func<T> on404 = null)
+                Func<IResponseContext, T> on404 = null)
         {
             var respBody = await resp.Content.ReadAsStringAsync();
             var contentType = resp.Content?.Headers?.ContentType?.MediaType;
@@ -254,7 +254,15 @@ namespace Zyborg.Vault.Protocol
                     // HTTP 404 is allowed as a successful response assuming
                     // there were not errors returned in the response body
                     if (errors?.Errors.Length == 0)
-                        return on404();
+                    {
+                        var ctx = new ResponseContext
+                        {
+                            IsJsonBody = isJson,
+                            Body = respBody,
+                        };
+                        
+                        return on404(ctx);
+                    }
                 }
 
                 var exMessage = "Response status code does not indicate success:"
@@ -317,5 +325,18 @@ namespace Zyborg.Vault.Protocol
         }
 
         #endregion -- IDisposable Support ==
+
+
+        internal class ResponseContext : IResponseContext
+        {
+            public bool IsJsonBody
+            { get; set; }
+
+            public string Body
+            { get; set; }
+
+            // public HttpHeaders Headers
+            // { get; set; }
+        }
     }
 }
