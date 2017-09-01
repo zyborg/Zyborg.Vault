@@ -10,7 +10,7 @@ namespace Zyborg.Vault.Model
         { get; set; }
 
         [JsonProperty("ttl")]
-        public long TTL
+        public Duration TTL
         { get; set; }
 
         [JsonProperty("creation_time")]

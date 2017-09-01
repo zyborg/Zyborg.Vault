@@ -6,11 +6,6 @@ namespace Zyborg.Vault.Model
     {
         private TimeSpan _duration;
 
-        public override string ToString()
-        {
-            return ((long)_duration.TotalSeconds).ToString();
-        }
-
         public long TotalSeconds => (long)_duration.TotalSeconds;
         public long TotalMinutes => (long)_duration.TotalMinutes;
         public long TotalHours => (long)_duration.TotalHours;
@@ -83,5 +78,23 @@ namespace Zyborg.Vault.Model
         {
             return d.HasValue ? (long)d.Value._duration.TotalSeconds : 0L;
         }        
-    }
+ 
+        public override string ToString()
+        {
+            return ((long)_duration.TotalSeconds).ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return _duration.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Duration))
+                return false;
+            
+            return _duration.Equals(((Duration)obj)._duration);
+        }
+   }
 }
