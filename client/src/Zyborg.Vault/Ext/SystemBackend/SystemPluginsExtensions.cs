@@ -115,5 +115,50 @@ namespace Zyborg.Vault.Ext.SystemBackend
 
             await client.DeleteAsync($"sys/plugins/catalog/{name}",
                     options: options);
-       }    }
+        }
+
+        /// <summary>
+        /// Reloads mounted plugin backends.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="plugin">The name of the plugin to reload, as registered in the plugin
+        ///     catalog.</param>
+        /// <param name="options"></param>
+        /// <remarks>
+        /// Used to reload mounted plugin backends. All mounted paths that use the plugin
+        /// backend will be reloaded.
+        /// </remarks>
+        public static async Task ReloadPluginAsync(
+                this VaultClient client,
+                string plugin,
+                SystemBackendOptions options = null)
+        {
+            if (string.IsNullOrEmpty(plugin))
+                throw new ArgumentNullException(nameof(plugin));
+
+            await client.WriteAsync($"sys/plugins/reload/backend",
+                    new { plugin },
+                    options: options);
+        }
+
+        /// <summary>
+        /// Reloads mounted plugin backends.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="mounts">Mount paths of the plugin backends to reload.</param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static async Task ReloadMountPluginsAsync(
+                this VaultClient client,
+                string[] mounts,
+                SystemBackendOptions options = null)
+        {
+            if (mounts == null || mounts.Length == 0)
+                throw new ArgumentNullException(nameof(mounts));
+
+            await client.WriteAsync($"sys/plugins/reload/backend",
+                    new { mounts },
+                    options: options);
+        }
+    }
 }
