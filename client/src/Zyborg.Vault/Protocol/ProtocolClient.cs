@@ -126,7 +126,7 @@ namespace Zyborg.Vault.Protocol
         public async Task<T> SendPostAsync<T>(string uri, object payload = null,
                 CallOptions options = null)
         {
-            using (var resp = await ProcessRequestAsync(HttpMethod.Put, uri, payload, options))
+            using (var resp = await ProcessRequestAsync(HttpMethod.Post, uri, payload, options))
             {
                 return await ProcessResponseAsync<T>(resp);
             }
