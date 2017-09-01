@@ -4,7 +4,7 @@ using Xunit;
 using Zyborg.Vault;
 using Zyborg.Vault.Ext.SystemBackend;
 
-namespace Zyborg.Vault_tests
+namespace Zyborg.Vault
 {
     public class SystemPluginsIntegrationTests
     {
