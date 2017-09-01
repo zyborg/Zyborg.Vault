@@ -18,3 +18,6 @@ listener "tcp" {
 storage "file" {
     path = "./_IGNORE/vault-file-data"
 }
+
+
+plugin_directory = "./_IGNORE/vault-file-plugins"

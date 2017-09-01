@@ -1,0 +1,21 @@
+{
+    "name": "mssql-database-plugin",
+    "command": "",
+    "args": null,
+    "sha256": null,
+    "builtin": true,
+    "request_id": "6d240dcb-eab9-805d-a111-8ae17ffb1a91",
+    "lease_id": "",
+    "renewable": false,
+    "lease_duration": 0,
+    "data": {
+        "args": null,
+        "builtin": true,
+        "command": "",
+        "name": "mssql-database-plugin",
+        "sha256": null
+    },
+    "wrap_info": null,
+    "warnings": null,
+    "auth": null
+}
