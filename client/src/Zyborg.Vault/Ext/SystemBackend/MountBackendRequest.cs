@@ -6,7 +6,7 @@ namespace Zyborg.Vault.Ext.SystemBackend
     public class MountBackendRequest
     {
         /// <summary>
-        /// Specifies the type of the backend, such as "aws".
+        /// Specifies the type of the backend, such as <c>aws</c>.
         /// </summary>
         [JsonProperty("type")]
         public string Type
