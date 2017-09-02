@@ -8,22 +8,17 @@ namespace Zyborg.Vault
 {
     public class SystemAuthIntegrationTests
     {
-        public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
 
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
-
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
 
         [Fact]
         public async void ConfirmBaseAuthAreEnabled()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
                 var auths = await client.ListAuthBackendsAsync();
 
                 var tokenMount = $"{TokenAuthExtensions.DefaultMountName}/";

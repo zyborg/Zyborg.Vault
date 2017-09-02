@@ -11,14 +11,9 @@ namespace Zyborg.Vault
 {
     public class GenericSecretIntegrationTests
     {
-        public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
 
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
-
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
         private static readonly Dictionary<string, object> SampleSecrets1 =
                 new Dictionary<string, object>
@@ -48,12 +43,13 @@ namespace Zyborg.Vault
                     },
                 };
 
+
         [Fact]
         public async void ListNoSecrets()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var list = await client.ListGenericSecretsAsync();
                 Assert.Equal(0, (list?.Data?.Keys?.Where(x =>
@@ -64,9 +60,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void WriteSecretUsingDictionary()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await client.WriteGenericSecretAsync("foo1", SampleSecrets1);
             }
@@ -75,9 +71,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void WriteSecretUsingObject()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await client.WriteGenericSecretAsync("foo2", SampleSecrets2);
             }
@@ -86,9 +82,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ReadSecretUsingDictionary()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var secrets = await client.ReadGenericSecretAsync("foo1");
                 var expected = SampleSecrets1.Keys.ToHashSet();
@@ -104,9 +100,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ReadSecretUsingObject()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var secrets = await client.ReadGenericSecretAsync("foo2");
                 var expected = SampleSecrets2.GetType().GetProperties().Select(x => x.Name).ToHashSet();
@@ -122,9 +118,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void DeleteSecrets()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await Task.WhenAll(
                     client.DeleteGenericSecretAsync("foo1"),

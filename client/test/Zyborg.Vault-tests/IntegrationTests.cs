@@ -17,20 +17,15 @@ namespace Zyborg.Vault
 {
     public class IntegrationTests
     {
-        public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
-
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
-
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
+        
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
 
         [Fact]
         public async void WriteSecretWithoutAuth()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
                 var ex = await Assert.ThrowsAsync<VaultClientException>(async () =>
                         await client.WriteAsync("secret/any-place-we-choose", new
@@ -46,7 +41,7 @@ namespace Zyborg.Vault
         [Fact]
         public async void WriteSecretWithBadAuth()
         {
-            using (var client = new VaultClient(VaultAddress) {
+            using (var client = new VaultClient(TestVaultAddress) {
                 VaultToken = "bad-token",
             })
             {
@@ -65,8 +60,8 @@ namespace Zyborg.Vault
         [Fact]
         public async void GetHelpForReadSecret()
         {
-            using (var client = new VaultClient(VaultAddress) {
-                VaultToken = _rootToken,
+            using (var client = new VaultClient(TestVaultAddress) {
+                VaultToken = TestRootToken,
             })
             {
                 var help = await client.GetHelpAsync("secret/foo-bar");
@@ -76,8 +71,8 @@ namespace Zyborg.Vault
         [Fact]
         public async void WriteSecret()
         {
-            using (var client = new VaultClient(VaultAddress) {
-                VaultToken = _rootToken,
+            using (var client = new VaultClient(TestVaultAddress) {
+                VaultToken = TestRootToken,
             })
             {
                 await client.WriteAsync("secret/foo2", new

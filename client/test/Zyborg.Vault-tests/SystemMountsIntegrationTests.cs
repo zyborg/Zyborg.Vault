@@ -10,21 +10,17 @@ namespace Zyborg.Vault
 {
     public class SystemMountsIntegrationTests
     {
-         public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
 
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
 
         [Fact]
         public async void ListMounts()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var list = await client.ListMountedBackendsAsync();
 
@@ -42,9 +38,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ReadMountConfiguration()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 // Some of the config elements we expect to be there in a default setup
                 var expectedConfigAndTypes = new Dictionary<string, Type>
@@ -65,9 +61,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void MountRemountUnmountBackend()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var list = await client.ListMountedBackendsAsync();
                 Assert.DoesNotContain("test-generic/", list.Data.Keys);

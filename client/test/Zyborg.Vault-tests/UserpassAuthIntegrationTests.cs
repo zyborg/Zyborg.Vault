@@ -10,22 +10,16 @@ namespace Zyborg.Vault
 {
     public class UserpassAuthIntegrationTests
     {
-        public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
-
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
-
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
 
         [Fact]
         public async void ConfirmUserpassAuthIsEnabled()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var auths = await client.ListAuthBackendsAsync();
                 var expectedMount = $"{UserpassAuthExtensions.DefaultMountName}/";
@@ -36,9 +30,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ListUsersBeforeAdd()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var users = await client.ListUserpassUsersAsync();
                 Assert.Equal(0, (users?.Data?.Keys?.Count()).GetValueOrDefault());
@@ -49,9 +43,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void CreateUser()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await client.CreateUserpassUserAsync("foo", "bar");
 
@@ -63,9 +57,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void LoginUserWithBadPassword()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var users = await client.ListUserpassUsersAsync();
                 Assert.Contains("foo", users.Data.Keys);
@@ -81,9 +75,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void LoginUser()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var users = await client.ListUserpassUsersAsync();
                 Assert.Contains("foo", users.Data.Keys);
@@ -100,9 +94,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void DeleteUser()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await client.DeleteUserpassUserAsync("foo");
 
@@ -115,9 +109,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void DeleteNonExistingUser()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var nonUser = "no-such-user-in-existence";
                 var users = await client.ListUserpassUsersAsync();
@@ -130,9 +124,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void LoginNonExistingUser()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var nonUser = "no-such-user-in-existence";
                 var users = await client.ListUserpassUsersAsync();

@@ -8,21 +8,17 @@ namespace Zyborg.Vault
 {
     public class SystemPluginsIntegrationTests
     {
-         public const string VaultAddress = "http://local-fiddler-8200:8888";
-        //public const string VaultAddress = "http://local-fiddler-5000:8888";
+        public const string TestVaultAddress = TestConfig.TestVaultAddress;
 
-        // HC Vault
-        private string _rootToken = "21bd1f5a-6eff-07fe-0184-a4358ae809c1";
+        public static readonly string TestRootToken = TestConfig.RootTokens[TestVaultAddress];
 
-        // // Mock Vault
-        // private string _rootToken = "d1166ee5-f095-4f9f-843f-6dfc084b06c3";
 
         [Fact]
         public async void ListPlugins()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 var list = await client.ListPluginsAsync();
                 // Some of the plugins we expect to be there in a default setup
@@ -39,9 +35,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ReadNoSuchPlugin()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 // Query for a plugin we expect to be there in a default setup
                 var ex = await Assert.ThrowsAsync<VaultClientException>(async () =>
@@ -54,9 +50,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void ReadPlugin()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 // Query for a plugin we expect to be there in a default setup
                 var info = await client.ReadPluginAsync("mssql-database-plugin");
@@ -69,9 +65,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void RegisterNoSuchPlugin()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 // Query for a plugin we expect to be there in a default setup
                 var ex = await Assert.ThrowsAsync<VaultClientException>(async () =>
@@ -85,9 +81,9 @@ namespace Zyborg.Vault
         [Fact(Skip = "Bad SHA is not detected at registration")]
         public async void RegisterBadShaPlugin()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 // Query for a plugin we expect to be there in a default setup
                 //var ex = await Assert.ThrowsAsync<VaultClientException>(async () =>
@@ -107,9 +103,9 @@ namespace Zyborg.Vault
         [Fact]
         public async void RegisterPlugin()
         {
-            using (var client = new VaultClient(VaultAddress))
+            using (var client = new VaultClient(TestVaultAddress))
             {
-                client.VaultToken = _rootToken;
+                client.VaultToken = TestRootToken;
 
                 await client.RegisterPluginAsync("mock-plugin",
                         new string(MockPluginSha256.ToCharArray().Reverse().ToArray()),
