@@ -1,20 +1,32 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Zyborg.Security.Cryptography;
 using Zyborg.Vault.Ext.SystemBackend;
 using Zyborg.Vault.Model;
+using Zyborg.Vault.Server.Auth;
+using Zyborg.Vault.Server.Secret;
+using Zyborg.Vault.Server.Storage;
 
 namespace Zyborg.Vault.Server
 {
     public class MockServer
     {
+        private PathMap<ISecretBackend> _reservedMounts = new PathMap<ISecretBackend>();
+        private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
+        private PathMap<IAuthBackend> _authMounts = new PathMap<IAuthBackend>();
+
         public static readonly DateTime UnixEpoch = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
 
         public ServerSettings Settings
         { get; } = new ServerSettings();
+
+        public IStorage Storage
+        { get; } = new InMemoryStorage();
 
         public HealthStatus Health
         { get; } = new HealthImpl();
@@ -30,6 +42,21 @@ namespace Zyborg.Vault.Server
             Health.Standby = true;
 
             StartStorage();
+
+            // Reserve the sys backend mount -- this will actually be intercepted
+            // and handled by the Sys Controller
+            _reservedMounts.Set("sys", new DummyBackend());
+            // Reserve the cubbyhole mount -- TODO:  for now we just use a plain old
+            // Generic secret but will eventually correct this
+            _reservedMounts.Set("cubbyhole", new GenericSecretBackend(
+                    new StorageWrapper(Storage, "sys-mounts/cubbyhole")));
+
+            _secretMounts.Set("secret", new GenericSecretBackend(
+                    new StorageWrapper(Storage, "secret-mounts/secret")));
+            // _secretMounts.Set("alt-secret1", new GenericSecretBackend(
+            //         new StorageWrapper(Storage, "secret-mounts/alt-secret1")));
+            // _secretMounts.Set("alt/secret/second", new GenericSecretBackend(
+            //         new StorageWrapper(Storage, "secret-mounts/alt/secret/second")));
         }
 
         public void StartStorage()
@@ -240,6 +267,30 @@ namespace Zyborg.Vault.Server
         public void DismountAuthProvider()
         {
 
+        }
+
+        public IEnumerable<string> ListSecretMounts()
+        {
+            return _reservedMounts.ListPaths().Concat(_secretMounts.ListPaths());
+        }
+
+        public (ISecretBackend backend, string path) ResolveSecretMount(string mountAndPath)
+        {
+            string mount = mountAndPath;
+            string path = string.Empty;
+
+            while (!_secretMounts.Exists(mount))
+            {
+                int lastSlash = mount.LastIndexOf('/');
+                if (lastSlash <= 0)
+                    // No more splitting and no match
+                    return (null, null);
+                
+                path = $"{mount.Substring(lastSlash + 1)}/{path}";
+                mount = mount.Substring(0, lastSlash);
+            }
+
+            return (_secretMounts.Get(mount), path);
         }
     }
 
