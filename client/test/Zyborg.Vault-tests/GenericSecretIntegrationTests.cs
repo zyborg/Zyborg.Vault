@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using Xunit;
 using Zyborg.Vault;
 using Zyborg.Vault.Ext.GenericSecret;
+using Zyborg.Vault.Model;
 
 namespace Zyborg.Vault
 {
@@ -129,6 +131,20 @@ namespace Zyborg.Vault
                 var list = await client.ListGenericSecretsAsync();
                 Assert.Equal(0, (list?.Data?.Keys?.Where(x =>
                         new[] { "foo1","foo2" }.Contains(x))?.Count()).GetValueOrDefault());
+            }
+        }
+
+        [Fact]
+        public async void WriteAribtraryBytes()
+        {
+            using (var client = new VaultClient(TestVaultAddress))
+            {
+                client.VaultToken = TestRootToken;
+
+                var bytes = new byte[] { 0, 1, 2, 3, 4, 5 };
+                var ex = await Assert.ThrowsAsync<VaultClientException>(
+                    async () => await client.WriteAsync("secret/secret-o-bytes", bytes));
+                Assert.Equal(HttpStatusCode.BadRequest, ex.StatusCode);
             }
         }
     }
