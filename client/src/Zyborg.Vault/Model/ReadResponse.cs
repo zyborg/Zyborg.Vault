@@ -21,7 +21,7 @@ namespace Zyborg.Vault.Model
         { get; set; }
 
         [JsonProperty("data")]
-        public TData Data
+        public virtual TData Data
         { get; set; }
 
         [JsonProperty("wrap_info")]
