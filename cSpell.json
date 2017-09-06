@@ -6,10 +6,13 @@
     "language": "en",
     // words - list of words to be always considered correct
     "words": [
+        "Unmount",
         "Zyborg",
         "auths",
         "finalizer",
+        "postgresql",
         "requ",
+        "segs",
         "standbyok",
         "uncomment",
         "userpass"

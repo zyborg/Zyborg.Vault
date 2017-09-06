@@ -1,7 +1,9 @@
 using System;
+using Newtonsoft.Json;
 
 namespace Zyborg.Vault.Model
 {
+    [JsonConverter(typeof(DurationConverter))]
     public struct Duration
     {
         private TimeSpan _duration;
@@ -96,5 +98,23 @@ namespace Zyborg.Vault.Model
             
             return _duration.Equals(((Duration)obj)._duration);
         }
-   }
+    }
+
+    public class DurationConverter : JsonConverter
+    {
+        public override bool CanRead => false;
+        public override bool CanWrite => true;
+        public override bool CanConvert(Type objectType) => typeof(Duration) == objectType;
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var d = (Duration)value;
+            writer.WriteValue(d.TotalSeconds);
+        }
+    }
 }
