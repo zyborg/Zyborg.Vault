@@ -14,7 +14,7 @@ namespace Zyborg.Vault.Ext.SystemBackend
         /// that the system defaults are used by this backend.
         /// </remarks>
         [JsonProperty("config")]
-        public Dictionary<string, object> Config
+        public MountConfig Config
         { get; set; }
 
         [JsonProperty("description")]
