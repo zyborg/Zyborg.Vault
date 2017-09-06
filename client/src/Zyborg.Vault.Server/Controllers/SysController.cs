@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Zyborg.Vault.Ext.SystemBackend;
@@ -87,6 +90,27 @@ namespace Zyborg.Vault.Server.Controllers
                     ?? throw new VaultServerException(
                             HttpStatusCode.BadRequest,
                             "server is not yet initialized");
+        }
+
+        [HttpGet("mounts")]
+        public ReadResponse<Dictionary<string, MountInfo>> ListSecretMounts()
+        {
+            var mountNames = _server.ListSecretMounts().OrderBy(x => x);
+            var mounts = mountNames.ToDictionary(
+                    key => key.Trim('/') + "/",
+                    key => new MountInfo
+                    {
+                        Accessor = key,
+                        Type = _server.ResolveSecretMount(key).backend?.GetType().FullName ?? "(UNKNOWN)",
+                        Config = new MountConfig(),
+                    });
+            
+            // To be fully compliant with the HCVault CLI, we
+            // have to honor the "repeated" response structure
+            return new ReadRepeatedResponse<Dictionary<string, MountInfo>>
+            {
+                Data = mounts
+            };
         }
     }
 }
