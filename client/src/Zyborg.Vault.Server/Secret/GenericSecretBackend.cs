@@ -12,7 +12,6 @@ namespace Zyborg.Vault.Server.Secret
 {
     public class GenericSecretBackend : ISecretBackend
     {
-        private MockServer _server;
         private IStorage _storage;
 
         // private Dictionary<string, string> _secrets = new Dictionary<string, string>
