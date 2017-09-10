@@ -16,16 +16,13 @@ namespace Zyborg.Vault.Server
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            Configuration.Bind("Zyborg.Vault.Server", Server.Settings);
-            Server.Start();
         }
 
         public IConfiguration Configuration
         { get; }
 
         public MockServer Server
-        { get; } = new MockServer();
+        { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,11 +33,13 @@ namespace Zyborg.Vault.Server
                 options.Filters.Add(new ApiExceptionFilter());
             });
 
-            services.AddSingleton(Server);
+            services.AddSingleton<MockServer>();
+            services.AddSingleton<Func<Storage.IStorage, IConfiguration>>(
+                    x => Configuration.GetSection("Zyborg.Vault.Server:Storage:Settings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MockServer server)
         {
             if (env.IsDevelopment())
             {
@@ -49,6 +48,10 @@ namespace Zyborg.Vault.Server
 
             app.UseResponseBuffering(); // Disables "chunked" Transfer-Encoding
             app.UseMvc();
+
+            Server = server;
+            Configuration.Bind("Zyborg.Vault.Server", Server.Settings);
+            Server.Start();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Zyborg.Security.Cryptography;
 using Zyborg.Vault.Ext.SystemBackend;
@@ -22,11 +23,19 @@ namespace Zyborg.Vault.Server
 
         public static readonly DateTime UnixEpoch = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
 
+        public MockServer(IServiceProvider di)
+        {
+            DI = di;
+        }
+
+        public IServiceProvider DI
+        { get; }
+
         public ServerSettings Settings
         { get; } = new ServerSettings();
 
         public IStorage Storage
-        { get; } = new InMemoryStorage();
+        { get; private set; }
 
         public HealthStatus Health
         { get; } = new HealthImpl();
@@ -61,8 +70,13 @@ namespace Zyborg.Vault.Server
 
         public void StartStorage()
         {
-            if ("file" != Settings.Storage.Type)
+            if (!Standard.StorageTypes.TryGetValue(Settings.Storage.Type, out var storageType))
                 throw new NotSupportedException($"unsupported storage type: {Settings.Storage.Type}");
+
+            IStorage s = (IStorage)ActivatorUtilities.CreateInstance(DI, storageType);
+            if (s == null)
+                throw new NotSupportedException($"unresolved storage type: {Settings.Storage.Type}: {storageType}");
+            this.Storage = s;
 
             if (!Settings.Storage.Settings.TryGetValue("path", out var path))
                 path = "./data";
@@ -157,7 +171,7 @@ namespace Zyborg.Vault.Server
             else
             {
                 // TODO: try-catch this and confirm the error response
-                byte[] keyBytes = Util.HexUtil.HexToByteArray(key);
+                byte[] keyBytes = Vault.Util.HexUtil.HexToByteArray(key);
                 if (State.UnsealKeys == null)
                 {
                     // TODO: research this
