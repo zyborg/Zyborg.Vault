@@ -45,6 +45,7 @@ namespace Zyborg.Vault.Server.Storage
 
         private string _path;
         private JObject _data;
+        private object _sync = new object();
 
         public JsonFileStorage(Func<IStorage, IConfiguration> configGetter)
         {
@@ -176,45 +177,56 @@ namespace Zyborg.Vault.Server.Storage
                 file = file.Substring(sep + 1);
             }
 
-            var dirNode = _data;
-            foreach (var pathSegment in dir.Split("/"))
+            lock (_sync)
             {
-                var token = dirNode.GetValue(pathSegment);
-                if (token != null)
+                var dirNode = _data;
+                foreach (var pathSegment in dir.Split("/"))
                 {
-                    if (token.Type != JTokenType.Object)
-                        throw new InvalidOperationException(
-                                "path intermediate node is not an expected container");
-                    dirNode = (JObject)token;
+                    var token = dirNode.GetValue(pathSegment);
+                    if (token != null)
+                    {
+                        if (token.Type != JTokenType.Object)
+                            throw new InvalidOperationException(
+                                    "path intermediate node is not an expected container");
+                        dirNode = (JObject)token;
+                    }
+                    else
+                    {
+                        var newNode = JObject.Parse("{}");
+                        dirNode.Add(pathSegment, newNode);
+                        dirNode = newNode;
+                    }
                 }
+
+                var prop = dirNode.Property(file);
+                if (prop == null)
+                    dirNode.Add(new JProperty(file, value));
                 else
-                {
-                    var newNode = JObject.Parse("{}");
-                    dirNode.Add(pathSegment, newNode);
-                    dirNode = newNode;
-                }
+                    prop.Value = value;
+
+                // await SaveJsonFileAsync();
+                SaveJsonFileAsync().Wait();
             }
 
-            var prop = dirNode.Property(file);
-            if (prop == null)
-                dirNode.Add(new JProperty(file, value));
-            else
-                prop.Value = value;
-
-            await SaveJsonFileAsync();
+            await Task.CompletedTask;
         }
 
         public async Task DeleteAsync(string path)
         {
             path = NormalizeFileJsonPath(path);
 
-            var token = _data.SelectToken(path);
-            if (token != null && token.Type == JTokenType.Property)
+            lock (_sync)
             {
-                var prop = (JProperty)token;
-                prop.Remove();
-                await SaveJsonFileAsync();
+                var token = _data.SelectToken(path);
+                if (token != null && token.Type == JTokenType.Property)
+                {
+                    var prop = (JProperty)token;
+                    prop.Remove();
+                    SaveJsonFileAsync().Wait();
+                }
             }
+
+            await Task.CompletedTask;
         }
  
         /// <summary>
