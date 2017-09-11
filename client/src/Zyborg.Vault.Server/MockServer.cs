@@ -55,7 +55,7 @@ namespace Zyborg.Vault.Server
             Health.Sealed = true;
             Health.Standby = true;
 
-            StartStorage();
+            StartStorage().Wait();
 
             // Reserve the sys backend mount -- this will actually be intercepted
             // and handled by the Sys Controller
@@ -73,7 +73,7 @@ namespace Zyborg.Vault.Server
             //         new StorageWrapper(Storage, "secret-mounts/alt/secret/second")));
         }
 
-        public void StartStorage()
+        public async Task StartStorage()
         {
             if (!Standard.StorageTypes.TryGetValue(Settings.Storage.Type, out var storageType))
                 throw new NotSupportedException($"unsupported storage type: {Settings.Storage.Type}");
@@ -83,30 +83,22 @@ namespace Zyborg.Vault.Server
                 throw new NotSupportedException($"unresolved storage type: {Settings.Storage.Type}: {storageType}");
             this.Storage = s;
 
-            if (!Settings.Storage.Settings.TryGetValue("path", out var path))
-                path = "./data";
-            
-            State.StorageRootPath = Path.GetFullPath(path);
-            State.StorageFilePath = Path.Combine(State.StorageRootPath, "_state");
-
-            if (File.Exists(State.StorageFilePath))
+            var stateJson = await this.Storage.ReadAsync("server/state");
+            if (stateJson != null)
             {
                 State.Durable = JsonConvert.DeserializeObject<DurableServerState>(
-                        File.ReadAllText(State.StorageFilePath));
+                        stateJson);
                 Health.Initialized = true;
             }
         }
 
-        public void SaveState()
+        public async Task SaveState()
         {
-            if (string.IsNullOrEmpty(State.StorageFilePath) || string.IsNullOrEmpty(State.StorageRootPath))
+            if (this.Storage == null)
                 throw new InvalidOperationException("storage system has not been initialized");
-            
-            if (!Directory.Exists(State.StorageRootPath))
-                Directory.CreateDirectory(State.StorageRootPath);
 
             var ser = JsonConvert.SerializeObject(State.Durable, Formatting.Indented);
-            File.WriteAllText(State.StorageFilePath, ser);
+            await this.Storage.WriteAsync("server/state", ser);
         }
 
         public InitializationStatus GetInitializationStatus()
@@ -154,7 +146,7 @@ namespace Zyborg.Vault.Server
                     State.Durable.ClusterName = Settings.ClusterName;
                     State.Durable.ClusterId = Guid.NewGuid().ToString();
 
-                    SaveState();
+                    SaveState().Wait();
                     Health.Initialized = true;
                     return resp;
                 }

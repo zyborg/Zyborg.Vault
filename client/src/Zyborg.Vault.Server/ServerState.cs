@@ -1,15 +1,10 @@
 using System;
+using System.Collections.Generic;
 
 namespace Zyborg.Vault.Server
 {
     public class ServerState
     {
-        public string StorageRootPath
-        { get; set; }
-
-        public string StorageFilePath
-        { get; set; }
-
         public string UnsealNonce
         { get; set; }
 
