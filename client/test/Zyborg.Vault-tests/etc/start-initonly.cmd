@@ -1,0 +1,19 @@
+
+@SETLOCAL
+@SET THIS_DIR=%~dp0
+
+@SET VAULT_CLI="%THIS_DIR%vault.cmd"
+@SET VAULT_CFG="%THIS_DIR%config-initonly.hcl"
+
+@SET VAULT_DAT=%THIS_DIR%_IGNORE\vault-initonly-data
+
+@IF EXIST %VAULT_DAT% (
+    @RMDIR %VAULT_DAT% /s
+)
+
+@SET VAULT_ARGS=server
+@SET VAULT_ARGS=%VAULT_ARGS% -config=%VAULT_CFG%
+
+%VAULT_CLI% %VAULT_ARGS%
+
+@ENDLOCAL
