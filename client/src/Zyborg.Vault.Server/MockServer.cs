@@ -17,11 +17,16 @@ namespace Zyborg.Vault.Server
 {
     public class MockServer
     {
+        public static readonly DateTime UnixEpoch = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
+
+        /// <summary>
+        /// Byte length of the unseal keys.
+        /// </summary>
+        public const int UnsealKeyLength = 33;
+
         private PathMap<ISecretBackend> _reservedMounts = new PathMap<ISecretBackend>();
         private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
         private PathMap<IAuthBackend> _authMounts = new PathMap<IAuthBackend>();
-
-        public static readonly DateTime UnixEpoch = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
 
         public MockServer(IServiceProvider di)
         {
@@ -166,49 +171,63 @@ namespace Zyborg.Vault.Server
             if (reset)
             {
                 State.UnsealNonce = null;
-                State.UnsealKeys = null;
+                State.UnsealProgress = null;
             }
             else
             {
-                // TODO: try-catch this and confirm the error response
-                byte[] keyBytes = Vault.Util.HexUtil.HexToByteArray(key);
-                if (State.UnsealKeys == null)
+                byte[] keyBytes;
+                if (key.Length == UnsealKeyLength * 2)
                 {
-                    // TODO: research this
-                    State.UnsealNonce = Guid.NewGuid().ToString();
-                }
+                    // Hex-encoded key
 
-                if (State.UnsealKeys == null)
+                    // TODO: try-catch this and confirm the error response
+                    keyBytes = Vault.Util.HexUtil.HexToByteArray(key);
+                }
+                else if (key.Length == UnsealKeyLength * 4 / 3)
                 {
-                    State.UnsealKeys = new[] { keyBytes };
+                    // Base64-encoded key
+                    keyBytes = Convert.FromBase64String(key);
                 }
                 else
                 {
-                    var keys = State.UnsealKeys.Append(keyBytes).ToArray();
-                    if (keys.Length < State.Durable.SecretThreshold)
-                    {
-                        State.UnsealKeys = keys;
-                    }
-                    else
-                    {
-                        // Either we succeed or we fail but
-                        // we reset the unseal state regardless
-                        State.UnsealNonce = null;
-                        State.UnsealKeys = null;
+                    throw new ArgumentException("invalid length key", nameof(key));
+                }
 
-                        // Combine the assembled keys
-                        // to derive the true root key
-                        Unseal(keys);
+                if (State.UnsealProgress == null)
+                {
+                    // TODO: research this
+                    State.UnsealNonce = Guid.NewGuid().ToString();
+                    State.UnsealProgress = new List<string>(State.Durable.SecretThreshold);
+                }
 
-                        Health.Sealed = false;
-                    }
+                var keyB64 = Convert.ToBase64String(keyBytes);
+                if (!State.UnsealProgress.Contains(keyB64))
+                    State.UnsealProgress.Add(keyB64);
+
+                if (State.UnsealProgress.Count >= State.Durable.SecretThreshold)
+                {
+                    var keys = State.UnsealProgress.Select(x => Convert.FromBase64String(x)).ToArray();
+
+                    // Either we succeed or we fail but
+                    // we reset the unseal state regardless
+                    State.UnsealNonce = null;
+                    State.UnsealProgress.Clear();
+                    State.UnsealProgress = null;
+
+                    // Combine the assembled keys
+                    // to derive the true root key
+                    Unseal(keys);
+
+                    // If we get here, we succeeded
+                    State.UnsealKeys = keys;
+                    Health.Sealed = false;
                 }
             }
 
             return GetSealStatus();
         }
 
-        private void Unseal(byte[][] keys)
+        private void Unseal(IEnumerable<byte[]> keys)
         {
             using (var tss = ThresholdSecretSharingAlgorithm.Create())
             using (var sha = SHA512.Create())
@@ -235,7 +254,7 @@ namespace Zyborg.Vault.Server
                 Sealed = Health.Sealed,
                 SecretThreshold = State.Durable.SecretThreshold,
                 SecretShares = State.Durable.SecretShares,
-                Progress = (State.UnsealKeys?.Length).GetValueOrDefault(),
+                Progress = (State.UnsealProgress?.Count).GetValueOrDefault(),
                 Nonce = State.UnsealNonce ??string.Empty,
                 Version = Health.Version,
                 ClusterName = Health.ClusterName,

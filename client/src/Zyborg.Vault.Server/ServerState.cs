@@ -13,7 +13,10 @@ namespace Zyborg.Vault.Server
         public string UnsealNonce
         { get; set; }
 
-        public byte[][] UnsealKeys
+        public List<string> UnsealProgress
+        { get; set; }
+
+        public IEnumerable<byte[]> UnsealKeys
         { get; set; }
 
         public byte[] RootKey
