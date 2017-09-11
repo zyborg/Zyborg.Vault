@@ -46,6 +46,8 @@ namespace Zyborg.Vault.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<RequestMiddleware>();
+
             app.UseResponseBuffering(); // Disables "chunked" Transfer-Encoding
             app.UseMvc();
 
