@@ -1,0 +1,5 @@
+{
+    // Override the default 60 since our project
+    // is getting big and takes time to parse
+    "omnisharp.projectLoadTimeout": 120
+}
