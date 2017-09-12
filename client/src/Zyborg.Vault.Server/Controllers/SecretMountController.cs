@@ -13,7 +13,7 @@ using Zyborg.Vault.Server.Secret;
 namespace Zyborg.Vault.Server.Controllers
 {
     [Route("v1/{*mount}")]
-    public class SecretMountController : Controller
+    public class SecretMountController : MountControllerBase
     {
         private MockServer _server;
 
@@ -22,7 +22,7 @@ namespace Zyborg.Vault.Server.Controllers
             _server = server;
         }
 
-        [HttpList]
+        [HttpList(Name = "ListSecret")]
         [SuccessType(typeof(ReadResponse<KeysData>))]
         public async Task<IActionResult> ListAsync([FromRoute]string mount)
         {
@@ -32,18 +32,23 @@ namespace Zyborg.Vault.Server.Controllers
                         HttpStatusCode.NotFound,
                         $"no handler for route '{mount}'");
             
-            var list = await backend.List(path);
-            if (list == null)
-                throw new VaultServerException(HttpStatusCode.NotFound);
+            try
+            {
+                var list = await backend.List(path);
 
-            return base.Ok(
-                    new ReadResponse<KeysData>
-                    {
-                        Data = new KeysData
+                return base.Ok(
+                        new ReadResponse<KeysData>
                         {
-                            Keys = list.ToArray(),
-                        }
-                    });
+                            Data = new KeysData
+                            {
+                                Keys = list?.ToArray(),
+                            }
+                        });
+            }
+            catch (Exception ex)
+            {
+                return await DecodeException(ex);
+            }
         }
 
         [HttpGet(Name = "ReadSecret", Order = int.MaxValue)]
