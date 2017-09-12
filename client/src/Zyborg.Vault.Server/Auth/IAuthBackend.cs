@@ -5,12 +5,12 @@ namespace Zyborg.Vault.Server.Auth
 {
     public interface IAuthBackend
     {
-        Task<IEnumerable<string>> List(string path);
+        Task<IEnumerable<string>> ListAsync(string path);
 
-        Task<string> Read(string path);
+        Task<string> ReadAsync(string path);
 
-        Task Write(string path, string payload);
+        Task WriteAsync(string path, string payload);
 
-        Task Delete(string path);
+        Task DeleteAsync(string path);
     }
 }

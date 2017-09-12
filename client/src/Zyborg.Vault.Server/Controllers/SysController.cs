@@ -92,6 +92,27 @@ namespace Zyborg.Vault.Server.Controllers
                             "server is not yet initialized");
         }
 
+        [HttpGet("auth")]
+        public ReadResponse<Dictionary<string, MountInfo>> ListAuthMounts()
+        {
+            var mountNames = _server.ListAuthMounts().OrderBy(x => x);
+            var mounts = mountNames.ToDictionary(
+                    key => key.Trim('/') + "/",
+                    key => new MountInfo
+                    {
+                        Accessor = key,
+                        Type = _server.ResolveAuthMount(key).backend?.GetType().FullName ?? "(UNKNOWN)",
+                        Config = new MountConfig(),
+                    });
+            
+            // To be fully compliant with the HCVault CLI, we
+            // have to honor the "repeated" response structure
+            return new ReadRepeatedResponse<Dictionary<string, MountInfo>>
+            {
+                Data = mounts
+            };
+        }
+
         [HttpGet("mounts")]
         public ReadResponse<Dictionary<string, MountInfo>> ListSecretMounts()
         {

@@ -65,8 +65,12 @@ namespace Zyborg.Vault.Server
             _reservedMounts.Set("cubbyhole", new GenericSecretBackend(
                     new StorageWrapper(Storage, "sys-mounts/cubbyhole")));
 
+            _authMounts.Set("userpass", new UserpassAuthBackend(
+                    new StorageWrapper(Storage, "auth-mounts/userpass")));
+
             _secretMounts.Set("secret", new GenericSecretBackend(
                     new StorageWrapper(Storage, "secret-mounts/secret")));
+
             // _secretMounts.Set("alt-secret1", new GenericSecretBackend(
             //         new StorageWrapper(Storage, "secret-mounts/alt-secret1")));
             // _secretMounts.Set("alt/secret/second", new GenericSecretBackend(
@@ -294,6 +298,33 @@ namespace Zyborg.Vault.Server
 
         }
 
+        public IEnumerable<string> ListAuthMounts()
+        {
+            return _authMounts.ListPaths();
+        }
+
+        public (IAuthBackend backend, string path) ResolveAuthMount(string mountAndPath)
+        {
+            if (string.IsNullOrEmpty(mountAndPath))
+                return (null, null);
+
+            string mount = mountAndPath;
+            string path = string.Empty;
+
+            while (!_authMounts.Exists(mount))
+            {
+                int lastSlash = mount.LastIndexOf('/');
+                if (lastSlash <= 0)
+                    // No more splitting and no match
+                    return (null, null);
+                
+                path = $"{mount.Substring(lastSlash + 1)}/{path}";
+                mount = mount.Substring(0, lastSlash);
+            }
+
+            return (_authMounts.Get(mount), path);
+        }
+
         public IEnumerable<string> ListSecretMounts()
         {
             return _reservedMounts.ListPaths().Concat(_secretMounts.ListPaths());
@@ -301,6 +332,9 @@ namespace Zyborg.Vault.Server
 
         public (ISecretBackend backend, string path) ResolveSecretMount(string mountAndPath)
         {
+            if (string.IsNullOrEmpty(mountAndPath))
+                return (null, null);
+
             string mount = mountAndPath;
             string path = string.Empty;
 
