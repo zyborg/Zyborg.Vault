@@ -6,11 +6,11 @@ namespace Zyborg.Vault.Model
     {
         [JsonProperty("request_id")]
         public string RequestId
-        { get; set; }
+        { get; set; } = System.Guid.Empty.ToString();
 
         [JsonProperty("lease_id")]
         public string LeaseId
-        { get; set; }
+        { get; set; } = string.Empty;
 
         [JsonProperty("renewable")]
         public bool Renewable
