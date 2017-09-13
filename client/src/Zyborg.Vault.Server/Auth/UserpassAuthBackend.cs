@@ -185,6 +185,24 @@ namespace Zyborg.Vault.Server.Auth
             await _storage.DeleteAsync(storagePath);
         }
 
+        [LocalWriteRoute("login/{username}")]
+        public async Task<object> LoginUser(
+                [Required, FromRoute]string username,
+                [Required, FromForm]string password)
+        {
+            var storagePath = $"users/{username}";
+
+            var userJson = await _storage.ReadAsync(storagePath);
+            if (!string.IsNullOrEmpty(userJson))
+            {
+                var user = JsonConvert.DeserializeObject<UserInfo>(userJson);
+                if (user != null && ComparePasswordAndHash(password, user.PasswordHash))
+                    return new AuthInfo { ClientToken = Guid.NewGuid().ToString() };
+            }
+
+            throw new ArgumentException("invalid username or password");
+        }
+
         internal static PasswordHash ComputePasswordHash(string passwordClear, byte[] salt = null)
         {
             // TODO: hash using PBKDF+Scrypt
