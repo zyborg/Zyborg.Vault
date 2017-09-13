@@ -169,6 +169,19 @@ namespace Zyborg.Vault.Server.Auth
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
         }
 
+        /// <summary>
+        /// Deletes the user from the backend.
+        /// </summary>
+        /// <param name="username">The username for the user.</param>
+        [LocalDeleteRoute("users/{username}")]
+        public async Task DeleteUserAsync(
+                [Required, FromRoute]string username)
+        {
+            var storagePath = $"users/{username}";
+
+            await _storage.DeleteAsync(storagePath);
+        }
+
         internal static PasswordHash ComputePasswordHash(string passwordClear, byte[] salt = null)
         {
             // TODO: hash using PBKDF+Scrypt
