@@ -204,7 +204,7 @@ namespace Zyborg.Vault.Server.Storage
                 else
                     prop.Value = value;
 
-                // await SaveJsonFileAsync();
+                // Can't await inside a lock
                 SaveJsonFileAsync().Wait();
             }
 
@@ -218,10 +218,12 @@ namespace Zyborg.Vault.Server.Storage
             lock (_sync)
             {
                 var token = _data.SelectToken(path);
-                if (token != null && token.Type == JTokenType.Property)
+                if (token != null && token.Parent?.Type == JTokenType.Property)
                 {
-                    var prop = (JProperty)token;
+                    var prop = (JProperty)token.Parent;
                     prop.Remove();
+
+                    // Can't await inside a lock
                     SaveJsonFileAsync().Wait();
                 }
             }
