@@ -25,22 +25,22 @@ namespace Zyborg.Vault.Server.Secret
             _storage = storage;
         }
 
-        public async Task<IEnumerable<string>> List(string path)
+        public async Task<IEnumerable<string>> ListAsync(string path)
         {
             return await _storage.ListAsync(path);
         }
 
-        public async Task<string> Read(string path)
+        public async Task<string> ReadAsync(string path)
         {
             return await _storage.ReadAsync(path);
         }
 
-        public async Task Write(string path, string payload)
+        public async Task WriteAsync(string path, string payload)
         {
             await _storage.WriteAsync(path, payload);
         }
 
-        public async Task Delete(string path)
+        public async Task DeleteAsync(string path)
         {
             await _storage.DeleteAsync(path);
         }

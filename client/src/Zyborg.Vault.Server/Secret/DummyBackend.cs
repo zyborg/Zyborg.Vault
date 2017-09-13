@@ -9,22 +9,22 @@ namespace Zyborg.Vault.Server.Secret
     /// </summary>
     public class DummyBackend : ISecretBackend
     {
-        public Task<IEnumerable<string>> List(string path)
+        public Task<IEnumerable<string>> ListAsync(string path)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> Read(string path)
+        public Task<string> ReadAsync(string path)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task Write(string path, string payload)
+        public Task WriteAsync(string path, string payload)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task Delete(string path)
+        public Task DeleteAsync(string path)
         {
             throw new System.NotImplementedException();
         }

@@ -34,7 +34,7 @@ namespace Zyborg.Vault.Server.Controllers
             
             try
             {
-                var list = await backend.List(path);
+                var list = await backend.ListAsync(path);
 
                 return base.Ok(
                         new ReadResponse<KeysData>
@@ -61,7 +61,7 @@ namespace Zyborg.Vault.Server.Controllers
                         HttpStatusCode.NotFound,
                         $"no handler for route '{mount}'");
             
-            var dataSer = await backend.Read(path);
+            var dataSer = await backend.ReadAsync(path);
             if (dataSer == null)
                 throw new VaultServerException(HttpStatusCode.NotFound);
 
@@ -95,7 +95,7 @@ namespace Zyborg.Vault.Server.Controllers
             // Make sure the JSON is legal
             var obj = JsonConvert.DeserializeObject(json);
 
-            await backend.Write(path, json);
+            await backend.WriteAsync(path, json);
 
             return NoContent();
         }
@@ -109,7 +109,7 @@ namespace Zyborg.Vault.Server.Controllers
                         HttpStatusCode.NotFound,
                         $"no handler for route '{mount}'");
             
-            await backend.Delete(path);
+            await backend.DeleteAsync(path);
 
             return NoContent();
         }

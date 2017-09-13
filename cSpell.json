@@ -6,10 +6,13 @@
     "language": "en",
     // words - list of words to be always considered correct
     "words": [
+        "PBKDF",
+        "Scrypt",
         "Unmount",
         "Zyborg",
         "auths",
         "finalizer",
+        "myplugin",
         "postgresql",
         "requ",
         "segs",
