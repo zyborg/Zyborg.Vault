@@ -13,10 +13,14 @@ using Zyborg.Vault.Server.Storage;
 
 namespace Zyborg.Vault.Server.Auth
 {
+    /// <summary>
+    /// For general information about the usage and operation of the
+    /// Username and Password backend, please see the
+    /// <see cref="https://www.vaultproject.io/docs/auth/userpass.html"
+    /// >Vault Userpass backend documentation</see>.
+    /// </summary>
     public class UserpassAuthBackend : LocallyRoutedAuthBackend<UserpassAuthBackend>, IAuthBackend
     {
-        private Dictionary<string, string> _users = new Dictionary<string, string>();
-
         private static readonly JsonMergeSettings DefaultJsonMergeSettings = new JsonMergeSettings
         {
             MergeArrayHandling = MergeArrayHandling.Replace,
@@ -185,9 +189,17 @@ namespace Zyborg.Vault.Server.Auth
             await _storage.DeleteAsync(storagePath);
         }
 
+        /// <summary>
+        /// Login with the username and password.
+        /// </summary>
+        /// <param name="username">The username for the user.</param>
+        /// <param name="password">The password for the user.</param>
+        /// <returns></returns>
         [LocalWriteRoute("login/{username}")]
         public async Task<object> LoginUser(
                 [Required, FromRoute]string username,
+                // TODO:  HC Vault appears to throw a 500 Internal Server Error
+                //        when this parameter is missing, but a 400 in other casese???
                 [Required, FromForm]string password)
         {
             var storagePath = $"users/{username}";
@@ -205,13 +217,17 @@ namespace Zyborg.Vault.Server.Auth
 
         internal static PasswordHash ComputePasswordHash(string passwordClear, byte[] salt = null)
         {
-            // TODO: hash using PBKDF+Scrypt
+            // TODO: if this wasn't just a Mock Server
+            //       and we really want to secure this,
+            //       we would do hash using PBKDF+Scrypt
             return new PasswordHash { Hash = passwordClear };
         }
 
         internal static bool ComparePasswordAndHash(string passwordClear, PasswordHash passwordHash)
         {
-            // TODO: hash using PBKDF+Scrypt
+            // TODO: if this wasn't just a Mock Server
+            //       and we really want to secure this,
+            //       we would do hash using PBKDF+Scrypt
             return string.Equals(passwordClear, passwordHash?.Hash);
         }
 
