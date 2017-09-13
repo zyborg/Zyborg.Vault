@@ -109,7 +109,7 @@ namespace Zyborg.Vault.Server.Protocol
                 if (mm.Matcher.TryMatch(path, rvd))
                 {
                     var pValues = BindParameters(mm.Method, rvd);
-                    var ret = mm.Method.Invoke(target, pValues.ToArray());
+                    var ret = mm.Method.Invoke(target, pValues);
                     if (mm.Method.ReturnType == typeof(Task<IEnumerable<string>>))
                         return (mm.Name, await (Task<IEnumerable<string>>)ret);
 
@@ -120,7 +120,7 @@ namespace Zyborg.Vault.Server.Protocol
             return (null, null);
         }
 
-        public virtual async Task<(string name, string result)> ReadAsync(T target, string path)
+        public virtual async Task<(string name, object result)> ReadAsync(T target, string path)
         {
             if (!path.StartsWith("/"))
                 path = $"/{path}";
@@ -133,17 +133,17 @@ namespace Zyborg.Vault.Server.Protocol
                 {
                     var pValues = BindParameters(mm.Method, rvd);
                     var ret = mm.Method.Invoke(target, pValues);
-                    if (mm.Method.ReturnType == typeof(Task<string>))
-                        return (mm.Name, (await (Task<string>)ret));
+                    if (mm.Method.ReturnType == typeof(Task<object>))
+                        return (mm.Name, (await (Task<object>)ret));
 
-                    return (mm.Name, (string)ret);
+                    return (mm.Name, ret);
                 }
             }
 
             return (null, null);
         }
 
-        public virtual async Task<(string name, object reserved)> WriteAsync(T target, string path, string payload)
+        public virtual async Task<(string name, object result)> WriteAsync(T target, string path, string payload)
         {
             if (!path.StartsWith("/"))
                 path = $"/{path}";
@@ -155,11 +155,11 @@ namespace Zyborg.Vault.Server.Protocol
                 if (mm.Matcher.TryMatch(path, rvd))
                 {
                     var pValues = BindParameters(mm.Method, rvd, payload);
-                    var ret = mm.Method.Invoke(target, pValues.ToArray());
-                    if (mm.Method.ReturnType == typeof(Task))
-                        await (Task)ret;
+                    var ret = mm.Method.Invoke(target, pValues);
+                    if (mm.Method.ReturnType == typeof(Task<object>))
+                        return (mm.Name, await (Task<object>)ret);
 
-                    return (mm.Name, null);
+                    return (mm.Name, ret);
                 }
             }
 
@@ -178,7 +178,7 @@ namespace Zyborg.Vault.Server.Protocol
                 if (mm.Matcher.TryMatch(path, rvd))
                 {
                     var pValues = BindParameters(mm.Method, rvd);
-                    var ret = mm.Method.Invoke(target, pValues.ToArray());
+                    var ret = mm.Method.Invoke(target, pValues);
                     if (mm.Method.ReturnType == typeof(Task))
                         await (Task)ret;
 

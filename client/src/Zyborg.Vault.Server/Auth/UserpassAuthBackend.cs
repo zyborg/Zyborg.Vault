@@ -51,7 +51,7 @@ namespace Zyborg.Vault.Server.Auth
         /// </summary>
         /// <param name="username">The username for the user.</param>
         [LocalReadRoute("users/{username}")]
-        public async Task<string> ReadUser([FromRoute]string username)
+        public async Task<object> ReadUser([FromRoute]string username)
         {
             var storagePath = $"users/{username}";
 
@@ -63,7 +63,7 @@ namespace Zyborg.Vault.Server.Auth
             if (user == null)
                 throw new InvalidOperationException("username does not exist");
 
-            return await Task.FromResult(JsonConvert.SerializeObject(user.Config));
+            return await Task.FromResult(user.Config);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Zyborg.Vault.Server.Auth
         /// </param>
 
         [LocalWriteRoute("users/{username}")]
-        public async Task CreateOrUpdateUser(
+        public async Task<object> CreateOrUpdateUser(
                 [Required, FromRoute]string username,
                 [Required, FromBody]string payload)
         {
@@ -114,6 +114,7 @@ namespace Zyborg.Vault.Server.Auth
                  throw new ArgumentException("missing password");
 
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
+            return null;
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace Zyborg.Vault.Server.Auth
         /// <param name="username">The username for the user.</param>
         /// <param name="password">The password for the user.</param>
         [LocalWriteRoute("users/{username}/password")]
-        public async Task UpdateUserPassword(
+        public async Task<object> UpdateUserPassword(
                 [Required, FromRoute]string username,
                 [Required, FromForm]string password)
         {
@@ -139,6 +140,7 @@ namespace Zyborg.Vault.Server.Auth
             user.PasswordHash = ComputePasswordHash(password);
 
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
+            return null;
         }
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace Zyborg.Vault.Server.Auth
         /// <param name="username">The username for the user.</param>
         /// <param name="policies">Comma-separated list of policies. If set to empty</param>
         [LocalWriteRoute("users/{username}/policies")]
-        public async Task UpdateUserPolicies(
+        public async Task<object> UpdateUserPolicies(
                 [Required, FromRoute]string username,
                 [FromForm]string policies)
         {
@@ -167,6 +169,7 @@ namespace Zyborg.Vault.Server.Auth
                 user.Config.Policies = policies;
             
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
+            return null;
         }
 
         /// <summary>

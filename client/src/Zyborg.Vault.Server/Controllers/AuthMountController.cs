@@ -61,16 +61,18 @@ namespace Zyborg.Vault.Server.Controllers
 
             try
             {
-                var dataSer = await backend.ReadAsync(path);
-                var obj = default(object);
-                if (!string.IsNullOrEmpty(dataSer))
-                    obj = JsonConvert.DeserializeObject(dataSer);
-                
-                return base.Ok(
-                        new ReadResponse<object>
-                        {
-                            Data = obj,
-                        });
+                var ret = await backend.ReadAsync(path);
+                // if (ret is NoContentResponse)
+                if (ret == null)
+                    return base.NoContent();
+
+                var resp = new ReadResponse<object>();
+                if (ret is AuthInfo auth)
+                    resp.Auth = auth;
+                else
+                    resp.Data = ret;
+
+                return base.Ok(resp);
             }
             catch (Exception ex)
             {
@@ -97,9 +99,18 @@ namespace Zyborg.Vault.Server.Controllers
 
             try
             {
-                await backend.WriteAsync(path, json);
-                
-                return base.NoContent();
+                var ret = await backend.WriteAsync(path, json);
+                // if (ret is NoContentResponse)
+                if (ret == null)
+                    return base.NoContent();
+
+                var resp = new ReadResponse<object>();
+                if (ret is AuthInfo auth)
+                    resp.Auth = auth;
+                else
+                    resp.Data = ret;
+
+                return base.Ok(resp);
             }
             catch (Exception ex)
             {

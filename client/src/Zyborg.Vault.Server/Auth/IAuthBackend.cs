@@ -7,9 +7,9 @@ namespace Zyborg.Vault.Server.Auth
     {
         Task<IEnumerable<string>> ListAsync(string path);
 
-        Task<string> ReadAsync(string path);
+        Task<object> ReadAsync(string path);
 
-        Task WriteAsync(string path, string payload);
+        Task<object> WriteAsync(string path, string payload);
 
         Task DeleteAsync(string path);
     }

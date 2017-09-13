@@ -36,7 +36,7 @@ namespace Zyborg.Vault.Server.Auth
             return result;
         }
 
-        public async Task<string> ReadAsync(string path)
+        public async Task<object> ReadAsync(string path)
         {
             path = PathMap<object>.NormalizePath(path);
 
@@ -47,13 +47,15 @@ namespace Zyborg.Vault.Server.Auth
             return result;
         }
 
-        public async Task WriteAsync(string path, string payload)
+        public async Task<object> WriteAsync(string path, string payload)
         {
             path = PathMap<object>.NormalizePath(path);
 
             var (match, result) = await _router.WriteAsync(_this, path, payload);
             if (match == null)
                 throw new NotSupportedException("unsupported path");
+            
+            return result;
         }
 
         public async Task DeleteAsync(string path)
