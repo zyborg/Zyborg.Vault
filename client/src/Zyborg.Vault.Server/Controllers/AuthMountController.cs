@@ -23,7 +23,7 @@ namespace Zyborg.Vault.Server.Controllers
         }
 
         [HttpList(Name = "ListAuth")]
-        public async Task<IActionResult> List([FromRoute]string mount)
+        public async Task<IActionResult> ListAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveAuthMount(mount);
             if (backend == null)
@@ -51,7 +51,7 @@ namespace Zyborg.Vault.Server.Controllers
         }
 
         [HttpGet(Name = "ReadAuth", Order = int.MaxValue)]
-        public async Task<IActionResult> Read([FromRoute]string mount)
+        public async Task<IActionResult> ReadAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveAuthMount(mount);
             if (backend == null)
@@ -80,7 +80,7 @@ namespace Zyborg.Vault.Server.Controllers
 
         [HttpPut(Name = "WriteAuth", Order = int.MaxValue)]
         [HttpPost(Name = "PostAuth", Order = int.MaxValue)]
-        public async Task<IActionResult> Write([FromRoute]string mount)
+        public async Task<IActionResult> WriteAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveAuthMount(mount);
             if (backend == null)
@@ -108,11 +108,24 @@ namespace Zyborg.Vault.Server.Controllers
         }
 
         [HttpDelete(Name = "DeleteAuth", Order = int.MaxValue)]
-        public void Delete()
+        public  async Task<IActionResult> DeleteAsync([FromRoute]string mount)
         {
-            throw new VaultServerException(
-                    HttpStatusCode.BadRequest,
-                    "not implemented");
+            var (backend, path) = _server.ResolveAuthMount(mount);
+            if (backend == null)
+                throw new VaultServerException(
+                        HttpStatusCode.NotFound,
+                        $"no handler for route '{mount}'");
+
+            try
+            {
+                await backend.DeleteAsync(path);
+                
+                return base.NoContent();
+            }
+            catch (Exception ex)
+            {
+                return await DecodeException(ex);
+            }
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Zyborg.Vault.Server.Controllers
 
         [HttpGet(Name = "ReadSecret", Order = int.MaxValue)]
         [SuccessType(typeof(ReadResponse<object>))]
-        public async Task<IActionResult> Read([FromRoute]string mount)
+        public async Task<IActionResult> ReadAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveSecretMount(mount);
             if (backend == null)
@@ -76,7 +76,7 @@ namespace Zyborg.Vault.Server.Controllers
 
         [HttpPut(Name = "WriteSecret", Order = int.MaxValue)]
         [HttpPost(Name = "PostSecret", Order = int.MaxValue)]
-        public async Task<IActionResult> Write([FromRoute]string mount)
+        public async Task<IActionResult> WriteAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveSecretMount(mount);
             if (backend == null)
@@ -101,7 +101,7 @@ namespace Zyborg.Vault.Server.Controllers
         }
 
         [HttpDelete(Name = "DeleteSecret", Order = int.MaxValue)]
-        public async Task<IActionResult> Delete([FromRoute]string mount)
+        public async Task<IActionResult> DeleteAsync([FromRoute]string mount)
         {
             var (backend, path) = _server.ResolveSecretMount(mount);
             if (backend == null)
