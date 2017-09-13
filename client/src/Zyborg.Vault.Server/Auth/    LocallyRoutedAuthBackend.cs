@@ -8,17 +8,20 @@ namespace Zyborg.Vault.Server.Auth
 {
     public abstract class LocallyRoutedAuthBackend<T> : IAuthBackend
     {
-        protected LocalRouter<LocallyRoutedAuthBackend<T>> _router;
-
+        protected LocalRouter<T> _router;
+        protected readonly T _this;
         protected LocallyRoutedAuthBackend(bool initOnConstruct = true)
         {
+            // We have to widen, then narrow
+            _this = (T)(object)this;
+
             if (initOnConstruct)
                 Init();
         }
 
         protected void Init()
         {
-            _router = new LocalRouter<LocallyRoutedAuthBackend<T>>();
+            _router = new LocalRouter<T>();
             _router.Init();
         }
 
@@ -26,7 +29,7 @@ namespace Zyborg.Vault.Server.Auth
         {
             path = PathMap<object>.NormalizePath(path);
 
-            var (match, result) = await _router.ListAsync(this, path);
+            var (match, result) = await _router.ListAsync(_this, path);
             if (match == null)
                 throw new NotSupportedException("unsupported path");
             
@@ -37,7 +40,7 @@ namespace Zyborg.Vault.Server.Auth
         {
             path = PathMap<object>.NormalizePath(path);
 
-            var (match, result) = await _router.ReadAsync(this, path);
+            var (match, result) = await _router.ReadAsync(_this, path);
             if (match == null)
                 throw new NotSupportedException("unsupported path");
 
@@ -48,7 +51,7 @@ namespace Zyborg.Vault.Server.Auth
         {
             path = PathMap<object>.NormalizePath(path);
 
-            var (match, result) = await _router.WriteAsync(this, path, payload);
+            var (match, result) = await _router.WriteAsync(_this, path, payload);
             if (match == null)
                 throw new NotSupportedException("unsupported path");
         }
@@ -57,7 +60,7 @@ namespace Zyborg.Vault.Server.Auth
         {
             path = PathMap<object>.NormalizePath(path);
 
-            var (match, result) = await _router.DeleteAsync(this, path);
+            var (match, result) = await _router.DeleteAsync(_this, path);
             if (match == null)
                 throw new NotSupportedException("unsupported path");
         }    }
