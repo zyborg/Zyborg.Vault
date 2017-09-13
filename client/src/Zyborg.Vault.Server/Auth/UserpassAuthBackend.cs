@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using Zyborg.Vault.Server.Storage;
 
 namespace Zyborg.Vault.Server.Auth
 {
-    public class UserpassAuthBackend : IAuthBackend
+    public class UserpassAuthBackend : LocallyRoutedAuthBackend<UserpassAuthBackend>, IAuthBackend
     {
         private Dictionary<string, string> _users = new Dictionary<string, string>();
 
@@ -24,55 +25,45 @@ namespace Zyborg.Vault.Server.Auth
 
         private IStorage _storage;
 
-        public UserpassAuthBackend(IStorage storage)
+        public UserpassAuthBackend(IStorage storage) : base(true)
         {
             _storage = storage;
         }
 
-        public async Task<IEnumerable<string>> ListAsync(string path)
+        /// <summary>
+        /// List available userpass users.
+        /// </summary>
+        [LocalListRoute("users")]
+        public async Task<IEnumerable<string>> ListUsers()
         {
-            path = PathMap<object>.NormalizePath(path);
-            if ("users" == path)
-            {
-                var list = await _storage.ListAsync("users");
+            var list = await _storage.ListAsync("users");
 
-                // In order to preserve Vault compatibility we can't
-                // simply return an empty list if there are no users
-                // We need to trigger a 404 Not Found response
-                if (list == null)
-                    throw new NotSupportedException(string.Empty);
-                return list;
-            }
-            else
-                throw new NotSupportedException("unsupported path");
+            // In order to preserve Vault compatibility we can't
+            // simply return an empty list if there are no users
+            // We need to trigger a 404 Not Found response
+            if (list == null || list.Count() == 0)
+                throw new NotSupportedException(string.Empty);
+            return list;
         }
 
-        public async Task<string> ReadAsync(string path)
+        /// <summary>
+        /// Reads the properties of an existing username.
+        /// </summary>
+        /// <param name="username">The username for the user.</param>
+        [LocalReadRoute("users/{username}")]
+        public async Task<string> ReadUser([FromRoute]string username)
         {
-            path = PathMap<object>.NormalizePath(path);
-            Match m;
-            if ((m = Regex.Match(path, "^users/([^/]+)$")).Success)
-                return await ReadUser(m.Groups[1].Value);
-            else
-                throw new NotSupportedException("unsupported path");
-        }
+            var storagePath = $"users/{username}";
 
-        public async Task WriteAsync(string path, string payload)
-        {
-            path = PathMap<object>.NormalizePath(path);
-            Match m;
-            if ((m = Regex.Match(path, "^users/([^/]+)$")).Success)
-                await CreateOrUpdateUser(m.Groups[1].Value, payload);
-            else if ((m = Regex.Match(path, "^users/([^/]+)/password$")).Success)
-                await UpdateUserPassword(m.Groups[1].Value, payload);
-            else
-                throw new NotSupportedException("unsupported path");
-        }
+            var userJson = await _storage.ReadAsync(storagePath);
+            if (string.IsNullOrEmpty(userJson))
+                throw new InvalidOperationException("username does not exist");
 
-        public Task DeleteAsync(string path)
-        {
-            path = PathMap<object>.NormalizePath(path);
-            throw new System.NotImplementedException();
+            var user = JsonConvert.DeserializeObject<UserInfo>(userJson);
+            if (user == null)
+                throw new InvalidOperationException("username does not exist");
+
+            return await Task.FromResult(JsonConvert.SerializeObject(user.Config));
         }
 
         /// <summary>
@@ -86,24 +77,41 @@ namespace Zyborg.Vault.Server.Auth
         /// The username for the user.
         /// </param>
 
-        [SubWrite("users/{username}")]
+        [LocalWriteRoute("users/{username}")]
         public async Task CreateOrUpdateUser(
                 [Required, FromRoute]string username,
                 [Required, FromBody]string payload)
         {
             var storagePath = $"users/{username}";
             var newUser = JObject.Parse(payload);
-            var oldJson = await _storage.ReadAsync($"users/{username}");
-            if (!string.IsNullOrEmpty(oldJson))
+
+            var userJson = await _storage.ReadAsync(storagePath);
+            UserInfo user;
+            if (!string.IsNullOrEmpty(userJson))
             {
-                var oldUser = JObject.Parse(oldJson);
-                oldUser.Merge(newUser, DefaultJsonMergeSettings);
-                newUser = oldUser;
+                var jObj = JObject.Parse(userJson);
+                var config = jObj[nameof(UserInfo.Config)] as JObject;
+                if (config != null)
+                    config.Merge(newUser);
+                
+                user = jObj.ToObject<UserInfo>();
+            }
+            else
+            {
+                user = new UserInfo
+                {
+                    Config = newUser.ToObject<UpdateUserRequest>()
+                };
             }
 
-            var user = newUser.ToObject<UserInfo>();
-            if (string.IsNullOrEmpty(user.Password))
-                throw new ArgumentException("missing password");
+            if (!string.IsNullOrEmpty(user.Config.Password))
+            {
+                user.PasswordHash = ComputePasswordHash(user.Config.Password);
+                user.Config.Password = null;
+            }
+
+            if (user.PasswordHash == null)
+                 throw new ArgumentException("missing password");
 
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
         }
@@ -113,10 +121,10 @@ namespace Zyborg.Vault.Server.Auth
         /// </summary>
         /// <param name="username">The username for the user.</param>
         /// <param name="password">The password for the user.</param>
-        [SubWrite("users/{username}/password")]
+        [LocalWriteRoute("users/{username}/password")]
         public async Task UpdateUserPassword(
                 [Required, FromRoute]string username,
-                [Required, FromBody]string payload)
+                [Required, FromForm]string password)
         {
             var storagePath = $"users/{username}";
 
@@ -128,16 +136,20 @@ namespace Zyborg.Vault.Server.Auth
             if (user == null)
                 throw new InvalidOperationException("username does not exist");
 
-            var p = JsonConvert.DeserializeObject<Dictionary<string, string>>(payload);
-            if (!p.TryGetValue("password", out var password) || string.IsNullOrEmpty(password))
-                throw new ArgumentException("missing password");
+            user.PasswordHash = ComputePasswordHash(password);
 
-            user.Password = password;
             await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
         }
 
-        [SubRead("users/{username}")]
-        public async Task<string> ReadUser([FromRoute]string username)
+        /// <summary>
+        /// Update policies for an existing user.
+        /// </summary>
+        /// <param name="username">The username for the user.</param>
+        /// <param name="policies">Comma-separated list of policies. If set to empty</param>
+        [LocalWriteRoute("users/{username}/policies")]
+        public async Task UpdateUserPolicies(
+                [Required, FromRoute]string username,
+                [FromForm]string policies)
         {
             var storagePath = $"users/{username}";
 
@@ -149,16 +161,32 @@ namespace Zyborg.Vault.Server.Auth
             if (user == null)
                 throw new InvalidOperationException("username does not exist");
 
-            return await Task.FromResult(JsonConvert.SerializeObject(user));
+            if (string.IsNullOrEmpty(policies))
+                user.Config.Policies = "default";
+            else
+                user.Config.Policies = policies;
+            
+            await _storage.WriteAsync(storagePath, JsonConvert.SerializeObject(user));
         }
 
-        public class UserInfo
+        internal static PasswordHash ComputePasswordHash(string passwordClear, byte[] salt = null)
+        {
+            // TODO: hash using PBKDF+Scrypt
+            return new PasswordHash { Hash = passwordClear };
+        }
+
+        internal static bool ComparePasswordAndHash(string passwordClear, PasswordHash passwordHash)
+        {
+            // TODO: hash using PBKDF+Scrypt
+            return string.Equals(passwordClear, passwordHash?.Hash);
+        }
+
+        public class UpdateUserRequest
         {
             /// <summary>
             /// The password for the user. Only required when creating the user.
             /// </summary>
-            [Required]
-            [JsonProperty("password")]
+            [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
             public string Password
             { get; set; }
 
@@ -182,8 +210,27 @@ namespace Zyborg.Vault.Server.Auth
             [JsonProperty("max_ttl")]
             public Duration? MaxTtl
             { get; set; }
+        }
 
+        internal class UserInfo
+        {
+            public PasswordHash PasswordHash
+            { get; set; }
 
+            public UpdateUserRequest Config
+            { get; set; }
+        }
+
+        internal class PasswordHash
+        {
+            public string Flag
+            { get; } = "0";
+
+            public string Hash
+            { get; set; }
+
+            public string Salt
+            { get; set; }
         }
     }
 }
