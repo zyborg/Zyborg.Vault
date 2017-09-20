@@ -31,3 +31,16 @@
     go build -o mock-plugin.exe .\main.go
     copy .\mock-plugin.exe YOUR-VAULT-PLUGIN-DIR
     PS:  Get-FileHash -Algorithm SHA256 -Path .\mock-plugin.exe
+
+
+
+# Vault Concerns and Criticisms
+* https://news.ycombinator.com/item?id=15284976
+* https://docs.google.com/presentation/d/1ipP2eB9pW5j3WDvzCGz9Wy4MBoK2SMvOTZtPdf5kSNs/edit#slide=id.g1fa55b980e_1_164
+* https://github.com/ejcx/dssss
+
+# Related:
+* https://www.usenix.org/conference/enigma2017/conference-program/presentation/haken
+* https://kev.inburke.com/kevin/things-to-use-instead-of-jwt/
+* https://paragonie.com/blog/2017/03/jwt-json-web-tokens-is-bad-standard-that-everyone-should-avoid
+
