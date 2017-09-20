@@ -1,0 +1,19 @@
+{
+    "path": {
+        "poltest/dir1": {
+            "capabilities": [ "list", "read" ]
+        },
+
+        "poltest/dir2": {
+            "capabilities": [ "list", "read", "create", "update", "delete" ]
+        },
+
+        "poltest/dir2/foo": {
+            "capabilities": [ "deny" ]
+        },
+
+        "poltest/dir2/foo/bar": {
+            "capabilities": [ "list", "read", "create", "update", "delete" ]
+        }
+    }
+}
