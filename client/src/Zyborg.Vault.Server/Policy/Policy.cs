@@ -32,35 +32,40 @@ namespace Zyborg.Vault.Server.Policy
         public Dictionary<string, Rule> PathRules
         { get; set; }
 
-        public IRule TryMatch(string path)
+        public bool TryMatch(string path, out IRule rule)
         {
-            if ((PathRules?.Count).GetValueOrDefault() == 0)
-                return null;
-            
-            // Based on:
-            //    https://www.vaultproject.io/docs/concepts/policies.html#policy-syntax
-            // 1. Policy paths are matched using the most specific path match. This may be an
-            //    exact match or the longest-prefix match of a glob. This means if you define
-            //    a policy for "secret/foo*", the policy would also match "secret/foobar".
-            // 2. The glob character is only supported as the last character of the path, and
-            //    is not a regular expression!
-
-            // We do reverse sorting to find the longest match
-            foreach (var pr in PathRules.OrderByDescending(x => x.Key.Length))
+            if ((PathRules?.Count).GetValueOrDefault() > 0)
             {
-                var rulePath = pr.Key;
-                if (rulePath.EndsWith("*"))
+                // Based on:
+                //    https://www.vaultproject.io/docs/concepts/policies.html#policy-syntax
+                // 1. Policy paths are matched using the most specific path match. This may be an
+                //    exact match or the longest-prefix match of a glob. This means if you define
+                //    a policy for "secret/foo*", the policy would also match "secret/foobar".
+                // 2. The glob character is only supported as the last character of the path, and
+                //    is not a regular expression!
+
+                // We do reverse sorting to find the longest match
+                foreach (var pr in PathRules.OrderByDescending(x => x.Key.Length))
                 {
-                    rulePath.TrimEnd('*');
-                    if (path.StartsWith(rulePath.TrimEnd('*')))
-                        return pr.Value;
+                    var rulePath = pr.Key;
+                    if (rulePath.EndsWith("*"))
+                    {
+                        if (path.StartsWith(rulePath.TrimEnd('*')))
+                        {
+                            rule = pr.Value;
+                            return true;
+                        }
+                    }
+                    if (string.Equals(rulePath, path))
+                    {
+                        rule = pr.Value;
+                        return true;
+                    }
                 }
-                if (string.Equals(rulePath, path))
-                    return pr.Value;
             }
 
-            // No rule paths match
-            return null;
+            rule = null;
+            return false;
         }
     }
 }

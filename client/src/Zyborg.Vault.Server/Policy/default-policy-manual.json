@@ -1,0 +1,61 @@
+{
+    "path": {
+        // Allow tokens to look up their own properties
+        "auth/token/lookup-self": {
+            "capabilities": ["read"]
+        },
+
+        // Allow tokens to renew themselves
+        "auth/token/renew-self": {
+            "capabilities": ["update"]
+        },
+
+        // Allow tokens to revoke themselves
+        "auth/token/revoke-self": {
+            "capabilities": ["update"]
+        },
+
+        // Allow a token to look up its own capabilities on a path
+        "sys/capabilities-self": {
+            "capabilities": ["update"]
+        },
+
+        // Allow a token to renew a lease via lease_id in the request body; old path for
+        // old clients, new path for newer
+        "sys/renew": {
+            "capabilities": ["update"]
+        },
+        "sys/leases/renew": {
+            "capabilities": ["update"]
+        },
+
+        // Allow looking up lease properties. This requires knowing the lease ID ahead
+        // of time and does not divulge any sensitive information.
+        "sys/leases/lookup": {
+            "capabilities": ["update"]
+        },
+
+        // Allow a token to manage its own cubbyhole
+        "cubbyhole/*": {
+            "capabilities": ["create", "read", "update", "delete", "list"]
+        },
+
+        // Allow a token to wrap arbitrary values in a response-wrapping token
+        "sys/wrapping/wrap": {
+            "capabilities": ["update"]
+        },
+
+        // Allow a token to look up the creation time and TTL of a given
+        // response-wrapping token
+        "sys/wrapping/lookup": {
+            "capabilities": ["update"]
+        },
+
+        // Allow a token to unwrap a response-wrapping token. This is a convenience to
+        // avoid client token swapping since this is also part of the response wrapping
+        // policy.
+        "sys/wrapping/unwrap": {
+            "capabilities": ["update"]
+        }
+    }
+}

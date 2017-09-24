@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+
 namespace Zyborg.Vault.Server.Policy
 {
     public interface IPolicy
     {
-         IRule TryMatch(string path);
+         bool TryMatch(string path, out IRule rule);
     }
 }

@@ -31,23 +31,29 @@ namespace Zyborg.Vault.Server.Policy
         public Duration? MaxWrappingTtl
         { get; set; }
 
+        public virtual bool IsSudo =>
+                (this.Capabilities?.Contains(Capability.Sudo)).GetValueOrDefault();
 
-        public virtual bool IsSudo => (this.Capabilities?.Contains(Capability.Sudo)).GetValueOrDefault();
+        public virtual bool IsDenied =>
+                (this.Capabilities?.Contains(Capability.Deny)).GetValueOrDefault();
 
-        public virtual bool IsDenied => (this.Capabilities?.Contains(Capability.Deny)).GetValueOrDefault();
+        // public bool HasListCapability => !IsDenied &&
+        //         (this.Capabilities?.Contains(Capability.List)).GetValueOrDefault();
+        // public bool HasReadCapability => !IsDenied &&
+        //         (this.Capabilities?.Contains(Capability.Read)).GetValueOrDefault();
+        // public bool HasCreateCapability => !IsDenied &&
+        //         (this.Capabilities?.Contains(Capability.Create)).GetValueOrDefault();
+        // public bool HasUpdateCapability => !IsDenied &&
+        //         (this.Capabilities?.Contains(Capability.Update)).GetValueOrDefault();
+        // public bool HasDeleteCapability => !IsDenied &&
+        //         (this.Capabilities?.Contains(Capability.Delete)).GetValueOrDefault();
 
-        public bool HasListCapability => !IsDenied &&
-                (this.Capabilities?.Contains(Capability.List)).GetValueOrDefault();
-        public bool HasReadCapability => !IsDenied &&
-                (this.Capabilities?.Contains(Capability.Read)).GetValueOrDefault();
-        public bool HasCreateCapability => !IsDenied &&
-                (this.Capabilities?.Contains(Capability.Create)).GetValueOrDefault();
-        public bool HasUpdateCapability => !IsDenied &&
-                (this.Capabilities?.Contains(Capability.Update)).GetValueOrDefault();
-        public bool HasDeleteCapability => !IsDenied &&
-                (this.Capabilities?.Contains(Capability.Delete)).GetValueOrDefault();
+        public virtual bool CheckCapability(string capability)
+        {
+            return (this.Capabilities?.Contains(capability)).GetValueOrDefault();
+        }
 
-        public bool IsAllowed(Dictionary<string, string> parameters)
+        public virtual bool CheckParameters(Dictionary<string, string> parameters)
         {
             if ((parameters?.Count).GetValueOrDefault() == 0)
                 // No parameters provided, so nothing to test against
@@ -56,42 +62,41 @@ namespace Zyborg.Vault.Server.Policy
             bool allowedParams = (AllowedParameters?.Count).GetValueOrDefault() > 0;
             bool deniedParams = (DeniedParameters?.Count).GetValueOrDefault() > 0;
 
-            if (!allowedParams && !deniedParams)
-                // No restrictions on parameters
-                return true;
-
-            foreach (var p in parameters)
+            if (allowedParams || deniedParams)
             {
-                if (deniedParams)
-                    if (IsParameterMatch(p.Key, p.Value, DeniedParameters))
-                        return false;
+                foreach (var p in parameters)
+                {
+                    if (deniedParams)
+                        if (DoesParameterMatch(p.Key, p.Value, DeniedParameters))
+                            return false;
 
-                if (allowedParams)
-                    if (IsParameterMatch(p.Key, p.Value, DeniedParameters))
-                        return true;
-                    else
-                        return false;
+                    if (allowedParams)
+                        if (DoesParameterMatch(p.Key, p.Value, DeniedParameters))
+                            return true;
+                        else
+                            return false;
+                }
             }
 
-            // This should actually never hit
-            // because of the earlier checks
+            // Either there were no parameter restrictions at all
+            // or none that resolved with a negative disposition
             return true;
         }
 
-        public virtual bool CanList(Dictionary<string, string> parameters) =>
-                HasListCapability && IsAllowed(parameters);
+        // public virtual bool CanList(Dictionary<string, string> parameters) =>
+        //         HasListCapability && CheckParameters(parameters);
 
-        public virtual bool CanRead(Dictionary<string, string> parameters) =>
-                HasReadCapability && IsAllowed(parameters);
+        // public virtual bool CanRead(Dictionary<string, string> parameters) =>
+        //         HasReadCapability && CheckParameters(parameters);
 
-        public virtual bool CanCreate(Dictionary<string, string> parameters) =>
-                HasCreateCapability && IsAllowed(parameters);
+        // public virtual bool CanCreate(Dictionary<string, string> parameters) =>
+        //         HasCreateCapability && CheckParameters(parameters);
 
-        public virtual bool CanUpdate(Dictionary<string, string> parameters) =>
-                HasUpdateCapability && IsAllowed(parameters);
+        // public virtual bool CanUpdate(Dictionary<string, string> parameters) =>
+        //         HasUpdateCapability && CheckParameters(parameters);
 
-        public virtual bool CanDelete(Dictionary<string, string> parameters) =>
-                HasUpdateCapability && IsAllowed(parameters);
+        // public virtual bool CanDelete(Dictionary<string, string> parameters) =>
+        //         HasUpdateCapability && CheckParameters(parameters);
 
 
         /// <summary>
@@ -109,7 +114,7 @@ namespace Zyborg.Vault.Server.Policy
         /// <item>A pattern can allow value globs (values with prefix and/or suffix wildcard <c>*</c>)</item>
         /// </list>
         /// </remarks>
-        public bool IsParameterMatch(string name, string value,
+        public bool DoesParameterMatch(string name, string value,
                 Dictionary<string, IEnumerable<string>> patterns)
         {
             if (patterns.TryGetValue(name, out var patternValues)
@@ -149,4 +154,5 @@ namespace Zyborg.Vault.Server.Policy
 
             return false;
         }
-    }}
+    }
+}
