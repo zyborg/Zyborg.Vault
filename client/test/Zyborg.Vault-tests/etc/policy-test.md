@@ -53,3 +53,38 @@ vault-with-token f160dd51-2835-e496-db5e-8997afc9dcce write poltest/dir2/foo/baz
 
 vault policy-write poltest3 policy-test/poltest3.policy.json
 
+
+## multi-policy tests
+
+vault policy-write multi1 policy-test/multi1.policy.hcl
+vault policy-write multi2 policy-test/multi2.policy.hcl
+vault policy-write multi3 policy-test/multi3.policy.hcl
+
+vault token-create -id=multi1-only -policy=multi1
+vault token-create -id=multi2-only -policy=multi2
+vault token-create -id=multi3-only -policy=multi3
+
+vault token-create -id=multi1_2-exclusive -no-default-policy -policy=multi1 -policy=multi2
+vault token-create -id=multi1_2_3-exclusive -no-default-policy -policy=multi1 -policy=multi2 -policy=multi3
+
+
+vault-with-token.cmd multi1-only write poltest/multi/dir1/foo1 "a=1"
+vault-with-token.cmd multi2-only write poltest/multi/dir1/foo1 "a=1"
+vault-with-token.cmd multi1_2-exclusive write poltest/multi/dir1/foo2 "a=1"
+vault-with-token.cmd multi1_2_3-exclusive write poltest/multi/dir1/foo2 "a=1"
+
+vault-with-token.cmd multi1-only list poltest/multi/dir1
+vault-with-token.cmd multi2-only list poltest/multi/dir1
+vault-with-token.cmd multi1-only read poltest/multi/dir1/foo2
+vault-with-token.cmd multi1_2-exclusive list poltest/multi/dir1
+vault-with-token.cmd multi1_2-exclusive read poltest/multi/dir1/foo1
+
+## All With/Without Sudo
+
+vault policy-write all-without-sudo policy-test/all-without-sudo.policy.hcl
+vault token-create -id=all-without-sudo -no-default-policy -policy=all-without-sudo
+
+vault policy-write all-without-sudo policy-test/all-with-sudo.policy.hcl
+vault token-create -id=all-with-sudo -no-default-policy -policy=all-with-sudo
+
+vault token-create -id=root-test -no-default-policy -policy=root
