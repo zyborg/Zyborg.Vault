@@ -7,7 +7,6 @@ PowerShell client bindings for HashiCorp Vault
 [![Powershellgallery Badge][psgallery-badge]][psgallery-status]
 [![MyGet](https://img.shields.io/myget/zyborg-stage/v/Zyborg.Vault.svg)]()
 
-
 ## About
 
 The aim of this project is to provide a PowerShell module that provides cmdlets
@@ -19,7 +18,7 @@ We define a mapping of CLI functions to PowerShell cmdlets
 [here](https://docs.google.com/spreadsheets/d/19Jt7iKim0CTmUPTF5sqga_D-yqYgCc3bmQSLmYmE6aQ/edit?usp=sharing).
 
 [apidocs-badge]: https://img.shields.io/badge/API_Docs-BROWSE-blue.svg
-[psgallery-badge]: https://img.shields.io/badge/PowerShell_Gallery-LATEST-green.svg
+[psgallery-badge]: https://img.shields.io/powershellgallery/v/Zyborg.Vault.svg
 [psgallery-status]: https://www.powershellgallery.com/packages/Zyborg.Vault
 
 ## Status
