@@ -257,6 +257,94 @@ namespace Zyborg.Vault.Server.Controllers
             };
         }
 
+        /// <summary>
+        /// Lists all configured policies.
+        /// </summary>
+        [HttpGet("policy")]
+        public ReadResponse<PolicyKeysData> ListPolicies()
+        {
+            _server.AssertAuthorized(this, isSudo: true);
+            
+            // To be fully compliant with the HCVault CLI, we
+            // have to honor the "repeated" response structure
+            return new ReadRepeatedResponse<PolicyKeysData>
+            {
+                Data = new PolicyKeysData
+                {
+                    Keys = _server.ListPolicies().ToArray()
+                }
+            };
+        }
+
+        /// <summary>
+        /// Retrieve the rules for the named policy.
+        /// </summary>
+        /// <param name="name">Specifies the name of the policy to retrieve.</param>
+        [HttpGet("policy/{name}")]
+        public ReadResponse<PolicyRulesData> ReadPolicy(
+                [Required, FromRoute]string name)
+        {
+            _server.AssertAuthorized(this, isSudo: true);
+            
+            var polDef = _server.ReadPolicy(name)
+                     ?? throw new VaultServerException(HttpStatusCode.NotFound);
+
+            // To be fully compliant with the HCVault CLI, we
+            // have to honor the "repeated" response structure
+            return new ReadRepeatedResponse<PolicyRulesData>
+            {
+                Data = new PolicyRulesData
+                {
+                    Name = polDef.Name,
+                    Rules = polDef.Definition,
+                }
+            };
+        }
+
+        /// <summary>
+        /// Aadds a new or updates an existing policy. Once a policy is updated,
+        /// it takes effect immediately to all associated users.
+        /// </summary>
+        /// <param name="name">Specifies the name of the policy to create.</param>
+        /// <param name="policyDefinition">Specifies the policy document.</param>
+        [HttpPut("policy/{name}")]
+        public void WritePolicy(
+                [Required, FromRoute]string name,
+                [Required, FromBody]PolicyRulesData policyDefinition)
+        {
+            _server.AssertAuthorized(this, isSudo: true);
+            
+            try
+            {
+                _server.WritePolicy(name, policyDefinition.Rules);
+            }
+            catch (Exception ex)
+            {
+                throw DecodeServerException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the policy with the given name. This will immediately affect
+        /// all users associated with this policy.
+        /// </summary>
+        /// <param name="name">Specifies the name of the policy to delete.</param>
+        [HttpDelete("policy/{name}")]
+        public void DeletePolicy(
+                [Required, FromRoute]string name)
+        {
+            _server.AssertAuthorized(this, isSudo: true);
+            
+            try
+            {
+                _server.DeletePolicy(name);
+            }
+            catch (Exception ex)
+            {
+                throw DecodeServerException(ex);
+            }
+        }
+
         public static Exception DecodeServerException(Exception ex)
         {
             var msgs = new string[0];
