@@ -80,6 +80,17 @@ namespace Zyborg.Vault.Server
             //         new StorageWrapper(Storage, "secret-mounts/alt-secret1")));
             // _secretMounts.Set("alt/secret/second", new GenericSecretBackend(
             //         new StorageWrapper(Storage, "secret-mounts/alt/secret/second")));
+
+            // Register root token
+            var tokenId = State.Durable.RootTokenId;
+            _tokens.Add(tokenId, new AuthInfo
+            {
+                Accessor = Guid.NewGuid().ToString(),
+                ClientToken = tokenId,
+                LeaseDuration = 0,
+                Renewable = false,
+                Policies = new[] { "root" },
+            });
         }
 
         public async Task StartStorage()
