@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Zyborg.Vault.Model;
+using Zyborg.Vault.Server.Auth;
 using Zyborg.Vault.Server.Protocol;
 
 namespace Zyborg.Vault.Server.Controllers
@@ -15,16 +16,20 @@ namespace Zyborg.Vault.Server.Controllers
     public class AuthMountController : MountControllerBase
     {
 
-        private MockServer _server;
+        protected AuthContext _auth;
+        protected MockServer _server;
 
         public AuthMountController(MockServer server)
         {
+            _auth = AuthContext.From(HttpContext);
             _server = server;
         }
 
         [HttpList(Name = "ListAuth")]
         public async Task<IActionResult> ListAsync([FromRoute]string mount)
         {
+            _server.AssertAuthorized(this);
+
             var (backend, path) = _server.ResolveAuthMount(mount);
             if (backend == null)
                 throw new VaultServerException(

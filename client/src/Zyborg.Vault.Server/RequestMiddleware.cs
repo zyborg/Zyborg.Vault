@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Zyborg.Vault.Server.Auth;
 
 namespace Zyborg.Vault.Server
 {
@@ -27,6 +28,9 @@ namespace Zyborg.Vault.Server
 
         public async Task Invoke(HttpContext ctx)
         {
+            // Setup an AuthContext for the duration of the request
+            AuthContext.BuildFrom(ctx, true);
+
             var cLen = ctx.Request.ContentLength;
             var cType = ctx.Request.ContentType;
             var method = ctx.Request.Method;

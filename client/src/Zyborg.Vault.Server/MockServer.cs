@@ -24,6 +24,8 @@ namespace Zyborg.Vault.Server
         /// </summary>
         public const int UnsealKeyLength = 33;
 
+        private Dictionary<string, AuthInfo> _tokens = new Dictionary<string, AuthInfo>();
+
         private PathMap<ISecretBackend> _reservedMounts = new PathMap<ISecretBackend>();
         private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
         private PathMap<IAuthBackend> _authMounts = new PathMap<IAuthBackend>();
@@ -282,6 +284,35 @@ namespace Zyborg.Vault.Server
                 LeaderAddress = "???",
             };
         }
+
+        public void AssertAuthorized(string capability, string path,
+                Dictionary<string, string> parameters = null, bool isSudo = false,
+                params string[] policies)
+        {
+            var pols = PolicyManager.NoPolicies;
+            if (policies != null && policies.Length > 0)
+                pols = policies.Select(x => _policies.TryGetValue(x, out var pol)
+                        ? pol.Policy : null).Where(x => x != null).ToArray();
+
+            if (!PolicyManager.IsAuthorized(capability, path, parameters, isSudo, pols))
+                throw new System.Security.SecurityException("permission denied");
+        }
+
+        public void AddToken(string id, AuthInfo auth)
+        {
+            _tokens[id] = auth;
+        }
+
+        public AuthInfo GetToken(string id)
+        {
+            _tokens.TryGetValue(id, out var t);
+            return t;
+        }
+
+        public void DeleteToken(string id)
+        {
+            _tokens.Remove(id);
+        }        
 
         public void GetAuthProviders()
         {

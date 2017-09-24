@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Zyborg.Vault.Server
 {
@@ -17,7 +18,7 @@ namespace Zyborg.Vault.Server
         public byte[] RootKey
         { get; set; }
 
-        public byte[] RootToken
+        public string RootTokenId
         { get; set; }
 
         public DurableServerState Durable
@@ -51,6 +52,10 @@ namespace Zyborg.Vault.Server
         { get; set; }
 
         public byte[] RootTokenHash
+        { get; set; }
+
+        // TODO: Remove this???
+        public string RootTokenId
         { get; set; }
     }
 }
