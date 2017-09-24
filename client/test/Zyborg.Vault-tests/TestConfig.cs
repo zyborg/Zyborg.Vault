@@ -30,9 +30,15 @@ namespace Zyborg.Vault
                     [MockServerVaultAddress] =
                             new[]
                             {
-                                "vault unseal 6111CC357474407411E86AE9B5575603EAD6C12889B2692E35A07D322E75366A01",
-                                "vault unseal 55F23CD6AD457CB688F1FBBCE68752E78D7F12A3FA360607E4459D31C9E64F1102",
-                                "vault unseal B05A6C7E13A36801FF0F7D8FD73EA7BB5918AADA224A23E9ABEF34309497913803"
+                                //"vault unseal 6111CC357474407411E86AE9B5575603EAD6C12889B2692E35A07D322E75366A01",
+                                //"vault unseal 55F23CD6AD457CB688F1FBBCE68752E78D7F12A3FA360607E4459D31C9E64F1102",
+                                //"vault unseal B05A6C7E13A36801FF0F7D8FD73EA7BB5918AADA224A23E9ABEF34309497913803",
+
+                                "vault unseal 7FbIzSbHv31RMBaRBoNtPLdgq96wxkuKKmLgMEtC72oB",
+                                "vault unseal 4BkRON+N1RkqdCYCR8Ng2eTUN76cJL4ZSD6jXmnsQTAC",
+                                "vault unseal KNBWlhlaHLwWNyMYn7ip9JHOygngBMDW+nJOssvfYMsD",
+                                "vault unseal kLTopQiRgzcfT4VAP5cY5JNjomL6R/+0qRjt3KOR0uME",
+                                "vault unseal WH2vC85GSpIjDIBa5+zRyeZ5X9WGZ4F7G1QAMAGi8xgF",
                             }.Select(x => x.Replace("vault unseal ","")),
                 };
 
@@ -42,7 +48,8 @@ namespace Zyborg.Vault
                     [FileConfigVaultAddress] =
                             "21bd1f5a-6eff-07fe-0184-a4358ae809c1",
                     [MockServerVaultAddress] =
-                            "d1166ee5-f095-4f9f-843f-6dfc084b06c3",
+                            //"d1166ee5-f095-4f9f-843f-6dfc084b06c3",
+                            "e3ecd861-86ee-4dfe-9dfd-9b5affc4b9c0",
                 };
 
     }
