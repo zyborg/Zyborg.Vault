@@ -25,11 +25,53 @@ namespace Zyborg.Vault.Server.Controllers
             return _server.Settings;
         }
 
-        // GET api/values
+        /// <summary>
+        /// The /sys/health endpoint is used to check the health status of Vault.
+        /// </summary>
+        /// <param name="standbyok">Specifies if being a standby should still return the
+        ///     active status code instead of the standby status code. This is useful when
+        ///     Vault is behind a non-configurable load balance that just wants a 200-level
+        ///     response.</param>
+        /// <param name="activecode">Specifies the status code that should be returned for
+        ///     an active node.</param>
+        /// <param name="standbycode"Specifies the status code that should be returned for
+        ///     a standby node.</param>
+        /// <param name="sealedcode">Specifies the status code that should be returned for
+        ///     a sealed node.</param>
+        /// <param name="uninitcode">Specifies the status code that should be returned for
+        ///     a uninitialized node.</param>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// 
+        /// <para>
+        /// This endpoint returns the health status of Vault. This matches the semantics of
+        /// a Consul HTTP health check and provides a simple way to monitor the health of a
+        /// Vault instance.
+        /// </para><para>
+        /// The default status codes are:
+        /// <list>
+        /// <item>200 if initialized, unsealed, and active</item>
+        /// <item>429 if unsealed and standby</item>
+        /// <item>501 if not initialized</item>
+        /// <item>503 if sealed</item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        [HttpHead("health")]
         [HttpGet("health")]
-        public HealthStatus GetHealth()
+        public IActionResult GetHealth(
+                [FromQuery]bool standbyok = false,
+                [FromQuery]int activecode = 200,
+                [FromQuery]int standbycode = 429,
+                [FromQuery]int sealedcode = 503,
+                [FromQuery]int uninitcode = 501)
         {
-            return new HealthStatus
+            var http = HttpContext;
+            var cc = base.ControllerContext;
+            var uh = base.Url;
+            var rd = base.RouteData;
+
+            var status = new HealthStatus
             {
                 Initialized = _server.Health.Initialized,
                 Sealed = _server.Health.Sealed,
@@ -41,6 +83,16 @@ namespace Zyborg.Vault.Server.Controllers
                 ClusterId = _server.Health.ClusterId,
                 ClusterName = _server.Health.ClusterName,
             };
+
+            var statusCode = activecode;
+            if (!status.Initialized)
+                statusCode = uninitcode;
+            else if (status.Sealed)
+                statusCode = sealedcode;
+            else if (status.Standby && !standbyok)
+                statusCode = standbycode;
+
+            return base.StatusCode(statusCode, status);
         }
 
         [HttpGet("init")]
