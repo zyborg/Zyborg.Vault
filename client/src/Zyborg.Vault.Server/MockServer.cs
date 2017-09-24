@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using Zyborg.Security.Cryptography;
 using Zyborg.Vault.Ext.SystemBackend;
 using Zyborg.Vault.Model;
 using Zyborg.Vault.Server.Auth;
+using Zyborg.Vault.Server.Policy;
 using Zyborg.Vault.Server.Secret;
 using Zyborg.Vault.Server.Storage;
 
@@ -26,6 +28,7 @@ namespace Zyborg.Vault.Server
 
         private Dictionary<string, AuthInfo> _tokens = new Dictionary<string, AuthInfo>();
 
+        private Dictionary<string, PolicyDefinition> _policies = PolicyManager.GetBasePolicies();
         private PathMap<ISecretBackend> _reservedMounts = new PathMap<ISecretBackend>();
         private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
         private PathMap<IAuthBackend> _authMounts = new PathMap<IAuthBackend>();
@@ -283,6 +286,60 @@ namespace Zyborg.Vault.Server
                 IsSelf = true,
                 LeaderAddress = "???",
             };
+        }
+
+        public IEnumerable<string> ListPolicies()
+        {
+            // TODO: move this to persistent operations
+            return _policies.Keys.OrderBy(x => x);
+        }
+
+        public PolicyDefinition ReadPolicy(string name)
+        {
+            if (!_policies.TryGetValue(name, out var polDef))
+                _policies.TryGetValue(name, out polDef);
+            
+            // TODO: move this to persistent operations
+            return polDef;
+        }
+
+        public void WritePolicy(string name, string policyDefinition)
+        {
+            if (_policies.TryGetValue(name, out var polDef))
+                if (polDef.IsUpdateForbidden)
+                    throw new ArgumentException(
+                            $"cannot update {name} policy");
+            
+            IPolicy pol;
+            try
+            {
+                // Parse and validate the policy definition
+                pol = PolicyManager.ParseDefinition(policyDefinition);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                        $"Failed to parse policy: {ex.GetBaseException().Message}");
+            }
+
+            if (polDef == null)
+                polDef = new PolicyDefinition { Name = name };
+            polDef.Definition = policyDefinition;
+            polDef.Policy = pol;
+
+            // TODO: move this to persistent operations
+            _policies[name] = polDef;
+        }
+
+        public bool DeletePolicy(string name)
+        {
+            if (_policies.TryGetValue(name, out var polDef))
+                if (polDef.IsDeleteForbidden)
+                    throw new ArgumentException(
+                            $"cannot delete {name} policy");
+
+            // TODO: move this to persistent operations
+            return _policies.Remove(name);
         }
 
         public void AssertAuthorized(string capability, string path,
