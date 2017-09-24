@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Zyborg.Vault.Ext.SystemBackend;
 using Zyborg.Vault.Model;
+using Zyborg.Vault.Server.Auth;
+using Zyborg.Vault.Server.Policy;
 
 namespace Zyborg.Vault.Server.Controllers
 {
-    [Route("v1/[controller]")]
+    [Route("v1/sys")]
     public class SysController : Controller
     {
         private MockServer _server;
@@ -22,6 +25,8 @@ namespace Zyborg.Vault.Server.Controllers
         [HttpGet("settings")]
         public ServerSettings GetSettings()
         {
+            _server.AssertAuthorized(this, isSudo: true);
+
             return _server.Settings;
         }
 
@@ -95,12 +100,44 @@ namespace Zyborg.Vault.Server.Controllers
             return base.StatusCode(statusCode, status);
         }
 
+        /// <summary>
+        /// This endpoint returns the initialization status of Vault.
+        /// </summary>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// </remarks>
         [HttpGet("init")]
         public InitializationStatus GetInitStatus()
         {
             return _server.GetInitializationStatus();
         }
 
+        /// <summary>
+        /// This endpoint initializes a new Vault. The Vault must not have been
+        /// previously initialized. The recovery options, as well as the stored
+        /// shares option, are only available when using Vault HSM.
+        /// </summary>
+        /// <param name="requ"></param>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// </remarks>
+        [HttpPut("init")]
+        public InitializationResponse StartInit([FromBody]InitializationRequest requ)
+        {
+            return _server.Initialize(requ.SecretShares, requ.SecretThreshold)
+                    ?? throw new VaultServerException(
+                            HttpStatusCode.BadRequest,
+                            "Vault is already initialized");
+        }
+
+        /// <summary>
+        /// Used to check the seal status of a Vault.
+        /// </summary>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// 
+        /// This endpoint returns the seal status of the Vault. This is an unauthenticated endpoint.
+        /// </remarks>
         [HttpGet("seal-status")]
         public SealStatus GetSealStatus()
         {
@@ -109,14 +146,30 @@ namespace Zyborg.Vault.Server.Controllers
                     "server is not yet initialized");
         }
 
+        /// <summary>
+        /// Used to query info about the current encryption key of Vault.
+        /// </summary>
+        /// <remarks>
+        /// <para><b><i>This endpoint is authenticated, but SUDO is NOT required.</i></b></para>
+        /// 
+        /// This endpoint returns information about the current encryption key used by Vault.
+        /// </remarks>
         [HttpGet("key-status")]
         public KeyStatus GetKeyStatus()
         {
+            _server.AssertAuthorized(this);
+
             return _server.GetKeyStatus() ?? throw new VaultServerException(
                     HttpStatusCode.ServiceUnavailable,
                     "Vault is sealed");
         }
 
+        /// <summary>
+        /// Used to check the high availability status and current leader of Vault.
+        /// </summary>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// </remarks>
         [HttpGet("leader")]
         public LeaderStatus GetLeaderStatus()
         {
@@ -125,15 +178,22 @@ namespace Zyborg.Vault.Server.Controllers
                     "Vault is sealed");
         }
 
-        [HttpPut("init")]
-        public InitializationResponse DoInit([FromBody]InitializationRequest requ)
-        {
-            return _server.Initialize(requ.SecretShares, requ.SecretThreshold)
-                    ?? throw new VaultServerException(
-                            HttpStatusCode.BadRequest,
-                            "Vault is already initialized");
-        }
-
+        /// <summary>
+        /// Used to unseal the Vault.
+        /// </summary>
+        /// <param name="requ"></param>
+        /// <remarks>
+        /// <para><b><i>This is an unauthenticated endpoint.</i></b></para>
+        /// 
+        /// This endpoint is used to enter a single master key share to progress the unsealing
+        /// of the Vault. If the threshold number of master key shares is reached, Vault will
+        /// attempt to unseal the Vault. Otherwise, this API must be called multiple times
+        /// until that threshold is met.
+        /// <para>
+        /// Either the key or reset parameter must be provided; if both are provided,
+        /// reset takes precedence.
+        /// </para>
+        /// </remarks>
         [HttpPut("unseal")]
         public SealStatus DoUnseal([FromBody]UnsealRequest requ)
         {
@@ -144,9 +204,15 @@ namespace Zyborg.Vault.Server.Controllers
                             "server is not yet initialized");
         }
 
+
+        /// <summary>
+        /// Lists all enabled auth backends.
+        /// </summary>
         [HttpGet("auth")]
         public ReadResponse<Dictionary<string, MountInfo>> ListAuthMounts()
         {
+            _server.AssertAuthorized(this, isSudo: true);
+
             var mountNames = _server.ListAuthMounts().OrderBy(x => x);
             var mounts = mountNames.ToDictionary(
                     key => key.Trim('/') + "/",
@@ -165,9 +231,14 @@ namespace Zyborg.Vault.Server.Controllers
             };
         }
 
+        /// <summary>
+        /// Lists all the mounted secret backends.
+        /// </summary>
         [HttpGet("mounts")]
         public ReadResponse<Dictionary<string, MountInfo>> ListSecretMounts()
         {
+            _server.AssertAuthorized(this, isSudo: true);
+
             var mountNames = _server.ListSecretMounts().OrderBy(x => x);
             var mounts = mountNames.ToDictionary(
                     key => key.Trim('/') + "/",
