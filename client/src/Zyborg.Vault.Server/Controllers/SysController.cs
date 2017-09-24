@@ -133,5 +133,24 @@ namespace Zyborg.Vault.Server.Controllers
                 Data = mounts
             };
         }
+
+        public static Exception DecodeServerException(Exception ex)
+        {
+            var msgs = new string[0];
+            if (!string.IsNullOrEmpty(ex.Message))
+                msgs = new[] { ex.Message };
+
+            switch (ex)
+            {
+                case NotSupportedException nse:
+                    return new VaultServerException(HttpStatusCode.NotFound, msgs);
+                case ArgumentException ae:
+                    return new VaultServerException(HttpStatusCode.BadRequest, msgs);
+                case System.Security.SecurityException ae:
+                    return new VaultServerException(HttpStatusCode.Forbidden, msgs);
+                default:
+                    return new VaultServerException(HttpStatusCode.InternalServerError, msgs);
+            }
+        }
     }
 }
