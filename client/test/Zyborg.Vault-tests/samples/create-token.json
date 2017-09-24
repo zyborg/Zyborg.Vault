@@ -1,0 +1,36 @@
+{
+    "REQUEST": {
+        "HTTP": "POST http://localhost:8200/v1/auth/token/create HTTP/1.1",
+        "BODY": {
+            "id": "multi2-only",
+            "policies": [
+                "multi2"
+            ],
+            "display_name": "",
+            "num_uses": 0,
+            "renewable": true
+        }
+    },
+    "RESPONSE": {
+        "BODY": {
+            "request_id": "490f1d95-faa5-5a79-afb3-7c87d97cbe69",
+            "lease_id": "",
+            "renewable": false,
+            "lease_duration": 0,
+            "data": null,
+            "wrap_info": null,
+            "warnings": null,
+            "auth": {
+                "client_token": "multi2-only",
+                "accessor": "38c91bf0-853f-45d8-5b1c-037394d7c5cf",
+                "policies": [
+                    "default",
+                    "multi2"
+                ],
+                "metadata": null,
+                "lease_duration": 2764800,
+                "renewable": true
+            }
+        }
+    }
+}

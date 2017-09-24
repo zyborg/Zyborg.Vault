@@ -1,0 +1,486 @@
+[
+    {
+        "time": "2017-09-20T21:51:19Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "ee3847b2-debc-0788-08f8-9f5295cc345f",
+            "operation": "update",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/audit/file",
+            "data": {
+                "description": "hmac-sha256:b5246db2a4ce2a73dffb29d87fbda53082ce94f7001baa266a1547fb3ae23beb",
+                "local": false,
+                "options": {
+                    "file_path": "hmac-sha256:51776f55ce8da181a1a25e73722b3763edc5682ba77b45daaa72d35d22a580b6"
+                },
+                "type": "hmac-sha256:24a869d2e90fa4593f26d7734bb94cd7237b4fa3892eb70319450cdebd219ccd"
+            },
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {},
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:04Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "f85da399-10f9-67c6-483c-9043743f66c6",
+            "operation": "list",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:04Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "f85da399-10f9-67c6-483c-9043743f66c6",
+            "operation": "list",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "data": {
+                "keys": [
+                    "hmac-sha256:d7ca94e360666ac40c49f3abee632658e7b8987c3e44e6050107a9b3928c5f09",
+                    "hmac-sha256:6b4f1acc13498f7b1e95dd3b701bf84e5408b9d7dac0ff9721d5ff776b5698e6",
+                    "hmac-sha256:2e359c02a121c6bfa6b384e7d9c50a3a3834dc063bbc609e39e07a12113da886",
+                    "hmac-sha256:7c11c85dc05bbfc8abd7d115cd6d81832890dd0e63962192369d8b20b084d79f",
+                    "hmac-sha256:0407ffc8b3569919d147a408a38679b3e981062bd49332800004cae72344963c",
+                    "hmac-sha256:5b2744668614f93d2a2f4672f5ee22e82ab10270de155e35035d077fb529ef32"
+                ]
+            }
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:35Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "d63597fd-8864-2f2c-08bf-ae763711c09e",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/my-secret1",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:35Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "d63597fd-8864-2f2c-08bf-ae763711c09e",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/my-secret1",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "secret": {
+                "lease_id": ""
+            },
+            "data": {
+                "foo": "hmac-sha256:32d6556b536a116bcbe3da29a99602c8e1a024fc7d64bcf28ea4b2cdabd7e068"
+            }
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:47Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "2c7f8ef7-c5e0-03e9-a521-f5df861b0991",
+            "operation": "create",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/my-secret4",
+            "data": {
+                "a": "hmac-sha256:2a968f3d69d68d76457080698e36736af1fd0962fc9aea6718a6b033b6647f88"
+            },
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:52:47Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "2c7f8ef7-c5e0-03e9-a521-f5df861b0991",
+            "operation": "create",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "secret/my-secret4",
+            "data": {
+                "a": "hmac-sha256:2a968f3d69d68d76457080698e36736af1fd0962fc9aea6718a6b033b6647f88"
+            },
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {},
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:57:49Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "b48a828b-aa2f-91de-28b5-5818106a9045",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/policy",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:57:49Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "b48a828b-aa2f-91de-28b5-5818106a9045",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/policy",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "data": {
+                "keys": [
+                    "hmac-sha256:3fbac2da6291250376c739f3c3d533db035f00cae7d3b4b8894df1dc80706022",
+                    "hmac-sha256:06f62fd9233772f934207b5edba57664f386a6a3522a7cb074dd6b21e8cfb4fb",
+                    "hmac-sha256:aa3e94c8096b30d22d9a66c2b96f1d1a0f36b4029c9e80b1db95707f68c940fa",
+                    "hmac-sha256:bf123da27a3e834e8feedfb1a619511600e28fd31f25196b2b7dc1e8dcb369db"
+                ],
+                "policies": [
+                    "hmac-sha256:3fbac2da6291250376c739f3c3d533db035f00cae7d3b4b8894df1dc80706022",
+                    "hmac-sha256:06f62fd9233772f934207b5edba57664f386a6a3522a7cb074dd6b21e8cfb4fb",
+                    "hmac-sha256:aa3e94c8096b30d22d9a66c2b96f1d1a0f36b4029c9e80b1db95707f68c940fa",
+                    "hmac-sha256:bf123da27a3e834e8feedfb1a619511600e28fd31f25196b2b7dc1e8dcb369db"
+                ]
+            }
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:57:58Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "92cf3250-b8bf-6e35-248f-335dddb0abe4",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/policy/default",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:57:58Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "92cf3250-b8bf-6e35-248f-335dddb0abe4",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/policy/default",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "data": {
+                "name": "hmac-sha256:3fbac2da6291250376c739f3c3d533db035f00cae7d3b4b8894df1dc80706022",
+                "rules": "hmac-sha256:4fadff4bd7b773d74c650c46f2f8d18d0db1ea19552573fabbff6687617322d4"
+            }
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:59:05Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "108798e8-b23e-84cc-61be-2adfb9b34d42",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/key-status",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:59:05Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "108798e8-b23e-84cc-61be-2adfb9b34d42",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/key-status",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "data": {
+                "install_time": "hmac-sha256:b3125fec2beb60ef03c1263118543379e8086c56ad3dbe21f81ae2ac9f1a7382",
+                "term": 1
+            }
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:59:25Z",
+        "type": "request",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "d3395889-33a5-c7a6-313e-fe5b8db45be7",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/mounts",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "error": ""
+    },
+    {
+        "time": "2017-09-20T21:59:25Z",
+        "type": "response",
+        "auth": {
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "display_name": "root",
+            "policies": [
+                "root"
+            ],
+            "metadata": null
+        },
+        "request": {
+            "id": "d3395889-33a5-c7a6-313e-fe5b8db45be7",
+            "operation": "read",
+            "client_token": "hmac-sha256:ea9f41f3e7b5885e6e2ec970ffa7720e1ceaacc09b3bf9d2436db9146b9d2a93",
+            "client_token_accessor": "hmac-sha256:dbb9eeb4d43b0da7cd2b79135483a073eb3f4e35646273bfaa25837f203f9f2b",
+            "path": "sys/mounts",
+            "data": null,
+            "remote_address": "127.0.0.1",
+            "wrap_ttl": 0,
+            "headers": {}
+        },
+        "response": {
+            "data": {
+                "cubbyhole/": {
+                    "accessor": "hmac-sha256:5b066d75daf5d45a959d876164a101d4b6599d99c2767770233a74efca9ecd4e",
+                    "config": {
+                        "default_lease_ttl": 0,
+                        "force_no_cache": false,
+                        "max_lease_ttl": 0
+                    },
+                    "description": "hmac-sha256:b7ffec26cdf7c56ea67e1b97b477571016d4af2ff554c687702491a7717a6a46",
+                    "local": true,
+                    "type": "hmac-sha256:17923e4a9d4941973dc9503da1b57b0a09b170a18b4bf8519816efeeb0a25d67"
+                },
+                "poltest/": {
+                    "accessor": "hmac-sha256:285f527d91f5e435494a2e085541144f12361755fb79955a33d47fdacef87c3f",
+                    "config": {
+                        "default_lease_ttl": 0,
+                        "force_no_cache": false,
+                        "max_lease_ttl": 0
+                    },
+                    "description": "hmac-sha256:b5246db2a4ce2a73dffb29d87fbda53082ce94f7001baa266a1547fb3ae23beb",
+                    "local": false,
+                    "type": "hmac-sha256:a1abeb26eccc57fb5d741c4877cd8619e4ee8efa881a31617919feaeaabeb25c"
+                },
+                "secret/": {
+                    "accessor": "hmac-sha256:3db71921ce3bc944240472111ed67c41cc9c7e5f9d34c4da5468f4313a9bb953",
+                    "config": {
+                        "default_lease_ttl": 0,
+                        "force_no_cache": false,
+                        "max_lease_ttl": 0
+                    },
+                    "description": "hmac-sha256:0bbd2dd67564b354d4b42ff0d3b72439d8000fac803efc420950ad61823479db",
+                    "local": false,
+                    "type": "hmac-sha256:a1abeb26eccc57fb5d741c4877cd8619e4ee8efa881a31617919feaeaabeb25c"
+                },
+                "sys/": {
+                    "accessor": "hmac-sha256:79d4b6c3c5a2511ff1ff8a2f9836ceea5bca5fe2330683e9dbcbb74a277a2db6",
+                    "config": {
+                        "default_lease_ttl": 0,
+                        "force_no_cache": false,
+                        "max_lease_ttl": 0
+                    },
+                    "description": "hmac-sha256:bcfa30175d8c8aa3186ca31e8ce078e4754be9d93b23462334935332496a5d63",
+                    "local": false,
+                    "type": "hmac-sha256:69baf965e3fc81798fe2a757130a1e7b63c059fbbb6b0b450ca6275b95a1afa9"
+                }
+            }
+        },
+        "error": ""
+    }
+]

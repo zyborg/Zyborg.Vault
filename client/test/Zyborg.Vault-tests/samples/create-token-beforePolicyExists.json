@@ -1,0 +1,39 @@
+{
+    "DESCRIPTION": "Created a token referencing a policy before it is created",
+    "REQUEST": {
+        "HTTP": "POST http://localhost:8200/v1/auth/token/create HTTP/1.1",
+        "BODY": {
+            "id": "multi1-only",
+            "policies": [
+                "multi1"
+            ],
+            "display_name": "",
+            "num_uses": 0,
+            "renewable": true
+        }
+    },
+    "RESPONSE": {
+        "BODY": {
+            "request_id": "04d66ef6-27c5-bd84-ac1f-7567529dea76",
+            "lease_id": "",
+            "renewable": false,
+            "lease_duration": 0,
+            "data": null,
+            "wrap_info": null,
+            "warnings": [
+                "Policy \"multi1\" does not exist"
+            ],
+            "auth": {
+                "client_token": "multi1-only",
+                "accessor": "8c69c833-7a6c-34d4-24ed-38a7a206e81b",
+                "policies": [
+                    "default",
+                    "multi1"
+                ],
+                "metadata": null,
+                "lease_duration": 2764800,
+                "renewable": true
+            }
+        }
+    }
+}
