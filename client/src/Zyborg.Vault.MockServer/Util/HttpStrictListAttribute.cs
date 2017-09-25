@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-namespace Zyborg.Vault.MockServer.Protocol
+namespace Zyborg.Vault.MockServer.Util
 {
     public class HttpStrictListAttribute : HttpMethodAttribute
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Zyborg.Vault.Model;
-using Zyborg.Vault.MockServer.Protocol;
+using Zyborg.Vault.MockServer.Util;
 using Zyborg.Vault.MockServer.Secret;
 
 namespace Zyborg.Vault.MockServer.Controllers

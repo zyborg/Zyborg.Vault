@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Zyborg.Vault.MockServer.Protocol;
+using Zyborg.Vault.MockServer.Util;
 using Zyborg.Vault.MockServer.Storage;
 
 namespace Zyborg.Vault.MockServer.Auth

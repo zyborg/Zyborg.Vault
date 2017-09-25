@@ -44,7 +44,7 @@ namespace Zyborg.Vault.MockServer.Controllers
             else if (meth == "PUT" || meth == "POST")
                 cap = isCreate == null || !isCreate(path) ? Capability.Update : Capability.Create;
             else if (meth == "LIST" || (meth == "GET"
-                    && http.Request.Query.ContainsKey(Protocol.HttpListAttribute.ListQuery)))
+                    && http.Request.Query.ContainsKey(Util.HttpListAttribute.ListQuery)))
                 cap = Capability.List;
             else if (meth == "GET")
                 cap = Capability.Read;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Zyborg.Vault.Model;
-using Zyborg.Vault.MockServer.Protocol;
+using Zyborg.Vault.MockServer.Util;
 using Zyborg.Vault.MockServer.Storage;
 
 namespace Zyborg.Vault.MockServer.Auth

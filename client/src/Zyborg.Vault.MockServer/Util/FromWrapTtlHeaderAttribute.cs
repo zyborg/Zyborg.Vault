@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Zyborg.Vault.MockServer.Protocol
+namespace Zyborg.Vault.MockServer.Util
 {
     public class FromWrapTtlHeaderAttribute : FromHeaderAttribute
     {

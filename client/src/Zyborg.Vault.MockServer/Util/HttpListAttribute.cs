@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-namespace Zyborg.Vault.MockServer.Protocol
+namespace Zyborg.Vault.MockServer.Util
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class HttpListAttribute : Attribute, IActionConstraint, IRouteTemplateProvider

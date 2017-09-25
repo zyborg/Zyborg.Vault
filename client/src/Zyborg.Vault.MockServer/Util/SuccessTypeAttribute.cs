@@ -1,6 +1,6 @@
 using System;
 
-namespace Zyborg.Vault.MockServer.Protocol
+namespace Zyborg.Vault.MockServer.Util
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class SuccessTypeAttribute : Attribute

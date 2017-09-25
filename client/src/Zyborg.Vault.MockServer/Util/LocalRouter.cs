@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Newtonsoft.Json;
 
-namespace Zyborg.Vault.MockServer.Protocol
+namespace Zyborg.Vault.MockServer.Util
 {
     /// <summary>
     /// Implements routing logic against a locally-scoped class.
