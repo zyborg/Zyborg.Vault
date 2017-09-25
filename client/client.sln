@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault-tests", "test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Testing.XunitExt", "..\tools\src\Zyborg.Testing.XunitExt\Zyborg.Testing.XunitExt.csproj", "{2B627A53-4DF9-4B7D-BA03-9D73F02E9FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault.Server", "src\Zyborg.Vault.Server\Zyborg.Vault.Server.csproj", "{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zyborg.Vault.MockServer", "src\Zyborg.Vault.MockServer\Zyborg.Vault.MockServer.csproj", "{BB31B6A2-D5E3-4FAB-8D58-5BBBC6F7D047}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
