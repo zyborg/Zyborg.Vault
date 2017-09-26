@@ -3,7 +3,7 @@ using Zyborg.Vault.Model;
 
 namespace Zyborg.Vault.MockServer.Auth
 {
-    public class AuthToken
+    public class TokenState
     {
         public AuthInfo AuthInfo
         { get; set; }
@@ -16,7 +16,7 @@ namespace Zyborg.Vault.MockServer.Auth
 
         /// <summary>
         /// This token will be created as a child of your token. The created token
-        ///  will inherit your policies, or can be assigned a subset of your policies.
+        /// will inherit your policies, or can be assigned a subset of your policies.
         /// </summary>
         public string ParentId
         { get; set; }
