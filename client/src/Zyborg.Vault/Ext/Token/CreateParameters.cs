@@ -5,6 +5,14 @@ using Zyborg.Vault.Model;
 
 namespace Zyborg.Vault.Ext.Token
 {
+    /// <summary>
+    /// Defines the set of input parameters allowed for the various Token-generating
+    /// APIs supported by the Token auth backend.
+    /// </summary>
+    /// <remarks>
+    /// Some parameters are only available under certain conditions, such as under
+    /// sudo or root authorization, or when using specific endpoints.
+    /// </remarks>
     public class CreateParameters
     {
         /// <summary>

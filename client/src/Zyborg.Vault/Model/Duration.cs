@@ -6,6 +6,10 @@ namespace Zyborg.Vault.Model
     [JsonConverter(typeof(DurationConverter))]
     public struct Duration
     {
+        public static readonly Duration Zero = (Duration)0;
+        public static readonly Duration MaxValue = (Duration)TimeSpan.MaxValue;
+        public static readonly Duration MinValue = (Duration)TimeSpan.MinValue;
+
         private TimeSpan _duration;
 
         public long TotalSeconds => (long)_duration.TotalSeconds;
@@ -21,10 +25,8 @@ namespace Zyborg.Vault.Model
         public static Duration FromHours(long h) =>
                 new Duration { _duration = TimeSpan.FromHours(h) };
 
-        public static implicit operator Duration(TimeSpan timeSpan)
-        {
-            return new Duration { _duration = timeSpan };
-        }
+        public static implicit operator Duration(TimeSpan timeSpan) =>
+                new Duration { _duration = timeSpan };
 
         public static implicit operator Duration(string spec)
         {
@@ -51,35 +53,24 @@ namespace Zyborg.Vault.Model
             return new Duration { _duration = fromSpec(double.Parse(spec.Trim())) };
         }
 
-        public static implicit operator Duration(int s)
-        {
-            return FromSeconds(s);
-        }
+        public static implicit operator Duration(int s) => FromSeconds(s);
+        public static implicit operator Duration(long s) => FromSeconds(s);
 
-        public static implicit operator Duration(long s)
-        {
-            return FromSeconds(s);
-        }
+        public static implicit operator string(Duration d) => d.ToString();
+        public static implicit operator string(Duration? d) => d?.ToString();
 
-        public static implicit operator string(Duration d)
-        {
-            return d.ToString();
-        }
+        public static implicit operator int(Duration? d) => d.HasValue
+                ? (int)d.Value._duration.TotalSeconds
+                : 0;
+        public static implicit operator long(Duration? d) => d.HasValue
+                ? (long)d.Value._duration.TotalSeconds
+                : 0L;
 
-        public static implicit operator string(Duration? d)
-        {
-            return d?.ToString();
-        }
+        public static explicit operator TimeSpan(Duration d) => d._duration;
+        public static explicit operator TimeSpan(Duration? d) => d.HasValue
+                ? d.Value._duration
+                : TimeSpan.Zero;
 
-        public static implicit operator int(Duration? d)
-        {
-            return d.HasValue ? (int)d.Value._duration.TotalSeconds : 0;
-        }
-
-        public static implicit operator long(Duration? d)
-        {
-            return d.HasValue ? (long)d.Value._duration.TotalSeconds : 0L;
-        }        
  
         public override string ToString()
         {

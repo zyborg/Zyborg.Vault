@@ -1,5 +1,18 @@
 {
     // Override the default 60 since our project
     // is getting big and takes time to parse
-    "omnisharp.projectLoadTimeout": 120
+    "omnisharp.projectLoadTimeout": 120,
+    "msbuildProjectTools": {
+        "language": {
+            "enable": true,
+            "disableHover": false,
+            "logLevel": "Information",
+            "trace": false
+        },
+        "nuget": {
+            "newestVersionsFirst": true,
+            "includePreRelease": true,
+            "disablePrefetch": false
+        }
+    }
 }

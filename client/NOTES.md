@@ -44,3 +44,8 @@
 * https://kev.inburke.com/kevin/things-to-use-instead-of-jwt/
 * https://paragonie.com/blog/2017/03/jwt-json-web-tokens-is-bad-standard-that-everyone-should-avoid
 
+
+# Kerberos/Active Directory:
+* https://stackoverflow.com/questions/37818333/how-to-get-service-token-from-kerberos-using-sspi
+* Kerberos.NET
+* Enclave.NET

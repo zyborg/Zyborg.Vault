@@ -360,6 +360,9 @@ namespace Zyborg.Vault.MockServer.Controllers
                 case System.Security.SecurityException ae:
                     return new VaultServerException(HttpStatusCode.Forbidden, msgs);
                 default:
+                    Console.Error.WriteLine("--- UNEXPECTED ERROR ---");
+                    Console.Error.WriteLine(ex.ToString());
+                    Console.Error.WriteLine("------------------------");
                     return new VaultServerException(HttpStatusCode.InternalServerError, msgs);
             }
         }

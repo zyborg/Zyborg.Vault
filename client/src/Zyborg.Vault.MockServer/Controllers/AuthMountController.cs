@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Zyborg.Vault.Model;
 using Zyborg.Vault.MockServer.Auth;
 using Zyborg.Vault.MockServer.Util;
+using Microsoft.AspNetCore.Http;
 
 namespace Zyborg.Vault.MockServer.Controllers
 {
@@ -21,7 +22,6 @@ namespace Zyborg.Vault.MockServer.Controllers
 
         public AuthMountController(MockServer server)
         {
-            _auth = AuthContext.From(HttpContext);
             _server = server;
         }
 
@@ -38,6 +38,7 @@ namespace Zyborg.Vault.MockServer.Controllers
 
             try
             {
+                RememberMe();
                 var list = await backend.ListAsync(path);
 
                 return base.Ok(
@@ -66,6 +67,7 @@ namespace Zyborg.Vault.MockServer.Controllers
 
             try
             {
+                RememberMe();
                 var ret = await backend.ReadAsync(path);
                 // if (ret is NoContentResponse)
                 if (ret == null)
@@ -104,6 +106,7 @@ namespace Zyborg.Vault.MockServer.Controllers
 
             try
             {
+                RememberMe();
                 var ret = await backend.WriteAsync(path, json);
                 // if (ret is NoContentResponse)
                 if (ret == null)
@@ -134,6 +137,7 @@ namespace Zyborg.Vault.MockServer.Controllers
 
             try
             {
+                RememberMe();
                 await backend.DeleteAsync(path);
                 
                 return base.NoContent();
@@ -142,6 +146,16 @@ namespace Zyborg.Vault.MockServer.Controllers
             {
                 return await DecodeException(ex);
             }
+        }
+
+        private void RememberMe()
+        {
+            HttpContext.Items[nameof(AuthMountController)] = this;
+        }
+
+        public static Controller From(HttpContext http)
+        {
+            return http.Items[nameof(AuthMountController)] as AuthMountController;
         }
     }
 }

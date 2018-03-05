@@ -110,7 +110,8 @@ namespace Zyborg.Vault.MockServer.Util
                 {
                     var pValues = BindParameters(mm.Method, rvd);
                     var ret = mm.Method.Invoke(target, pValues);
-                    if (mm.Method.ReturnType == typeof(Task<IEnumerable<string>>))
+
+                    if (typeof(Task<IEnumerable<string>>).IsAssignableFrom(mm.Method.ReturnType))
                         return (mm.Name, await (Task<IEnumerable<string>>)ret);
 
                     return (mm.Name, (IEnumerable<string>)ret);
@@ -133,12 +134,22 @@ namespace Zyborg.Vault.MockServer.Util
                 {
                     var pValues = BindParameters(mm.Method, rvd);
                     var ret = mm.Method.Invoke(target, pValues);
-                    if (mm.Method.ReturnType == typeof(Task<object>))
-                        return (mm.Name, (await (Task<object>)ret));
+                    var retType = mm.Method.ReturnType;
+
+                    if (typeof(Task).IsAssignableFrom(retType))
+                    {
+                        await (Task)ret;
+                        if (retType.IsGenericType)
+                            ret = ((dynamic)ret).Result;
+                        else if (typeof(Task).IsAssignableFrom(mm.Method.ReturnType))
+                            ret = null;
+                    }
 
                     return (mm.Name, ret);
                 }
             }
+
+
 
             return (null, null);
         }
@@ -156,8 +167,17 @@ namespace Zyborg.Vault.MockServer.Util
                 {
                     var pValues = BindParameters(mm.Method, rvd, payload);
                     var ret = mm.Method.Invoke(target, pValues);
-                    if (mm.Method.ReturnType == typeof(Task<object>))
-                        return (mm.Name, await (Task<object>)ret);
+                    var retType = mm.Method.ReturnType;
+
+                    if (typeof(Task).IsAssignableFrom(retType))
+                    {
+                        await (Task)ret;
+                        if (retType.IsGenericType)
+                            ret = ((dynamic)ret).Result;
+                        else if (typeof(Task).IsAssignableFrom(mm.Method.ReturnType))
+                            ret = null;
+                    }
+
 
                     return (mm.Name, ret);
                 }
@@ -179,7 +199,7 @@ namespace Zyborg.Vault.MockServer.Util
                 {
                     var pValues = BindParameters(mm.Method, rvd);
                     var ret = mm.Method.Invoke(target, pValues);
-                    if (mm.Method.ReturnType == typeof(Task))
+                    if (typeof(Task).IsAssignableFrom(mm.Method.ReturnType))
                         await (Task)ret;
 
                     return (mm.Name, null);

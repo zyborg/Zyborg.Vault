@@ -45,7 +45,7 @@ namespace Zyborg.Vault.Ext.Token
         public Duration MaxTtl
         { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id
         { get; set; }
 
@@ -72,6 +72,5 @@ namespace Zyborg.Vault.Ext.Token
         [JsonProperty("ttl")]
         public Duration Ttl
         { get; set; }
-
     }
 }

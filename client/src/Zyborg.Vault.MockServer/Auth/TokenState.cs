@@ -1,14 +1,26 @@
 using System;
+using System.Collections.Generic;
 using Zyborg.Vault.Model;
 
 namespace Zyborg.Vault.MockServer.Auth
 {
+    /// <summary>
+    /// Defines the durable representation of a Token.
+    /// </summary>
+    /// <remarks>
+    /// All the elements and state that must be persisted for a token
+    /// are represented by this class which is an internal implemenation
+    /// detail managed by the <see cref="TokenManager"/>.
+    /// </remarks>
     public class TokenState
     {
         public AuthInfo AuthInfo
         { get; set; }
 
         public DateTime CreateTime
+        { get; set; }
+
+        public DateTime? ExpiresTime
         { get; set; }
 
         public string CreateSource
@@ -79,6 +91,43 @@ namespace Zyborg.Vault.MockServer.Auth
         /// The number of times this token can be used until it is automatically revoked.
         /// </summary>
         public int? UseLimit
+        { get; set; }
+
+        /// <summary>
+        /// Policies to associate with this token.
+        /// </summary>
+        public string[] Policies
+        { get; set; }
+
+        /// <summary>
+        /// The token value that clients will use to authenticate with Vault.
+        /// If not provided this defaults to a 36 character UUID.
+        /// A root token is required to specify the ID of a token.
+        /// </summary>
+        public string Id
+        { get; set; }
+
+        /// <summary>
+        /// Metadata to associate with the token. This shows up in the audit log.
+        /// </summary>
+        public Dictionary<string, string> Metadata
+        { get; set; }
+
+        /// <summary>
+        /// When tokens are created, a token accessor is also created and returned.
+        /// </summary>
+        /// <remarks>
+        /// This accessor is a value that acts as a reference to a token and can
+        /// only be used to perform limited actions:
+        /// <list>
+        /// <item>Look up a token's properties (not including the actual token ID)</item>
+        /// <item>Look up a token's capabilities on a path</item>
+        /// <item>Revoke the token</item>
+        /// </list>
+        /// <see cref="https://www.vaultproject.io/docs/concepts/tokens.html#token-accessors"
+        /// >More details.</see>
+        /// </remarks>
+        public string Accessor
         { get; set; }
 
         /// <summary>

@@ -6,26 +6,39 @@ using Zyborg.Vault.Model;
 using Zyborg.Vault.MockServer.Auth;
 using Zyborg.Vault.MockServer.Policy;
 using Zyborg.Vault.MockServer.Storage;
+using Microsoft.AspNetCore.Http;
 
 namespace Zyborg.Vault.MockServer.Controllers
 {
     public static class MockServerExtensions
     {
-        public static void AssertAuthorized(this MockServer server, Controller c,
+        public static void AssertAuthorized(this MockServer server, HttpContext http,
                 Dictionary<string, string> parameters = null,
                 bool isSudo = false, Func<string, bool> isCreate = null)
         {
-            var urlHelper = c.Url;
-            var routeData = c.RouteData;
-            var http = c.HttpContext;
-            var auth = AuthContext.From(c.HttpContext);
+            var controller = AuthMountController.From(http) ?? SecretMountController.From(http);
+            
+            if (controller == null)
+                throw new System.Security.SecurityException("permission denied");
+
+            AssertAuthorized(server, controller, parameters, isSudo, isCreate);
+        }
+
+        public static void AssertAuthorized(this MockServer server, Controller controller,
+                Dictionary<string, string> parameters = null,
+                bool isSudo = false, Func<string, bool> isCreate = null)
+        {
+            var urlHelper = controller.Url;
+            var routeData = controller.RouteData;
+            var http = controller.HttpContext;
+            var auth = AuthContext.From(http);
             var meth = http.Request.Method.ToUpper();
 
             // Resolve the auth info based on the current token
             // extracted from the current request in HttpContext
             AuthInfo authInfo = null;
             if (!string.IsNullOrEmpty(auth?.Token))
-                authInfo = server.GetToken(auth.Token);
+                try { authInfo = server.GetToken(auth.Token).Result; } catch (Exception) {}
             if (authInfo == null)
                 throw new System.Security.SecurityException("permission denied");
 

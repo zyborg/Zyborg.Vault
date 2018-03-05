@@ -14,6 +14,7 @@ using Zyborg.Vault.MockServer.Auth;
 using Zyborg.Vault.MockServer.Policy;
 using Zyborg.Vault.MockServer.Secret;
 using Zyborg.Vault.MockServer.Storage;
+using Microsoft.AspNetCore.Http;
 
 namespace Zyborg.Vault.MockServer
 {
@@ -26,16 +27,22 @@ namespace Zyborg.Vault.MockServer
         /// </summary>
         public const int UnsealKeyLength = 33;
 
-        private Dictionary<string, AuthInfo> _tokens = new Dictionary<string, AuthInfo>();
+        private IHttpContextAccessor _httpAcc;
 
-        private Dictionary<string, PolicyDefinition> _policies = PolicyManager.GetBasePolicies();
-        private PathMap<ISecretBackend> _reservedMounts = new PathMap<ISecretBackend>();
-        private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
+        private TokenManager _tok;
+
+        private PathMap<IAuthBackend> _authReservedMounts = new PathMap<IAuthBackend>();
         private PathMap<IAuthBackend> _authMounts = new PathMap<IAuthBackend>();
 
-        public MockServer(IServiceProvider di)
+        private Dictionary<string, PolicyDefinition> _policies = PolicyManager.GetBasePolicies();
+
+        private PathMap<ISecretBackend> _secretReservedMounts = new PathMap<ISecretBackend>();
+        private PathMap<ISecretBackend> _secretMounts = new PathMap<ISecretBackend>();
+
+        public MockServer(IServiceProvider di, IHttpContextAccessor httpAcc)
         {
             DI = di;
+            _httpAcc = httpAcc;
         }
 
         public IServiceProvider DI
@@ -61,36 +68,16 @@ namespace Zyborg.Vault.MockServer
             Health.Standby = true;
 
             StartStorage().Wait();
-
-            // Reserve the sys backend mount -- this will actually be intercepted
-            // and handled by the Sys Controller
-            _reservedMounts.Set("sys", new DummyBackend());
-            // Reserve the cubbyhole mount -- TODO:  for now we just use a plain old
-            // Generic secret but will eventually correct this
-            _reservedMounts.Set("cubbyhole", new GenericSecretBackend(
-                    new StorageWrapper(Storage, "sys-mounts/cubbyhole")));
-
-            _authMounts.Set("userpass", new UserpassAuthBackend(
-                    new StorageWrapper(Storage, "auth-mounts/userpass")));
-
-            _secretMounts.Set("secret", new GenericSecretBackend(
-                    new StorageWrapper(Storage, "secret-mounts/secret")));
-
-            // _secretMounts.Set("alt-secret1", new GenericSecretBackend(
-            //         new StorageWrapper(Storage, "secret-mounts/alt-secret1")));
-            // _secretMounts.Set("alt/secret/second", new GenericSecretBackend(
-            //         new StorageWrapper(Storage, "secret-mounts/alt/secret/second")));
+            StartAuthMounts().Wait();
+            StartSecretMounts().Wait();
 
             // Register root token
-            var tokenId = State.Durable.RootTokenId;
-            _tokens.Add(tokenId, new AuthInfo
-            {
-                Accessor = Guid.NewGuid().ToString(),
-                ClientToken = tokenId,
-                LeaseDuration = 0,
-                Renewable = false,
-                Policies = new[] { "root" },
-            });
+            //! var tokenId = State.Durable.RootTokenId;
+            //! _tok.AddTokenAsync(new Ext.Token.CreateParameters
+            //! {
+            //!     Id = tokenId,
+            //!     Policies = new[] { "root" },
+            //! }, null, null).Wait();
         }
 
         public async Task StartStorage()
@@ -110,6 +97,49 @@ namespace Zyborg.Vault.MockServer
                         stateJson);
                 Health.Initialized = true;
             }
+        }
+
+        public async Task StartAuthMounts()
+        {
+            // Build our Token auth backend and manager
+            var tok = new TokenAuthBackend(this, new StorageWrapper(Storage, "sys/auth"), _httpAcc);
+            _tok = tok.Manager;
+            _authMounts.Set("token", tok);
+            _authReservedMounts.Set("token", tok); // Make sure it fixed
+
+
+            _authMounts.Set("userpass", new UserpassAuthBackend(
+                    new StorageWrapper(Storage, "auth-mounts/userpass")));
+            
+            await Task.CompletedTask;
+        }
+
+        public async Task StartSecretMounts()
+        {
+            ISecretBackend backend = new DummyBackend();
+
+            // Reserve the sys backend mount -- this will actually be intercepted
+            // and handled by the Sys Controller
+            _secretMounts.Set("sys", backend);
+            _secretReservedMounts.Set("sys", backend);
+
+            // Reserve the cubbyhole mount -- TODO:  for now we just use a plain old
+            // Generic secret but will eventually correct this
+            backend = new GenericSecretBackend(new StorageWrapper(Storage,
+                    "sys-mounts/cubbyhole"));
+            _secretMounts.Set("cubbyhole", backend);
+            _secretReservedMounts.Set("cubbyhole", backend);
+
+
+            _secretMounts.Set("secret", new GenericSecretBackend(new StorageWrapper(Storage,
+                    "secret-mounts/secret")));
+
+            // _secretMounts.Set("alt-secret1", new GenericSecretBackend(
+            //         new StorageWrapper(Storage, "secret-mounts/alt-secret1")));
+            // _secretMounts.Set("alt/secret/second", new GenericSecretBackend(
+            //         new StorageWrapper(Storage, "secret-mounts/alt/secret/second")));
+
+            await Task.CompletedTask;
         }
 
         public async Task SaveState()
@@ -299,6 +329,23 @@ namespace Zyborg.Vault.MockServer
             };
         }
 
+        public async Task<AuthInfo> GetToken(string id)
+        {
+            var tok = await _tok.GetTokenAsync(id);
+            if (tok == null)
+                throw new ArgumentException("token not found");
+            
+            return new AuthInfo
+            {
+                Accessor = tok.Accessor,
+                ClientToken = id,
+                LeaseDuration = (long)tok.Ttl,
+                Metadata = tok.Metadata,
+                Policies = tok.Policies,
+                Renewable = tok.Renewable,
+            };
+        }
+
         public IEnumerable<string> ListPolicies()
         {
             // TODO: move this to persistent operations
@@ -366,22 +413,6 @@ namespace Zyborg.Vault.MockServer
                 throw new System.Security.SecurityException("permission denied");
         }
 
-        public void AddToken(string id, AuthInfo auth)
-        {
-            _tokens[id] = auth;
-        }
-
-        public AuthInfo GetToken(string id)
-        {
-            _tokens.TryGetValue(id, out var t);
-            return t;
-        }
-
-        public void DeleteToken(string id)
-        {
-            _tokens.Remove(id);
-        }        
-
         public void GetAuthProviders()
         {
 
@@ -424,9 +455,16 @@ namespace Zyborg.Vault.MockServer
             return (_authMounts.Get(mount), path);
         }
 
+        public void AddAuthMount(string mount, IAuthBackend backend)
+        {
+            if (_authReservedMounts.Exists(mount))
+                throw new InvalidOperationException("RESERVED");
+            
+            throw new NotImplementedException();        }
+
         public IEnumerable<string> ListSecretMounts()
         {
-            return _reservedMounts.ListPaths().Concat(_secretMounts.ListPaths());
+            return _secretMounts.ListPaths();
         }
 
         public (ISecretBackend backend, string path) ResolveSecretMount(string mountAndPath)
@@ -449,6 +487,14 @@ namespace Zyborg.Vault.MockServer
             }
 
             return (_secretMounts.Get(mount), path);
+        }
+
+        public void AddSecretMount(string mount, ISecretBackend backend)
+        {
+            if (_secretReservedMounts.Exists(mount))
+                throw new InvalidOperationException("RESERVED");
+            
+            throw new NotImplementedException();
         }
     }
 

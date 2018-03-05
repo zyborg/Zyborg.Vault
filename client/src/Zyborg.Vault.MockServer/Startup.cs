@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,13 @@ namespace Zyborg.Vault.MockServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // As per https://www.strathweb.com/2016/12/accessing-httpcontext-outside-of-framework-components-in-asp-net-core/
+            // this allows us to get at HttpContext vi DI from components that are not part
+            // of the ASP.NET framework set of components proper.
+            // TODO:  as per https://github.com/aspnet/Hosting/issues/793,
+            // "...maintaining this state has non-trivial performance costs..."
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMvc(options =>
             {
                 // see ApiExceptionFilter class for more details

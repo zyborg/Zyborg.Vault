@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Zyborg.Vault.Model;
 using Zyborg.Vault.MockServer.Util;
 using Zyborg.Vault.MockServer.Secret;
+using Microsoft.AspNetCore.Http;
 
 namespace Zyborg.Vault.MockServer.Controllers
 {
@@ -34,6 +35,7 @@ namespace Zyborg.Vault.MockServer.Controllers
             
             try
             {
+                RememberMe();
                 var list = await backend.ListAsync(path);
 
                 return base.Ok(
@@ -61,6 +63,7 @@ namespace Zyborg.Vault.MockServer.Controllers
                         HttpStatusCode.NotFound,
                         $"no handler for route '{mount}'");
             
+            RememberMe();
             var dataSer = await backend.ReadAsync(path);
             if (dataSer == null)
                 throw new VaultServerException(HttpStatusCode.NotFound);
@@ -95,6 +98,7 @@ namespace Zyborg.Vault.MockServer.Controllers
             // Make sure the JSON is legal
             var obj = JsonConvert.DeserializeObject(json);
 
+            RememberMe();
             await backend.WriteAsync(path, json);
 
             return NoContent();
@@ -109,9 +113,20 @@ namespace Zyborg.Vault.MockServer.Controllers
                         HttpStatusCode.NotFound,
                         $"no handler for route '{mount}'");
             
+            RememberMe();
             await backend.DeleteAsync(path);
 
             return NoContent();
+        }
+
+        private void RememberMe()
+        {
+            HttpContext.Items[nameof(SecretMountController)] = this;
+        }
+
+        public static Controller From(HttpContext http)
+        {
+            return http.Items[nameof(SecretMountController)] as AuthMountController;
         }
     }
 }

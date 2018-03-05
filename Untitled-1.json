@@ -1,0 +1,151 @@
+[
+    {
+        "keys": [
+            "EC56C8CD26C7BF7D5130169106836D3CB760ABDEB0C64B8A2A62E0304B42EF6A01",
+            "E0191138DF8DD5192A74260247C360D9E4D437BE9C24BE19483EA35E69EC413002",
+            "28D05696195A1CBC163723189FB8A9F491CECA09E004C0D6FA724EB2CBDF60CB03",
+            "90B4E8A5089183371F4F85403F9718E49363A262FA47FFB4A918EDDCA391D2E304",
+            "587DAF0BCE464A92230C805AE7ECD1C9E6795FD58667817B1B54003001A2F31805"
+        ],
+        "keys_base64": [
+            "7FbIzSbHv31RMBaRBoNtPLdgq96wxkuKKmLgMEtC72oB",
+            "4BkRON+N1RkqdCYCR8Ng2eTUN76cJL4ZSD6jXmnsQTAC",
+            "KNBWlhlaHLwWNyMYn7ip9JHOygngBMDW+nJOssvfYMsD",
+            "kLTopQiRgzcfT4VAP5cY5JNjomL6R/+0qRjt3KOR0uME",
+            "WH2vC85GSpIjDIBa5+zRyeZ5X9WGZ4F7G1QAMAGi8xgF"
+        ],
+        "root_token": "e3ecd861-86ee-4dfe-9dfd-9b5affc4b9c0"
+    },
+    {
+        "keys": [
+            "dd9e560f6713dece92f12233432568699b0e8347abfa59833d5c5f439b7bc53488",
+            "cd4a061fe14add142c2de0fd08101cec2d3577068e47b278ee50aecf32c8fd8805",
+            "3b5b4a69f194f97c8e5bcedb25aaa048df831ac48c537f0fc5e2ef5269c4c7b0be",
+            "1755fa7dd0422eed678d36e3d221cc815992034050fc68e1463388bc38b1b95b34",
+            "4ea739e490f6491fc1cc1f992252017eed23005813e641fbf7874247267793bd3c"
+        ],
+        "keys_base64": [
+            "3Z5WD2cT3s6S8SIzQyVoaZsOg0er+lmDPVxfQ5t7xTSI",
+            "zUoGH+FK3RQsLeD9CBAc7C01dwaOR7J47lCuzzLI/YgF",
+            "O1tKafGU+XyOW87bJaqgSN+DGsSMU38PxeLvUmnEx7C+",
+            "F1X6fdBCLu1njTbj0iHMgVmSA0BQ/GjhRjOIvDixuVs0",
+            "Tqc55JD2SR/BzB+ZIlIBfu0jAFgT5kH794dCRyZ3k708"
+        ],
+        "root_token": "3180aebe-889f-3139-8a80-718a2912b8f4"
+    },
+    {
+        "token/": {
+            "accessor": "auth_token_70da5636",
+            "config": {
+                "default_lease_ttl": 0,
+                "max_lease_ttl": 0
+            },
+            "description": "token based credentials",
+            "local": false,
+            "type": "token"
+        },
+        "userpass/": {
+            "accessor": "auth_userpass_92a99346",
+            "config": {
+                "default_lease_ttl": 0,
+                "max_lease_ttl": 0
+            },
+            "description": "",
+            "local": false,
+            "type": "userpass"
+        },
+        "foo/bar/": {
+            "accessor": "auth_userpass_b470fa73",
+            "config": {
+                "default_lease_ttl": 0,
+                "max_lease_ttl": 0
+            },
+            "description": "",
+            "local": false,
+            "type": "userpass"
+        },
+        "request_id": "6c900f0c-93c2-2821-0c90-9921add633c2",
+        "lease_id": "",
+        "renewable": false,
+        "lease_duration": 0,
+        "data": {
+            "foo/bar/": {
+                "accessor": "auth_userpass_b470fa73",
+                "config": {
+                    "default_lease_ttl": 0,
+                    "max_lease_ttl": 0
+                },
+                "description": "",
+                "local": false,
+                "type": "userpass"
+            },
+            "token/": {
+                "accessor": "auth_token_70da5636",
+                "config": {
+                    "default_lease_ttl": 0,
+                    "max_lease_ttl": 0
+                },
+                "description": "token based credentials",
+                "local": false,
+                "type": "token"
+            },
+            "userpass/": {
+                "accessor": "auth_userpass_92a99346",
+                "config": {
+                    "default_lease_ttl": 0,
+                    "max_lease_ttl": 0
+                },
+                "description": "",
+                "local": false,
+                "type": "userpass"
+            }
+        },
+        "wrap_info": null,
+        "warnings": null,
+        "auth": null
+    },
+    // GET sys/policy/default
+    {
+        "name": "default",
+        "rules": "\n# Allow tokens to look up their own properties\npath \"auth/token/lookup-self\" {\n    capabilities = [\"read\"]\n}\n\n# Allow tokens to renew themselves\npath \"auth/token/renew-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow tokens to revoke themselves\npath \"auth/token/revoke-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to look up its own capabilities on a path\npath \"sys/capabilities-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to renew a lease via lease_id in the request body; old path for\n# old clients, new path for newer\npath \"sys/renew\" {\n    capabilities = [\"update\"]\n}\npath \"sys/leases/renew\" {\n    capabilities = [\"update\"]\n}\n\n# Allow looking up lease properties. This requires knowing the lease ID ahead\n# of time and does not divulge any sensitive information.\npath \"sys/leases/lookup\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to manage its own cubbyhole\npath \"cubbyhole/*\" {\n    capabilities = [\"create\", \"read\", \"update\", \"delete\", \"list\"]\n}\n\n# Allow a token to wrap arbitrary values in a response-wrapping token\npath \"sys/wrapping/wrap\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to look up the creation time and TTL of a given\n# response-wrapping token\npath \"sys/wrapping/lookup\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to unwrap a response-wrapping token. This is a convenience to\n# avoid client token swapping since this is also part of the response wrapping\n# policy.\npath \"sys/wrapping/unwrap\" {\n    capabilities = [\"update\"]\n}\n",
+        "request_id": "e10a4e8c-1a04-d53d-8ebc-66bb323926ec",
+        "lease_id": "",
+        "renewable": false,
+        "lease_duration": 0,
+        "data": {
+            "name": "default",
+            "rules": "\n# Allow tokens to look up their own properties\npath \"auth/token/lookup-self\" {\n    capabilities = [\"read\"]\n}\n\n# Allow tokens to renew themselves\npath \"auth/token/renew-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow tokens to revoke themselves\npath \"auth/token/revoke-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to look up its own capabilities on a path\npath \"sys/capabilities-self\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to renew a lease via lease_id in the request body; old path for\n# old clients, new path for newer\npath \"sys/renew\" {\n    capabilities = [\"update\"]\n}\npath \"sys/leases/renew\" {\n    capabilities = [\"update\"]\n}\n\n# Allow looking up lease properties. This requires knowing the lease ID ahead\n# of time and does not divulge any sensitive information.\npath \"sys/leases/lookup\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to manage its own cubbyhole\npath \"cubbyhole/*\" {\n    capabilities = [\"create\", \"read\", \"update\", \"delete\", \"list\"]\n}\n\n# Allow a token to wrap arbitrary values in a response-wrapping token\npath \"sys/wrapping/wrap\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to look up the creation time and TTL of a given\n# response-wrapping token\npath \"sys/wrapping/lookup\" {\n    capabilities = [\"update\"]\n}\n\n# Allow a token to unwrap a response-wrapping token. This is a convenience to\n# avoid client token swapping since this is also part of the response wrapping\n# policy.\npath \"sys/wrapping/unwrap\" {\n    capabilities = [\"update\"]\n}\n"
+        },
+        "wrap_info": null,
+        "warnings": null,
+        "auth": null
+    }
+    // GET auth/token/lookup-self
+    ,
+    {
+        "request_id": "a6f55e78-f525-720f-d87a-9b2d6100f0c7",
+        "lease_id": "",
+        "renewable": false,
+        "lease_duration": 0,
+        "data": {
+            "accessor": "d9e726d5-8f24-190d-22fa-9315c2ba60cd",
+            "creation_time": 1503609899,
+            "creation_ttl": 0,
+            "display_name": "root",
+            "expire_time": null,
+            "explicit_max_ttl": 0,
+            "id": "21bd1f5a-6eff-07fe-0184-a4358ae809c1",
+            "meta": null,
+            "num_uses": 0,
+            "orphan": true,
+            "path": "auth/token/root",
+            "policies": [
+                "root"
+            ],
+            "ttl": 0
+        },
+        "wrap_info": null,
+        "warnings": null,
+        "auth": null
+    }
+]
