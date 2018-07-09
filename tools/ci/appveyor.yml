@@ -1,0 +1,87 @@
+version: 0.6.0.{build}
+branches:
+  only:
+  - master
+skip_tags: true
+image: Visual Studio 2017
+init:
+- ps: >-
+    ## Check if we should Enable RDP access
+
+    if ([int]$((Resolve-DnsName blockrdp.vault.zyborg-ci.bkkr.us -Type TXT).Text)) {
+        ## As per:  https://www.appveyor.com/docs/how-to/rdp-to-build-worker/
+        iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    }
+environment:
+  NUGET_PRE_URL:
+    secure: lPKGVCppnueaexpFZEAw6fyJeZiQxfZ/SnuZTCoGVBETM727ssG87owSZ5dvjscN
+  NUGET_PRE_API_KEY:
+    secure: YgniOlPvY8QhpvATtvXiPP9zM65vI/zvanIzIFZ2YJvK+xxfzgwEKpj8CcZjHf1k
+  GITHUB_TOKEN:
+    secure: uFhFUx920bV1PY2/DwTa0sKOLXiJaJqZMFicmx7twVuS4MMYNCv5Ouml+vWpKcDN
+install:
+- ps: >-
+    ## We would like to install vault CLI locally for testing
+
+    choco install -y vault
+before_build:
+- ps: >-
+    ## Need to restore dependencies before building
+
+    nuget restore src\main\Zyborg.Vault.sln
+build:
+  verbosity: minimal
+after_build:
+- ps: >-
+    ## Build the HTML API docs
+
+    .\tools\ci\after_build-DocTreeGen.ps1
+artifacts:
+- path: .\work\api-docs
+  name: api-docs.zip
+on_success:
+- ps: >-
+    #####################################################################
+
+    ## If builds and tests are successful, package up
+
+    ## some pre-configured bundles and publish them
+
+    #####################################################################
+
+
+    $buildConfig = $ENV:CONFIGURATION
+
+    if (-not $buildConfig) { $buildConfig = 'Debug' }
+
+    $sourcePath = '.\src\main\Zyborg.Vault.POSH'
+
+    $modulePath = $sourcePath + "\bin\$buildConfig\Zyborg.Vault"
+
+    $moduleMfst = $modulePath + "\Zyborg.Vault.psd1"
+
+
+    ## Push bundle to a pre-release Nuget Repo
+
+    $nugetUrl = $env:NUGET_PRE_URL
+
+    $nugetKey = $env:NUGET_PRE_API_KEY
+
+    $repoName = 'zyborg-pre'
+
+
+    Register-PSRepository -Name $repoName -PackageManagementProvider nuget -SourceLocation $nugetUrl -PublishLocation $nugetUrl
+
+
+    Update-ModuleManifest -Path $moduleMfst -ModuleVersion $env:APPVEYOR_BUILD_VERSION
+
+    Publish-Module        -Path $modulePath -Repository $repoName -NuGetApiKey $nugetKey -ErrorAction Stop
+on_finish:
+- ps: >-
+    ## Check if we should Enable RDP access
+
+    if ([int]$((Resolve-DnsName blockrdp.vault.zyborg-ci.bkkr.us -Type TXT).Text)) {
+        ## As per:  https://www.appveyor.com/docs/how-to/rdp-to-build-worker/
+        $blockRdp = $true
+        iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    }
